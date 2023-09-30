@@ -3,11 +3,10 @@
 // Declare a void pointer(Empty object) called __o__GameMode
 void* __o__GameMode;
 
-std::string GameModeDetour() {
-    return "ÅòbInjected Asterism!";
+void* GameModeDetour() {
 }
 
-class GameModeHook : public FuncHook {//BlockReach
+class GameModeHook : public FuncHook {
 public:
     bool Initialize() override
     {
