@@ -28,8 +28,8 @@ void drawtextDetour(MinecraftUIRenderContext* ctx, void* font, float* pos, std::
         caretMeasureData
     );
 }
-void onDrawImage(MinecraftUIRenderContext* ctx,  TexturePtr* a2, Vector2<float> const& ImagePos, Vector2<float> const& ImageDimension, Vector2<float> const& uvPos, Vector2<float> const& uvSize) {
-    Utils::CallFunc<void*, MinecraftUIRenderContext*, TexturePtr*, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&>(
+void onDrawImage(MinecraftUIRenderContext* ctx,  void* a2, Vector2<float> const& ImagePos, Vector2<float> const& ImageDimension, Vector2<float> const& uvPos, Vector2<float> const& uvSize) {
+    Utils::CallFunc<void*, MinecraftUIRenderContext*, void*, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&>(
         __o__drawimage,
         ctx,
         a2,
