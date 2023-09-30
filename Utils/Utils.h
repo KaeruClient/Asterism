@@ -1,7 +1,11 @@
 #pragma once
-
+void debugStr(const char* str) {
+#ifdef _DEBUG 
+    OutputDebugString(str);
+#endif
+}
 namespace Utils {
-#define log(str) OutputDebugString(str)
+#define log(str) debugStr(str)
 
     template <typename R, typename... Args>
     R CallFunc(void* func, Args... args)
