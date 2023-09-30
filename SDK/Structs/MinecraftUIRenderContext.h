@@ -5,16 +5,7 @@ class NinesliceInfo;
 class HashedString;
 class TextMeasureData;
 class CaretMeasureData;
-void* calltext;
-class TexturePtr {
-private:
-	char pad_0x0[0x18];  //0x0000
-public:
-	TextHolder filePath;  //0x0018
-private:
-	char pad_0x0038[0x20];  //0x0038
-};
-
+class TexturePtr;
 
 
 class MinecraftUIRenderContext {

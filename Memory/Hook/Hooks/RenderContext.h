@@ -29,7 +29,7 @@ void drawtextDetour(MinecraftUIRenderContext* ctx, void* font, float* pos, std::
     );
 }
 void onDrawImage(MinecraftUIRenderContext* ctx,  TexturePtr* a2, Vector2<float> const& ImagePos, Vector2<float> const& ImageDimension, Vector2<float> const& uvPos, Vector2<float> const& uvSize) {
-    /*Utils::CallFunc<void*, MinecraftUIRenderContext*, TexturePtr*, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&>(
+    Utils::CallFunc<void*, MinecraftUIRenderContext*, TexturePtr*, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&>(
         __o__drawimage,
         ctx,
         a2,
@@ -38,8 +38,6 @@ void onDrawImage(MinecraftUIRenderContext* ctx,  TexturePtr* a2, Vector2<float> 
         uvPos,
         uvSize
     );
-    std::string path = a2->filePath.getText();
-    log(path.c_str());*/
 }
 // Call the function at the address stored in __o__Render, passing in __this and ctx as arguments
 void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
