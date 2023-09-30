@@ -4,6 +4,7 @@ void debugStr(const char* str) {
     OutputDebugString(str);
 #endif
 }
+
 namespace Utils {
 #define log(str) debugStr(str)
 
@@ -59,7 +60,6 @@ namespace Utils {
         }
 
         log(combine("Success: Enabled hook for ", pTarget, "\n").c_str());
-
         return true;
     }
 

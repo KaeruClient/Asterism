@@ -10,20 +10,20 @@ class GameMode {
 private:
 	virtual void Constructor();
 public:
-	virtual void startDestroyBlock(BlockPos<int> const&, unsigned char, bool&);
-	virtual void destroyBlock(BlockPos<int> const&, unsigned char);
-	virtual void continueDestroyBlock(BlockPos<int> const&, unsigned char, Vector3<int> const&, bool&);
-	virtual void stopDestroyBlock(BlockPos<int> const&);
-	virtual void startBuildBlock(BlockPos<int> const&, unsigned char);
-	virtual void buildBlock(BlockPos<int> const&, unsigned char, bool);
-	virtual void continueBuildBlock(BlockPos<int> const&, unsigned char);
+	virtual void startDestroyBlock(BlockPos const&, unsigned char, bool&);
+	virtual void destroyBlock(BlockPos const&, unsigned char);
+	virtual void continueDestroyBlock(BlockPos const&, unsigned char, Vector3 const&, bool&);
+	virtual void stopDestroyBlock(BlockPos const&);
+	virtual void startBuildBlock(BlockPos const&, unsigned char);
+	virtual void buildBlock(BlockPos const&, unsigned char, bool);
+	virtual void continueBuildBlock(BlockPos const&, unsigned char);
 	virtual void stopBuildBlock(void);
 private:
 	virtual void tick(void);
 	virtual int getPickRange(InputMode const&, bool);
 	virtual void useItem(ItemStack&);
-	virtual void useItemOn(ItemStack&, BlockPos<int> const&, unsigned char, Vector3<int> const&, Block const*);
-	virtual void interact(Actor&, Vector3<int> const&);
+	virtual void useItemOn(ItemStack&, BlockPos const&, unsigned char, Vector3 const&, Block const*);
+	virtual void interact(Actor&, Vector3 const&);
 public:
 	virtual void attack(Actor&);
 private:

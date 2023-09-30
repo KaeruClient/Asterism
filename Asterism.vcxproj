@@ -155,6 +155,8 @@
     <ClInclude Include="Includes\minhook\hde\pstdint.h" />
     <ClInclude Include="Includes\minhook\hde\table32.h" />
     <ClInclude Include="Includes\minhook\hde\table64.h" />
+    <ClInclude Include="Memory\Hook\Hooks\getDestroyProgress.h" />
+    <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="Includes\minhook\trampoline.h" />
     <ClInclude Include="Utils\DrawUtils.h" />

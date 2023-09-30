@@ -10,11 +10,6 @@ void* __o__drawimage;
 int layerCounter = 0;
 
 void drawtextDetour(MinecraftUIRenderContext* ctx, void* font, float* pos, std::string* text, float* color, float alpha, unsigned int textAlignment, const TextMeasureData* textMeasureData, const CaretMeasureData* caretMeasureData) {
-   {
-        color[0] = 1;
-        color[1] = 0;
-        color[2] = 0;
-    }
    Utils::CallFunc<void*, MinecraftUIRenderContext*, void*, float*, std::string*, float*, float, unsigned int, const TextMeasureData*, const CaretMeasureData*>(
         __o__drawtext,
         ctx,
@@ -70,9 +65,11 @@ void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
 
         // Declare a UIColor object called color and initialize it with the values 255, 255, 255, 255
         UIColor color = UIColor{ 0, 255, 255, 255 };
-
-       // renderCtx->fillRectangle(Vector4<float>(2, 2, 10, 20), color, color.a);
-        //DrawUtils::fillRectangle(renderCtx, Vector4<float>(2, 2, 10, 20), color);
+        UIColor color2 = UIColor{ 0, 0, 0, 255 };
+        DrawUtils::Initialize(renderCtx);
+        //renderCtx->fillRectangle(Vector4<float>({ 2, 2 }, { 10, 20 }), color, color.a);
+        DrawUtils::fillRectangle(Vector4<float>({ 2, 2 }, { 60, 20 }), color2);
+        DrawUtils::drawRectangle(Vector4<float>({ 2, 2 }, { 60, 20 }), color, 1);
     }
 }
 

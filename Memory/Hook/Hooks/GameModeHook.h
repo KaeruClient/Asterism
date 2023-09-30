@@ -1,19 +1,27 @@
 #pragma once
-#include "../../../SDK/Structs/GameMode.h"
 // Declare a void pointer(Empty object) called __o__GameMode
 void* __o__GameMode;
 
-void GameModeDetour() {
+void GameModeDetour(GameMode* gm) {
+    Utils::CallFunc<void, GameMode*>(
+        __o__GameMode,
+        gm
+    );
+    Global::gm = gm;
+    
+    gm->buildBlock(BlockPos(0, 30, 0), 0, true);
 }
 
 class GameModeHook : public FuncHook {
 public:
     bool Initialize() override
     {
-        void* GameModeAddr = Utils::findSig("44 0F B6 11 48 8D 0D");
+        uintptr_t sigOffset = (uintptr_t)Utils::findSig("48 8D 05 ? ? ? ? 48 89 01 48 89 51 ? 48 C7 41 ? FF FF FF FF C7 41 ? FF FF FF FF ");//java bypass C6 81 88 19 00 00 00
+        int offset = *reinterpret_cast<int*>(sigOffset + 3);
+        uintptr_t** vtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + /*length of instruction*/ 8);
 
         return Utils::HookFunction(
-            GameModeAddr,
+            vtable[9],
             (void*)&GameModeDetour,
             &__o__GameMode
         );

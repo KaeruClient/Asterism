@@ -116,5 +116,11 @@
     <ClInclude Include="Utils\DrawUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Memory\Hook\Hooks\getDestroyProgress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

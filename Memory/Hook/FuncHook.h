@@ -12,16 +12,20 @@ public:
 #include "Hooks/FluxAnim.h"
 #include "Hooks/GameModeHook.h"
 #include "Hooks/Background.h"
+#include "Hooks/getDestroyProgress.h"
+#include "Hooks/JavaBypass.h"
 // This function initializes all registered function hooks
 void InitializeHooks() {
     // This is an array of pointers to function hook objects
     static FuncHook* hooks[] = {
         &KeymapHook::Instance(),
-        //&GameModeHook::Instance(),
+        &GameModeHook::Instance(),
         &RenderContextHook::Instance(),
         &SwingDuraHook::Instance(),
         &FluxSwingHook::Instance(),
-        //&DrawBackGroundHook::Instance()
+        //&DrawBackGroundHook::Instance(),
+        &DestroyProgressHook::Instance(),
+        &JavaBypassHook::Instance()
     };
 
     // Iterate through all the hook objects
