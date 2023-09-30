@@ -3,7 +3,7 @@
 // Declare a void pointer(Empty object) called __o__GameMode
 void* __o__GameMode;
 
-void* GameModeDetour() {
+void GameModeDetour() {
 }
 
 class GameModeHook : public FuncHook {
