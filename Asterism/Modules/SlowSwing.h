@@ -12,4 +12,6 @@ public:
 	~SlowSwing();
 
 	const char* getModuleName();
+
+	virtual void onTick(GameMode* gm);
 };

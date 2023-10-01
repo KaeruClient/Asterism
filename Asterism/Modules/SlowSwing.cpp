@@ -10,3 +10,7 @@ SlowSwing::~SlowSwing() {
 const char* SlowSwing::getModuleName() {
 	return "SlowSwing";
 }
+
+void SlowSwing::onTick(GameMode* gm) {
+
+}
