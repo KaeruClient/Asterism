@@ -23,8 +23,8 @@ void drawtextDetour(MinecraftUIRenderContext* ctx, void* font, float* pos, std::
         caretMeasureData
     );
 }
-void onDrawImage(MinecraftUIRenderContext* ctx,  void* a2, Vector2<float> const& ImagePos, Vector2<float> const& ImageDimension, Vector2<float> const& uvPos, Vector2<float> const& uvSize) {
-    Utils::CallFunc<void*, MinecraftUIRenderContext*, void*, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&, Vector2<float> const&>(
+void onDrawImage(MinecraftUIRenderContext* ctx,  void* a2, vec2_t const& ImagePos, vec2_t const& ImageDimension, vec2_t const& uvPos, vec2_t const& uvSize) {
+    Utils::CallFunc<void*, MinecraftUIRenderContext*, void*, vec2_t const&, vec2_t const&, vec2_t const&, vec2_t const&>(
         __o__drawimage,
         ctx,
         a2,
@@ -37,14 +37,12 @@ void onDrawImage(MinecraftUIRenderContext* ctx,  void* a2, Vector2<float> const&
 // Call the function at the address stored in __o__Render, passing in __this and ctx as arguments
 void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
     // Call the function at the address stored in __o__Render, passing in __this and ctx as arguments/
-    
     Utils::CallFunc<void*, void*, MinecraftUIRenderContext*>(
         __o__Render,
         a1,
         renderCtx
     );
     auto vtable = *(uintptr_t**)renderCtx;
-    static bool hookedDrawText =
     Utils::HookFunction(
         (void*)vtable[5], // DrawText
         (void*)&drawtextDetour,
@@ -67,9 +65,9 @@ void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
         UIColor color = UIColor{ 0, 255, 255, 255 };
         UIColor color2 = UIColor{ 0, 0, 0, 255 };
         DrawUtils::Initialize(renderCtx);
-        //renderCtx->fillRectangle(Vector4<float>({ 2, 2 }, { 10, 20 }), color, color.a);
-        DrawUtils::fillRectangle(Vector4<float>({ 2, 2 }, { 60, 20 }), color2);
-        DrawUtils::drawRectangle(Vector4<float>({ 2, 2 }, { 60, 20 }), color, 1);
+        //renderCtx->fillRectangle(vec4_t({ 2, 2 }, { 10, 20 }), color, color.a);
+        DrawUtils::fillRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color2);
+        DrawUtils::drawRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color, 1);
     }
 }
 

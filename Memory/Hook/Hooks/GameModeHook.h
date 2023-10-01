@@ -7,9 +7,9 @@ void GameModeDetour(GameMode* gm) {
         __o__GameMode,
         gm
     );
-    Global::gm = gm;
+    GameData::gm = gm;
     
-    gm->buildBlock(BlockPos(0, 30, 0), 0, true);
+    gm->buildBlock(vec3_ti(0, 30, 0), 0, true);
 }
 
 class GameModeHook : public FuncHook {

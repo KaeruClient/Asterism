@@ -2,8 +2,13 @@
 
 void* __o__sd;
 
-__int64 sdDetour() {
+__int64 sdDetour(Actor* _this) {
+    auto oFunc = Utils::CallFunc<__int64, Actor*>(
+        __o__sd,
+        _this
+    );
     return 20;
+    return oFunc;
 }
 
 class SwingDuraHook : public FuncHook {

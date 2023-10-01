@@ -142,6 +142,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Asterism\Loader.cpp" />
+    <ClCompile Include="Asterism\Managers\Module.cpp" />
+    <ClCompile Include="Asterism\Managers\ModuleManager.cpp" />
+    <ClCompile Include="Includes\animations\dotMatrix.cpp" />
+    <ClCompile Include="Includes\animations\fade.cpp" />
+    <ClCompile Include="Includes\animations\snowflake.cpp" />
+    <ClCompile Include="Includes\imgui\imgui.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Includes\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Includes\kiero\kiero.cpp" />
     <ClCompile Include="Includes\minhook\buffer.c" />
     <ClCompile Include="Includes\minhook\hde\hde32.c" />
     <ClCompile Include="Includes\minhook\hde\hde64.c" />
@@ -149,6 +163,23 @@
     <ClCompile Include="Includes\minhook\trampoline.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asterism\ImGuiLoader.h" />
+    <ClInclude Include="Asterism\Loader.h" />
+    <ClInclude Include="Asterism\Managers\Module.h" />
+    <ClInclude Include="Asterism\Managers\ModuleManager.h" />
+    <ClInclude Include="Includes\animations\dotMatrix.h" />
+    <ClInclude Include="Includes\animations\fade.hpp" />
+    <ClInclude Include="Includes\animations\snowflake.hpp" />
+    <ClInclude Include="Includes\imgui\imconfig.h" />
+    <ClInclude Include="Includes\imgui\imgui.h" />
+    <ClInclude Include="Includes\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="Includes\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="Includes\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Includes\imgui\imgui_internal.h" />
+    <ClInclude Include="Includes\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Includes\imgui\imstb_textedit.h" />
+    <ClInclude Include="Includes\imgui\imstb_truetype.h" />
+    <ClInclude Include="Includes\kiero\kiero.h" />
     <ClInclude Include="Includes\minhook\buffer.h" />
     <ClInclude Include="Includes\minhook\hde\hde32.h" />
     <ClInclude Include="Includes\minhook\hde\hde64.h" />
@@ -159,8 +190,9 @@
     <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="Includes\minhook\trampoline.h" />
+    <ClInclude Include="SDK\Maths\Vectors.h" />
     <ClInclude Include="Utils\DrawUtils.h" />
-    <ClInclude Include="Utils\Global.h" />
+    <ClInclude Include="Memory\GameData.h" />
     <ClInclude Include="Memory\Hook\FuncHook.h" />
     <ClInclude Include="Memory\Hook\Hooks\Background.h" />
     <ClInclude Include="Memory\Hook\Hooks\GameModeHook.h" />
@@ -168,12 +200,8 @@
     <ClInclude Include="Memory\Hook\Hooks\RenderContext.h" />
     <ClInclude Include="Memory\Hook\Hooks\SwingDura.h" />
     <ClInclude Include="Memory\Hook\Hooks\FluxAnim.h" />
-    <ClInclude Include="SDK\Maths\BlockPos.h" />
     <ClInclude Include="SDK\Maths\TextHolder.h" />
     <ClInclude Include="SDK\Maths\UIColor.h" />
-    <ClInclude Include="SDK\Maths\Vector2.h" />
-    <ClInclude Include="SDK\Maths\Vector3.h" />
-    <ClInclude Include="SDK\Maths\Vector4.h" />
     <ClInclude Include="SDK\Structs\ClientInstance.h" />
     <ClInclude Include="SDK\Structs\GameMode.h" />
     <ClInclude Include="SDK\Structs\MinecraftUIRenderContext.h" />

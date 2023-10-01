@@ -1,10 +1,14 @@
 #pragma once
-
 // This is an abstract base class for function hooks to inherit
 class FuncHook {
 public:
     // This function initializes the hook
     virtual bool Initialize() = 0;
+    static void Restore() {
+        MH_DisableHook(MH_ALL_HOOKS);
+        MH_RemoveHook(MH_ALL_HOOKS);
+        MH_Uninitialize();
+    };
 };
 #include "Hooks/Keymap.h"
 #include "Hooks/RenderContext.h"

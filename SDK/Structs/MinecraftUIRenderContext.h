@@ -10,7 +10,7 @@ class TexturePtr;
 
 class MinecraftUIRenderContext {
 public:
-    void* ClientInstance;
+    ClientInstance* ClientInstance;
 
 private:
     virtual void Destructor();
@@ -21,7 +21,7 @@ private:
     virtual void setTextAlpha();
     virtual void drawDebugText();
 public:
-    virtual void drawText(void* font, Vector4<float> const& pos, TextHolder* str, UIColor const& colour, float idk, float alinM, TextMeasureData const& textdata, CaretMeasureData const& caretdata);
+    virtual void drawText(void* font, vec4_t const& pos, TextHolder* str, UIColor const& colour, float idk, float alinM, TextMeasureData const& textdata, CaretMeasureData const& caretdata);
     virtual void flushText(float flushDelta);
 private:
     virtual void drawImage();
@@ -30,6 +30,6 @@ private:
     virtual void beginSharedMeshBatch();
     virtual void endSharedMeshBatch();
 public:
-    virtual void drawRectangle(Vector4<float> const& rect, UIColor const& colour, float alpha, int width);
-    virtual void fillRectangle(Vector4<float> const& rect, UIColor const& colour, float alpha);
+    virtual void drawRectangle(vec4_t const& rect, UIColor const& colour, float alpha, int width);
+    virtual void fillRectangle(vec4_t const& rect, UIColor const& colour, float alpha);
 };

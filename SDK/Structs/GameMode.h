@@ -1,29 +1,28 @@
 #pragma once
-#include "../Maths/Vector3.h"
-#include "../Maths/BlockPos.h"
+#include "../Maths/Vectors.h"
 #include "../../Utils/Utils.h"
 class Actor;
 class ItemStack;
-class Block;
+class Block; // Today I want to learn how to find any sigs. That is hard for me>< <ye>
 class InputMode;
 class GameMode {
 private:
 	virtual void Constructor();
 public:
-	virtual void startDestroyBlock(BlockPos const&, unsigned char, bool&);
-	virtual void destroyBlock(BlockPos const&, unsigned char);
-	virtual void continueDestroyBlock(BlockPos const&, unsigned char, Vector3 const&, bool&);
-	virtual void stopDestroyBlock(BlockPos const&);
-	virtual void startBuildBlock(BlockPos const&, unsigned char);
-	virtual void buildBlock(BlockPos const&, unsigned char, bool);
-	virtual void continueBuildBlock(BlockPos const&, unsigned char);
+	virtual void startDestroyBlock(vec3_ti const&, unsigned char, bool&);
+	virtual void destroyBlock(vec3_ti const&, unsigned char);
+	virtual void continueDestroyBlock(vec3_ti const&, unsigned char, vec3_t const&, bool&);
+	virtual void stopDestroyBlock(vec3_ti const&);
+	virtual void startBuildBlock(vec3_ti const&, unsigned char);
+	virtual void buildBlock(vec3_ti const&, unsigned char, bool);
+	virtual void continueBuildBlock(vec3_ti const&, unsigned char);
 	virtual void stopBuildBlock(void);
 private:
 	virtual void tick(void);
 	virtual int getPickRange(InputMode const&, bool);
 	virtual void useItem(ItemStack&);
-	virtual void useItemOn(ItemStack&, BlockPos const&, unsigned char, Vector3 const&, Block const*);
-	virtual void interact(Actor&, Vector3 const&);
+	virtual void useItemOn(ItemStack&, vec3_ti const&, unsigned char, vec3_t const&, Block const*);
+	virtual void interact(Actor&, vec3_t const&);
 public:
 	virtual void attack(Actor&);
 private:

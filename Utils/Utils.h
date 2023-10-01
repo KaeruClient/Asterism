@@ -15,6 +15,11 @@ namespace Utils {
         return ((R(*)(Args...))func)(args...);
     }
 
+    template <unsigned int index, typename returnType, typename... args>
+    static inline auto callVirtualTable(void* ptr, args... argList) -> returnType {
+        using function = returnType(__thiscall*)(void*, decltype(argList)...);
+        return (*static_cast<function**>(ptr))[index](ptr, argList...);
+    }
     // template function that converts the specified value to a string using a stringstream
     template <typename T>
     std::string combine(T t)

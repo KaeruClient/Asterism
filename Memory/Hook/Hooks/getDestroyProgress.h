@@ -2,7 +2,7 @@
 
 void* __o__progress;
 float progressDetour(void* inv, void* block) {
-    if (Global::keymap['R']) 
+    if (GameData::keymap['R']) 
     return INFINITY;
     return Utils::CallFunc<float, void*, void*>(
         __o__progress,

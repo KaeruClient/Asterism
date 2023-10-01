@@ -2,8 +2,21 @@
 
 void* __o__SendKey;
 
+HMODULE getDll() {
+    MEMORY_BASIC_INFORMATION info;
+    size_t len = VirtualQueryEx(GetCurrentProcess(), (void*)getDll, &info, sizeof(info));
+    assert(len == sizeof(info));
+    return len ? (HMODULE)info.AllocationBase : NULL;
+};
+void EjectClient(HMODULE DllModule) { // âJÇ∑Ç≤Ç¢,,âJç~Ç¡ÇƒÇ»Ç¢ÅI (PROî≈ÇÃÇ›)
+    FuncHook::Restore(); 
+    FreeLibraryAndExitThread(DllModule, 0);
+}
+
 void keymapDetour(__int32 key, bool held) {
-    Global::keymap[key] = held;
+    GameData::keymap[key] = held;
+    if (GameData::keymap['L'] && GameData::keymap[17])
+        EjectClient(getDll());
     log(Utils::combine("Key ", key, " ", held, "\n").c_str());
     Utils::CallFunc<void*, __int32, bool>(
         __o__SendKey,

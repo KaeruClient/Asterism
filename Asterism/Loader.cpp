@@ -1,30 +1,6 @@
-#pragma region Includes & Macros
+#include "Loader.h"
 
-// C++ Includes
-#include <Windows.h>
-#include <Psapi.h>
-#include <iostream>
-#include <sstream>
-#include <map>
-
-// Minhook
-#include "../Memory/minhook.h"
-// Utils
-#include "../Utils/Global.h"
-#include "../Utils/Utils.h"
-
-// Maths
-#include "../SDK/Maths/TextHolder.h"
-#include "../SDK/Maths/UIColor.h"
-#include "../SDK/Maths/Vector2.h"
-#include "../SDK/Maths/Vector3.h"
-#include "../SDK/Maths/Vector4.h"
-#include "../SDK/Maths/BlockPos.h"
-
-// Hooks
-#include "../Memory/Hook/FuncHook.h"
-#pragma endregion
-// This function initializes the client.
+// この関数はクライアントの初期設定をするものです
 void InitializeClient(HMODULE module) {
     InitializeHooks();
 }

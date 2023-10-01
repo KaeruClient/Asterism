@@ -3,7 +3,7 @@
 void* __o__javabypass;
 
 void JavaBypass(void* p) {
-    if (!Global::keymap['R']) {
+    if (!GameData::keymap['R']) {
         Utils::CallFunc<void*, void*>(
             __o__javabypass,
             p
