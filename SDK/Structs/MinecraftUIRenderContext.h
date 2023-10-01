@@ -1,4 +1,6 @@
 #pragma once
+#include "../Maths/TextHolder.h"
+#include "../Maths/UIColor.h"
 
 class ComponentRenderBatch;
 class NinesliceInfo;
