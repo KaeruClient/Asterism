@@ -75,6 +75,9 @@
     <ClCompile Include="Includes\kiero\kiero.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asterism\Modules\SlowSwing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\minhook\buffer.h">
@@ -204,6 +207,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asterism\ImGuiLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asterism\Modules\SlowSwing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

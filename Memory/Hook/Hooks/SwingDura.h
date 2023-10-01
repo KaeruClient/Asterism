@@ -7,7 +7,7 @@ __int64 sdDetour(Actor* _this) {
         __o__sd,
         _this
     );
-    return 20;
+    return 70;
     return oFunc;
 }
 

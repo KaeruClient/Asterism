@@ -3,6 +3,9 @@
 #include "../../includes/imgui/imgui_impl_dx11.h"
 #include "../../includes/imgui/imgui_impl_dx12.h"
 #include "../../includes/imgui/imgui_impl_win32.h"
+#include "../../SDK/Structs/GameMode.h"
+#include "../../SDK/Structs/ClientInstance.h"
+#include "../../SDK/Structs/MinecraftUIRenderContext.h"
 
 enum class Category {
 	COMBAT = 0,

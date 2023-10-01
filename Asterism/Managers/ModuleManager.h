@@ -2,13 +2,15 @@
 
 #include "Module.h"
 #include <vector>
+#include <memory>
 
 class ModuleManager {
 private:
 	
-	std::vector<Module> moduleList;
+	std::vector<std::unique_ptr<Module>> moduleList;
 public:
-	std::vector<Module> getModuleList() {
+	void initModule();
+	std::vector<std::unique_ptr<Module>> getModuleList() {
 		return moduleList;
 	}
 };

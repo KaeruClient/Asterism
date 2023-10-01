@@ -3,12 +3,16 @@
 //Module Stuff
 #include "Managers/Module.h"
 #include "Managers/ModuleManager.h"
-
+#include <d3d11.h>
+#include <d3d10.h>
+#include <d3d12.h>
+#include <d3d.h>
 
 //Amimation Stuff
 #include "../Includes/Animations/snowflake.hpp"
 #include "../Includes/animations/dotMatrix.h"
 #include "../Includes/animations/fade.hpp"
+#include <winerror.h>
 
 // Snow Shit
 #define SNOW_LIMIT 300 // max ammount of Snow/Bubbles allowed on screen at once
