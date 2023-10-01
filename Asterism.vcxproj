@@ -144,6 +144,7 @@
     <ClCompile Include="Asterism\Loader.cpp" />
     <ClCompile Include="Asterism\Managers\Module.cpp" />
     <ClCompile Include="Asterism\Managers\ModuleManager.cpp" />
+    <ClCompile Include="Asterism\Modules\SlowSwing.cpp" />
     <ClCompile Include="Includes\animations\dotMatrix.cpp" />
     <ClCompile Include="Includes\animations\fade.cpp" />
     <ClCompile Include="Includes\animations\snowflake.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Asterism\Loader.h" />
     <ClInclude Include="Asterism\Managers\Module.h" />
     <ClInclude Include="Asterism\Managers\ModuleManager.h" />
+    <ClInclude Include="Asterism\Modules\SlowSwing.h" />
     <ClInclude Include="Includes\animations\dotMatrix.h" />
     <ClInclude Include="Includes\animations\fade.hpp" />
     <ClInclude Include="Includes\animations\snowflake.hpp" />
