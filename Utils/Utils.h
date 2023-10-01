@@ -1,4 +1,13 @@
 #pragma once
+
+#include <Windows.h>
+#include <Psapi.h>
+#include <sstream>
+#include <winnt.h>
+#include <xmemory>
+
+#include "../Memory/minhook.h"
+
 void debugStr(const char* str) {
 #ifdef _DEBUG 
     OutputDebugString(str);
@@ -9,7 +18,7 @@ namespace Utils {
 #define log(str) debugStr(str)
 
     template <typename R, typename... Args>
-    R CallFunc(void* func, Args... args)
+    R CallFunc(void* func, Args... args) //namespaceをclassにしないんですか？！？！？！
     {
         // Call the function and return the result.
         return ((R(*)(Args...))func)(args...);
@@ -157,18 +166,4 @@ namespace Utils {
             }
         }
     }
-    void patchBytes(unsigned char* dst, unsigned char* src, unsigned int size) {
-        DWORD oldprotect;
-        VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);
-        memcpy(dst, src, size);
-        VirtualProtect(dst, size, oldprotect, &oldprotect);
-    }
-
-    void nopBytes(unsigned char* dst, unsigned int size) {
-        DWORD oldprotect;
-        VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldprotect);
-        memset(dst, 0x90, size);
-        VirtualProtect(dst, size, oldprotect, &oldprotect);
-    }
-
 }

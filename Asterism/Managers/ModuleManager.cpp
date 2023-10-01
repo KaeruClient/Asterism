@@ -6,5 +6,5 @@
 //
 
 void ModuleManager::initModule() {
-	moduleList.emplace_back(std::make_unique<SlowSwing>);
+	//moduleList.emplace_back(std::make_shared<SlowSwing>());
 }

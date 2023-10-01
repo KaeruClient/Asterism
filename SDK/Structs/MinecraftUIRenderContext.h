@@ -12,7 +12,7 @@ class TexturePtr;
 
 class MinecraftUIRenderContext {
 public:
-    ClientInstance* ClientInstance;
+    void* ClientInstance;
 
 private:
     virtual void Destructor();

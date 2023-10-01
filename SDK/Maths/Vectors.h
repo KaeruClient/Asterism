@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cmath>
 struct vec2_t {
 	// union allows for the same memory location to be accessed with different names ‹¤—p‘Ì...‚Á‚ÄºÄHI‚¾‚¢‚½‚¢‚ ‚Á‚Ä‚é‚µ‚å
 	union {

@@ -1,10 +1,9 @@
-#pragma once
+#pragma once/*
 #include "../../includes/imgui/imgui.h"
 #include "../../includes/imgui/imgui_impl_dx11.h"
 #include "../../includes/imgui/imgui_impl_dx12.h"
-#include "../../includes/imgui/imgui_impl_win32.h"
+#include "../../includes/imgui/imgui_impl_win32.h"*/
 #include "../../SDK/Structs/GameMode.h"
-#include "../../SDK/Structs/ClientInstance.h"
 #include "../../SDK/Structs/MinecraftUIRenderContext.h"
 
 enum class Category {
@@ -22,7 +21,33 @@ private:
 	int keybind = 0x0;
 	bool extended = false;
 	const char* tooltip;
+	Category cat;
+protected:
+	Module(int key, Category c, const char* tooltip) {
+		this->keybind = key;
+		this->cat = c;
+		this->tooltip = tooltip;
+	};
 public:
-	Module(int key, Category c, const char* tooltip);
+	virtual ~Module();
 
+	const Category getCategory() {
+		return cat;
+	}
+
+	virtual bool isEnabled() {
+		return enabled;
+	};
+	virtual void onEnable();
+	virtual void onDisable();
+
+	void setEnabled(bool enabled) {
+		if (this->enabled != enabled) {
+			this->enabled = enabled;
+			if (enabled)
+				this->onEnable();
+			else
+				this->onDisable();
+		}
+	}
 };
