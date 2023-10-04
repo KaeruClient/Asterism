@@ -1,23 +1,23 @@
 #pragma once
 
 #include "Module.h"
-#include "../../Utils/Utils.h"
+#include <typeinfo>
 #include <vector>
+#include <optional>
 #include <memory>
-
-class ModuleManager;
-
+#include <mutex>
+#include <shared_mutex>
+//hi ikaaa ikaclient on TRASH
 class ModuleManager {
 private:
-
 	std::vector<std::shared_ptr<Module>> moduleList;
+	bool initialized = false;
+	std::shared_mutex moduleListMutex;
 public:
-	void initModule();
-	std::vector<std::shared_ptr<Module>> getModuleList() {
-		return moduleList;
-	}
-	//ModuleManager(GameData* gameData);
-	//virtual void onTick(GameMode* gm);
+	std::shared_mutex* getModuleListLock() { return &moduleListMutex; }
+
+	bool isInitialized() { return initialized; };
+	std::vector<std::shared_ptr<Module>>* getModuleList();
 };
 
 extern ModuleManager* moduleMgr;

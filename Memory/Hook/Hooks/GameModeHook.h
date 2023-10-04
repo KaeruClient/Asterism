@@ -2,23 +2,30 @@
 // Declare a void pointer(Empty object) called __o__GameMode
 void* __o__GameMode;
 
-void GameModeDetour(GameMode* gm) {
-    Utils::CallFunc<void, GameMode*>(
+float GameModeDetour(GameMode* gm, void* a1, void* a2, void* a3) {
+    g_Data.setGameMode(gm);
+    float oFunc = Utils::CallFunc<float, GameMode*, void*, void*, void*>(
         __o__GameMode,
-        gm
+        gm,
+        a1,
+        a2,
+        a3
     );
+    //log("woah");
+    return oFunc;
 }
 
 class GameModeHook : public FuncHook {
 public:
+
     bool Initialize() override
     {
-        uintptr_t sigOffset = (uintptr_t)Utils::findSig("48 8D 05 ? ? ? ? 48 89 01 48 89 51 ? 48 C7 41 ? FF FF FF FF C7 41 ? FF FF FF FF ");//java bypass C6 81 88 19 00 00 00
+        uintptr_t sigOffset = (uintptr_t)Utils::findSig("48 8D 05 ? ? ? ? 48 89 01 48 89 51 ? 48 C7 41 ? FF FF FF FF C7 41 ? FF FF FF FF");
         int offset = *reinterpret_cast<int*>(sigOffset + 3);
-        uintptr_t** vtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + /*length of instruction*/ 8);
-
+        uintptr_t** vtable = reinterpret_cast<uintptr_t**>(sigOffset + offset + /*–½—ß‚Ì’·‚³*/ 7);
+        Global::gmvtable = vtable;
         return Utils::HookFunction(
-            vtable[9],
+            vtable[10],
             (void*)&GameModeDetour,
             &__o__GameMode
         );

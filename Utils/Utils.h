@@ -15,7 +15,7 @@ void debugStr(const char* str) {
 }
 
 namespace Utils {
-#define log(str) debugStr(str)
+#define logstr(str) debugStr(str)
 
     template <typename R, typename... Args>
     R CallFunc(void* func, Args... args) //namespaceをclassにしないんですか？！？！？！
@@ -23,7 +23,7 @@ namespace Utils {
         // Call the function and return the result.
         return ((R(*)(Args...))func)(args...);
     }
-
+    
     template <unsigned int index, typename returnType, typename... args>
     static inline auto callVirtualTable(void* ptr, args... argList) -> returnType {
         using function = returnType(__thiscall*)(void*, decltype(argList)...);
@@ -56,24 +56,24 @@ namespace Utils {
             initialized = true;
             if (MH_Initialize() != MH_OK)
             {
-                log("Error: Failed to initialize MinHook\n");
+              //  log("Error: Failed to initialize MinHook\n");
                 return false;
             }
         }
 
         if (MH_CreateHook(pTarget, pDetour, (LPVOID*)pOriginal) != MH_OK)
         {
-            log("Error: Failed to create hook\n");
+            //log("Error: Failed to create hook\n");
             return false;
         }
 
         if (MH_EnableHook(pTarget) != MH_OK)
         {
-            log("Error: Failed to enable hook\n");
+            //log("Error: Failed to enable hook\n");
             return false;
         }
 
-        log(combine("Success: Enabled hook for ", pTarget, "\n").c_str());
+        logstr(combine("Success: Enabled hook for ", pTarget, "\n").c_str());
         return true;
     }
 

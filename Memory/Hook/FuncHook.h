@@ -18,18 +18,23 @@ public:
 #include "Hooks/Background.h"
 #include "Hooks/getDestroyProgress.h"
 #include "Hooks/JavaBypass.h"
+#include "Hooks/MouseMap.h"
+#include "Hooks/LocalPlayer.h"
+#include "Hooks/EntityListMaker.h"
 // This function initializes all registered function hooks
 void InitializeHooks() {
     // This is an array of pointers to function hook objects
     static FuncHook* hooks[] = {
         &KeymapHook::Instance(),
+        &MouseMapHook::Instance(),
         &GameModeHook::Instance(),
         &RenderContextHook::Instance(),
         &SwingDuraHook::Instance(),
         &FluxSwingHook::Instance(),
         //&DrawBackGroundHook::Instance(),
-        &DestroyProgressHook::Instance(),
-        &JavaBypassHook::Instance()
+  //      &DestroyProgressHook::Instance(),
+        &JavaBypassHook::Instance(),
+//        &ActorRuntimeIDHook::Instance()
     };
 
     // Iterate through all the hook objects

@@ -12,6 +12,7 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID reserved)
         DisableThreadLibraryCalls(module);
         // Create a new thread to initialize the client on
         CreateThread(0, 0, (LPTHREAD_START_ROUTINE)InitializeClient, module, 0, 0);
+        CreateThread(0, 0, (LPTHREAD_START_ROUTINE)ImguiHooks::InitImgui, module, 0, 0);
     }
     return true;
 }

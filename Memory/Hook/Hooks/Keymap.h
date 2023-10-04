@@ -14,10 +14,10 @@ void EjectClient(HMODULE DllModule) { // âJÇ∑Ç≤Ç¢,,âJç~Ç¡ÇƒÇ»Ç¢ÅI (PROî≈ÇÃÇ›)
 }
 
 void keymapDetour(__int32 key, bool held) {
-    GameData::keymap[key] = held;
-    if (GameData::keymap['L'] && GameData::keymap[17])
+    Global::keymap[key] = held;
+    if (Global::keymap['L'] && Global::keymap[17])
         EjectClient(getDll());
-    log(Utils::combine("Key ", key, " ", held, "\n").c_str());
+    logstr(Utils::combine("Key ", key, " ", held, "\n").c_str());
     Utils::CallFunc<void*, __int32, bool>(
         __o__SendKey,
         key,

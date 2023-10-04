@@ -2,15 +2,15 @@
 
 void* __o__sd;
 
-__int64 sdDetour(Actor* _this) {
-    auto oFunc = Utils::CallFunc<__int64, Actor*>(
+__int64 sdDetour(Actor* _this) {//_thisがentitylistなんだよなぁww
+    auto oFunc = Utils::CallFunc<__int64, Actor*>(//死刑死刑死刑死刑！！！死刑！！！！！！！！！！！！！！！！
         __o__sd,
         _this
     );
-    return 20;
+    //g_Data.getGameMode()->attack(*g_Data.getEntityList()[0]);
+    if (_this == g_Data.getGameMode()->player) return 20;
     return oFunc;
 }
-
 class SwingDuraHook : public FuncHook {
 public:
     bool Initialize() override {

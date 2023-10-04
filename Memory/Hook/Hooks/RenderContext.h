@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../SDK/Structs/MinecraftUIRenderContext.h"
 #include "../../../Utils/DrawUtils.h"
+#include "../../../Utils/ImGuiUtils.h"
 // Declare a void pointer called __o__Render
 void* __o__Render;
 void* __o__drawtext;
@@ -43,16 +44,23 @@ void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
         renderCtx
     );
     auto vtable = *(uintptr_t**)renderCtx;
-    Utils::HookFunction(
-        (void*)vtable[5], // DrawText
-        (void*)&drawtextDetour,
-        &__o__drawtext
-    );
-    Utils::HookFunction(
-        (void*)vtable[7], // DrawImage
-        (void*)&onDrawImage,
-        &__o__drawimage
-    );
+    static bool tryHook5 = false;
+    static bool tryHook7 = false;
+    if (!tryHook5) {
+        tryHook5 =
+            Utils::HookFunction(
+                (void*)vtable[5], // DrawText
+                (void*)&drawtextDetour,
+                &__o__drawtext
+            );
+    }
+    if (!tryHook7) {
+        tryHook7 = Utils::HookFunction(
+            (void*)vtable[7], // DrawImage
+            (void*)&onDrawImage,
+            &__o__drawimage
+        );
+    }
     // Increment layerCounter
     layerCounter++;
 
@@ -62,12 +70,11 @@ void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
         layerCounter = 0;
 
         // Declare a UIColor object called color and initialize it with the values 255, 255, 255, 255
-        UIColor color = UIColor{ 0, 255, 255, 255 };
-        UIColor color2 = UIColor{ 0, 0, 0, 255 };
+        
         DrawUtils::Initialize(renderCtx);
         //renderCtx->fillRectangle(vec4_t({ 2, 2 }, { 10, 20 }), color, color.a);
-        DrawUtils::fillRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color2);
-        DrawUtils::drawRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color, 1);
+        //DrawUtils::fillRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color2);
+        //DrawUtils::drawRectangle(vec4_t({ 2, 2 }, { 60, 20 }), color, 1);
     }
 }
 
