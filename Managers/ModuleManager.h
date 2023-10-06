@@ -11,6 +11,7 @@
 #include "../Asterism/Module/Modules/Module.h"
 
 #include "../Asterism/Module/Modules/Watermark.h"
+#include "../Asterism/Module/Modules/ArrayList.h"
 #include "../Memory/GameData.h"
 //hi ikaaa ikaclient on TRASH
 class ModuleManager {
@@ -55,4 +56,4 @@ public:
 		return nullptr;
 	};
 }; //‚ ‚È‚½‚Í‚Ç‚¤‚µ‚½
-extern ModuleManager* moduleHandler;
+extern ModuleManager* moduleMgr;

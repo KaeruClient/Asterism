@@ -211,7 +211,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		}
 #pragma endregion
 
-		moduleHandler->onImRender();
+		moduleMgr->onImRender();
 		
 		{
 			ImGuiStyle* style = &ImGui::GetStyle();
@@ -375,7 +375,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
-		moduleHandler->onImRender();
+		moduleMgr->onImRender();
 		
 		//}
 	//}

@@ -78,6 +78,9 @@
     <ClCompile Include="Asterism\Module\Modules\Watermark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asterism\Module\Modules\ArrayList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\minhook.h">

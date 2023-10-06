@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Asterism\Loader.cpp" />
+    <ClCompile Include="Asterism\Module\Modules\ArrayList.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Module.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Watermark.cpp" />
     <ClCompile Include="Managers\ModuleManager.cpp" />

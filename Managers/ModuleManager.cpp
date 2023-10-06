@@ -20,7 +20,10 @@ void ModuleManager::initModules() {
 
 		moduleList.emplace_back(new Watermark());
 
+		moduleList.emplace_back(new ArrayList());
+
 		getModuleByName("Watermark")->setEnabled(true);
+		getModuleByName("ArrayList")->setEnabled(true);
 		// Sort modules alphabetically
 		std::sort(moduleList.begin(), moduleList.end(), [](auto lhs, auto rhs) {
 			auto current = lhs;
@@ -69,4 +72,4 @@ void ModuleManager::onRender(MinecraftUIRenderContext* renderCtx) {
 	}
 }
 
-ModuleManager* moduleHandler = new ModuleManager(&g_Data);
+ModuleManager* moduleMgr = new ModuleManager(&g_Data);

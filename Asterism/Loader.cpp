@@ -3,7 +3,7 @@
 // この関数はクライアントの初期設定をするものです
 void InitializeClient(HMODULE module) {
     InitializeHooks();
-    moduleHandler->initModules();
+    moduleMgr->initModules();
 }
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID reserved)
