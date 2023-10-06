@@ -19,8 +19,6 @@ public:
 #include "Hooks/getDestroyProgress.h"
 #include "Hooks/JavaBypass.h"
 #include "Hooks/MouseMap.h"
-#include "Hooks/LocalPlayer.h"
-#include "Hooks/EntityListMaker.h"
 // This function initializes all registered function hooks
 void InitializeHooks() {
     // This is an array of pointers to function hook objects

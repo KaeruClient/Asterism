@@ -69,6 +69,15 @@
     <ClCompile Include="Includes\kiero\kiero.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Managers\ModuleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asterism\Module\Modules\Module.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asterism\Module\Modules\Watermark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\minhook.h">
@@ -152,16 +161,13 @@
     <ClInclude Include="Memory\GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Asterism\Managers\ModuleManager.h">
+    <ClInclude Include="Managers\ModuleManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Asterism\Managers\Module.h">
+    <ClInclude Include="Asterism\Module\Modules\Module.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory\Hook\Hooks\MouseMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Memory\Hook\Hooks\LocalPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Includes\animations\dotMatrix.h">
@@ -212,7 +218,10 @@
     <ClInclude Include="Assets\ProductSans.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory\Hook\Hooks\EntityListMaker.h">
+    <ClInclude Include="Asterism\Module\Modules\ArrayList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asterism\Module\Modules\Watermark.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

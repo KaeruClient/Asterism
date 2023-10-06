@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 
 class GameData {
 private:
@@ -14,4 +15,4 @@ public:
 		return _gm;
 	}
 };
-GameData g_Data;
+static GameData g_Data;
