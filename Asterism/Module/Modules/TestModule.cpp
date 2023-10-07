@@ -1,6 +1,6 @@
 #include "TestModule.h"
 
-TestModule::TestModule() : Module(0x0, Category::MISC, "For testing module") {
+TestModule::TestModule() : Module('X', Category::MISC, "For testing module") {
 };
 
 TestModule::~TestModule() {

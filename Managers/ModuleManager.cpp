@@ -62,6 +62,20 @@ void ModuleManager::onImRender() {
 	}
 }
 
+void ModuleManager::onKey(__int32 key) {
+	if (!isInitialized())
+		return;
+	auto mutex = lockModuleList();
+
+	for (auto& mod : moduleList) {
+		if (key == mod->getBind()) {
+			mod->setEnabled(!mod->isEnabled());
+		}
+		if (mod->isEnabled())
+			mod->onKey(key);
+	}
+}
+
 void ModuleManager::onRender(MinecraftUIRenderContext* renderCtx) {
 	if (!isInitialized())
 		return;
