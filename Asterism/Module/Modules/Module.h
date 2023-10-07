@@ -27,9 +27,7 @@ public:
 	};
 
 	virtual const char* getModuleName() = 0;
-	virtual const char* getModeName() {
-		return "";
-	};
+	virtual const char* getModeName();
 	virtual void onTick(GameMode* gm) {};
 	virtual void onRender(MinecraftUIRenderContext* ctx) {};
 	virtual void onImRender() {};

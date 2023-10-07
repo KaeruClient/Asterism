@@ -10,6 +10,7 @@
 
 
 #define logstr(str);
+
 namespace Utils {
     template <typename R, typename... Args>
     R CallFunc(void* func, Args... args) //namespaceをclassにしないんですか？！？！？！

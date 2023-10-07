@@ -12,6 +12,7 @@
 
 #include "../Asterism/Module/Modules/Watermark.h"
 #include "../Asterism/Module/Modules/ArrayList.h"
+#include "../Asterism/Module/Modules/TestModule.h"
 #include "../Memory/GameData.h"
 //hi ikaaa ikaclient on TRASH
 class ModuleManager {

@@ -19,11 +19,12 @@ void ModuleManager::initModules() {
 		auto lock = lockModuleListExclusive();
 
 		moduleList.emplace_back(new Watermark());
-
+		moduleList.emplace_back(new TestModule());
 		moduleList.emplace_back(new ArrayList());
 
 		getModuleByName("Watermark")->setEnabled(true);
 		getModuleByName("ArrayList")->setEnabled(true);
+		getModuleByName("TestModule")->setEnabled(true);
 		// Sort modules alphabetically
 		std::sort(moduleList.begin(), moduleList.end(), [](auto lhs, auto rhs) {
 			auto current = lhs;
