@@ -11,3 +11,5 @@ const char* Module::getModuleName() {
 const char* Module::getModeName() {
 	return "";
 }
+void Module::onKey(__int32 key) {
+}

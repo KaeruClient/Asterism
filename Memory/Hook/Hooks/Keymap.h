@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../../../Managers/ModuleManager.h"
 void* __o__SendKey;
 
 HMODULE getDll() {
@@ -17,6 +17,8 @@ void keymapDetour(__int32 key, bool held) {
     Global::keymap[key] = held;
     if (Global::keymap['L'] && Global::keymap[17])
         EjectClient(getDll());
+    if (held)
+        moduleMgr->onKey(key);
     logstr(Utils::combine("Key ", key, " ", held, "\n").c_str());
     Utils::CallFunc<void*, __int32, bool>(
         __o__SendKey,

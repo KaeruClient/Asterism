@@ -27,6 +27,7 @@ public:
 	void onTick(GameMode* gameMode);
 	void onRender(MinecraftUIRenderContext* renderCtx);
 	void onImRender();
+	void onKey(__int32);
 	std::shared_lock<std::shared_mutex> lockModuleList() { return std::shared_lock<std::shared_mutex>(moduleListMutex); }
 	std::unique_lock<std::shared_mutex> lockModuleListExclusive() { return std::unique_lock<std::shared_mutex>(moduleListMutex); }
 

@@ -22,6 +22,9 @@ public:
 	virtual bool isEnabled() {
 		return this->enabled;
 	}
+	virtual int getBind() {
+		return this->key;
+	}
 	virtual void setEnabled(bool ean) {
 		this->enabled = ean;
 	};
@@ -31,4 +34,5 @@ public:
 	virtual void onTick(GameMode* gm) {};
 	virtual void onRender(MinecraftUIRenderContext* ctx) {};
 	virtual void onImRender() {};
+	virtual void onKey(__int32 key);
 };

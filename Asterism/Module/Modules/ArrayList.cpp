@@ -62,8 +62,9 @@ void ArrayList::onImRender() {
 		}
 	}
 	bool bottom = true;
+	float yPos = - 5;
 	ImFont* font = ImGui::GetIO().FontDefault;
-	vec2_t windowSize = vec2_t(ImGuiUtil::get_window_size().x + (ImGuiUtil::isFullScreen() ? 0 : 10),  ImGuiUtil::get_window_size().y - !ImGuiUtil::isFullScreen());
+	vec2_t windowSize = vec2_t(ImGuiUtil::get_window_size().x + (ImGuiUtil::isFullScreen() ? 0 : 10),  ImGuiUtil::get_window_size().y - !ImGuiUtil::isFullScreen() + yPos);
 	float yOffset = 0;
 	if (bottom) yOffset = windowSize.y - ImGuiUtil::get_text_area(font, 30, "A").y;
 	int index = 0;
