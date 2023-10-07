@@ -90,6 +90,9 @@
     <ClCompile Include="Asterism\Module\Modules\TestModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asterism\Module\Modules\PacketMine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\minhook.h">
@@ -243,6 +246,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asterism\Module\Modules\TestModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Maths\GlobalMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asterism\Module\Modules\PacketMine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Hook\Hooks\StartDestroyBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Hook\Hooks\ContinueDestroy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

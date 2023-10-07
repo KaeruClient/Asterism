@@ -3,7 +3,8 @@
 void* __o__javabypass;
 
 void JavaBypass(void* p) {
-    {
+    auto mod = moduleMgr->getModule<PacketMine>();
+    if (!mod->packetmine && !mod->isEnabled()) {
         Utils::CallFunc<void*, void*>(
             __o__javabypass,
             p
