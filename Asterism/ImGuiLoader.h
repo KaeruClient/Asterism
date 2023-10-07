@@ -90,10 +90,7 @@
 #include "../Includes/animations/dotMatrix.h"
 #include "../Includes/Animations/fade.hpp"
 
-// --------------------CATEGORY OPEN TOGGLE-----------------
-bool isVisualOpen = false;
-//
-
+#include "../Managers/ModuleManager.h"
 static ImVec2 getScreenResolution() {
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
