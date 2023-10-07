@@ -3,7 +3,7 @@
 void* __o__GameMode;
 
 float GameModeDetour(GameMode* gm, void* a1, void* a2, void* a3) {
-    g_Data.setGameMode(gm);
+    if (gm != nullptr) g_Data.setGameMode(gm);
     float oFunc = Utils::CallFunc<float, GameMode*, void*, void*, void*>(
         __o__GameMode,
         gm,

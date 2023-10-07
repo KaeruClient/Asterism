@@ -35,6 +35,9 @@
 // Utils
 #include "../Memory/Global.h"
 #include "../Utils/Utils.h"
+#include "../Utils/TimerUtil.h"
+#include "../Utils/DrawUtils.h"
+#include "../Utils/ColorUtils.h"
 
 // Maths
 #include "../SDK/Maths/TextHolder.h"

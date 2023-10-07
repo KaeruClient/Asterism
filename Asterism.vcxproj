@@ -148,6 +148,7 @@
     <ClCompile Include="Asterism\Loader.cpp" />
     <ClCompile Include="Asterism\Module\Modules\ArrayList.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Module.cpp" />
+    <ClCompile Include="Asterism\Module\Modules\TestModule.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Watermark.cpp" />
     <ClCompile Include="Managers\ModuleManager.cpp" />
     <ClCompile Include="Includes\animations\dotMatrix.cpp" />
@@ -167,6 +168,8 @@
     <ClCompile Include="Includes\minhook\hde\hde64.c" />
     <ClCompile Include="Includes\minhook\hook.c" />
     <ClCompile Include="Includes\minhook\trampoline.c" />
+    <ClCompile Include="Utils\ColorUtils.cpp" />
+    <ClCompile Include="Utils\TimerUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets\ProductSans.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="Asterism\Loader.h" />
     <ClInclude Include="Asterism\Module\Modules\ArrayList.h" />
     <ClInclude Include="Asterism\Module\Modules\Module.h" />
+    <ClInclude Include="Asterism\Module\Modules\TestModule.h" />
     <ClInclude Include="Asterism\Module\Modules\Watermark.h" />
     <ClInclude Include="Managers\ModuleManager.h" />
     <ClInclude Include="Includes\animations\dotMatrix.h" />
@@ -202,6 +206,7 @@
     <ClInclude Include="Memory\Hook\Hooks\MouseMap.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="SDK\Maths\Vectors.h" />
+    <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\DrawUtils.h" />
     <ClInclude Include="Memory\Global.h" />
     <ClInclude Include="Memory\Hook\FuncHook.h" />
@@ -216,6 +221,7 @@
     <ClInclude Include="SDK\Structs\GameMode.h" />
     <ClInclude Include="SDK\Structs\MinecraftUIRenderContext.h" />
     <ClInclude Include="Utils\ImGuiUtils.h" />
+    <ClInclude Include="Utils\TimerUtil.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

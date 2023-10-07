@@ -39,6 +39,14 @@ public:
 		return vec2_t(w, h);
 	}
 
+	static bool isFullScreen() {
+		RECT desktop;
+		static HWND window = (HWND)FindWindowA(nullptr, "Minecraft");
+		GetWindowRect(window, &desktop);
+		if (desktop.top != 0 || desktop.left != 0)
+			return false;
+		return true;
+	}
 	static void draw_image(ImTextureID textureId, float x1, float y1, float x2, float y2) {
 		get_draw_list()->AddImageQuad(textureId, ImVec2(x1, y1), ImVec2(x2, y1), ImVec2(x1, y2), ImVec2(x2, y2));
 	}

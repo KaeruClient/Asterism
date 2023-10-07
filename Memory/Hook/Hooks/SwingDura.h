@@ -8,7 +8,7 @@ __int64 sdDetour(Actor* _this) {//_this‚ªentitylist‚È‚ñ‚¾‚æ‚È‚Ÿww
         _this
     );
     //g_Data.getGameMode()->attack(*g_Data.getEntityList()[0]);
-    if (_this == g_Data.getGameMode()->player) return 20;
+    if (_this == g_Data.getGameMode()->player && g_Data.getGameMode() != nullptr) return 20;
     return oFunc;
 }
 class SwingDuraHook : public FuncHook {

@@ -8,3 +8,6 @@ Module::Module(int key, Category c, const char* tooltip) {
 const char* Module::getModuleName() {
 	return "Module";
 }
+const char* Module::getModeName() {
+	return "";
+}
