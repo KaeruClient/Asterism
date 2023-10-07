@@ -8,15 +8,9 @@
 
 #include "../Memory/minhook.h"
 
-void debugStr(const char* str) {
-#ifdef _DEBUG 
-    OutputDebugString(str);
-#endif
-}
 
+#define logstr(str);
 namespace Utils {
-#define logstr(str) debugStr(str)
-
     template <typename R, typename... Args>
     R CallFunc(void* func, Args... args) //namespaceをclassにしないんですか？！？！？！
     {

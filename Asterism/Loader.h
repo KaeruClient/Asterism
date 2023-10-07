@@ -49,8 +49,6 @@
 #include "../Memory/GameData.h"
  
 // Client 
-#include "Managers/ModuleManager.h"
-#include "Managers/Module.h"
 #include "ImGuiLoader.h"
 #include "../Utils/ImGuiUtils.h"
 
@@ -87,6 +85,14 @@
 #include <map>
 #include <cassert>
 #include <basetsd.h>
+#include <typeinfo>
+#include <vector>
+#include <optional>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
+
+#include <algorithm>
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dwrite.lib")

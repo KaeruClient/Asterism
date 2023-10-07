@@ -47,8 +47,6 @@
 #include "../Memory/GameData.h"
 
 // Client 
-#include "Managers/ModuleManager.h"
-#include "Managers/Module.h"
 
 #include "../Includes/imgui/imgui.h"
 #include "../Includes/imgui/imgui_impl_win32.h"
@@ -179,7 +177,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 
 			ImGuiIO& io = ImGui::GetIO();
 			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-			font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
+			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
 				30.f);
 			
 			initContext = true;
@@ -212,13 +210,9 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
-		/*
-		for (auto mod : moduleMgr->getModuleList())
-			if (mod->enabled)
-				mod->OnImGuiRender();
-				*/
-		//for (auto mod : modHandler.modules)
-			//if (mod->enabled && mod->name == "ClickGui") {
+
+		moduleMgr->onImRender();
+		
 		{
 			ImGuiStyle* style = &ImGui::GetStyle();
 			style->WindowPadding = ImVec2(0, 0);
@@ -265,70 +259,61 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 			ImGuiWindowFlags TargetFlags;
-			TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDecoration;
+			TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
 
-			if (ImGui::Begin(("Visuals"), 0, TargetFlags)) {
-				ImGui::SetWindowSize(ImVec2(230.f, 0.f));
+			if (ImGui::Begin(("TestGui"), 0, TargetFlags)) {
+				ImGui::SetWindowSize(ImVec2(360.f, 430.f));
+#pragma region FadeAnimations
+				/*md::FadeInOut fade;
+				ImVec2 window_pos = ImGui::GetWindowPos();
+				ImVec2 window_size = ImGui::GetContentRegionMax();  // Other possible use : ImGui::GetContentRegionAvail();
+				ImVec2 mouse_pos = ImVec2(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+				static float opacity = 1.0f;
+				static bool b_inside_window = false;
+				static bool b_child_window_visible = false;
 
-				auto draw = ImGui::GetWindowDrawList();
-
-				ImVec2 rect = ImVec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-				ImVec2 rect2 = ImVec2(ImGui::GetWindowPos().x + ImGui::GetWindowSize().x, ImGui::GetWindowPos().y + 40);
-
-				draw->AddRectFilled(rect, rect2, ImColor(0.8039f, 0.0667f, 0.0667f, 0.85f));
-				ImGui::Text("Visuals");
-				ImGui::Spacing();
-
-				ImVec2 mousePos = ImGui::GetMousePos();
-
-				draw->AddRectFilled(ImVec2(mousePos.x, mousePos.y), ImVec2(mousePos.x + 150.f, mousePos.y + 20.f), ImColor(0.8039f, 0.0667f, 0.0667f, 0.85f));
-
-				if (ImGui::IsMouseReleased(1) && mousePos.x >= rect.x && mousePos.x <= rect2.x && mousePos.y >= rect.y && mousePos.y <= rect2.y)
-				{
-					isVisualOpen = !isVisualOpen;
+				if (((mouse_pos.x < window_pos.x) || (mouse_pos.x > (window_pos.x + window_size.x)) ||
+					(mouse_pos.y < window_pos.y) || (mouse_pos.y > (window_pos.y + window_size.y))) &&
+					(b_child_window_visible == false)) {
+					b_inside_window = false;
 				}
+				else
+					b_inside_window = true;
 
-				if (isVisualOpen) {
-					ImGui::Spacing(10.f);
-					if (ImGui::Button("Test")) {
-					}
-					ImGui::Checkbox("Toggle Snow", &ImGui::doSnow);
-					ImGui::Checkbox("Toggle DotMatrix", &ImGui::doDotMatrix);
-					ImGui::ButtonScrollable("Button Scrollable that fits in button size", ImVec2(350.f, 0.f));
+				opacity = fade.fadeInOut(1.f, 1.f, 0.1f, 1.f, b_inside_window);
 
-					float windowHeight = ImGui::GetCursorPosY();
-					ImGui::SetWindowSize(ImVec2(230.f, windowHeight));
-				}
-			}
-			ImGui::End();
-
-			if (ImGui::Begin(("Combat"), 0, TargetFlags)) {
-				ImGui::SetWindowSize(ImVec2(180.f, 430.f));
-				if (ImGui::CollapsingHeader(("Combat"))) {
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
+				if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
+					b_child_window_visible = true; else b_child_window_visible = false;*/
+#pragma endregion
+				if (ImGui::CollapsingHeader("Visuals")) {
 					ImGui::Spacing();
 					if (ImGui::Button("Test")) {
 					}
+					ImGui::Toggle("Toggle Snow", &ImGui::doSnow);
+					ImGui::Toggle("Toggle DotMatrix", &ImGui::doDotMatrix);
+					ImGui::ButtonScrollable("Button Scrollable", ImVec2(100.f, 0.f));
+					//ImGui::ButtonScrollable("Button Scrollable that fits in button size", ImVec2(350.f, 0.f));
+					ImGui::ButtonScrollableEx("Button Scrollable (Right-click only!)", ImVec2(100.f, 0.f), ImGuiButtonFlags_MouseButtonRight);
 					ImGui::Spacing();
 				}
-			}
-			ImGui::End();
-
-			if (ImGui::Begin(("Player"), 0, TargetFlags)) {
-				ImGui::SetWindowSize(ImVec2(180.f, 430.f));
-				if (ImGui::CollapsingHeader(("Player"))) {
+				if (ImGui::CollapsingHeader(("Aura"))) {
 					ImGui::Spacing();
 					if (ImGui::Button("Test")) {
 					}
 					ImGui::Spacing();
 				}
-			}
-			ImGui::End();
-
-			if (ImGui::Begin(("Moevement"), 0, TargetFlags)) {
-				ImGui::SetWindowSize(ImVec2(180.f, 430.f));
-				if (ImGui::CollapsingHeader(("Movement"))) {
+				if (ImGui::CollapsingHeader(("Client"))) {
 					ImGui::Spacing();
 					if (ImGui::Button("Test")) {
+					}
+					ImGui::Spacing();
+				}
+				if (ImGui::CollapsingHeader(("Exploits"))) {
+					ImGui::Spacing();
+					if (ImGui::Button("Unlock Achevements")) {
+						//if (Minecraft.clientInstance != nullptr && Minecraft.clientInstance->getLocalPlayer() != nullptr)
+							//Minecraft.clientInstance->getLocalPlayer()->unlockAchievments();
 					}
 					ImGui::Spacing();
 				}
@@ -408,6 +393,8 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 
 			ImGuiIO& io = ImGui::GetIO();
 			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+			font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
+				30.f);
 
 			initContext = true;
 		};
@@ -446,9 +433,8 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		for (auto mod : modHandler.modules)
 			if (mod->enabled)
 				mod->OnImGuiRender();*/
-		ImGuiIO& io = ImGui::GetIO();
-		font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
-			30.f);
+
+				//soredame toriaezu yattemite() draw_text no tokoro no font wo customFont‚É
 		UIColor color = UIColor{ 0, 150, 150, 255 };
 		UIColor color2 = UIColor{ 0, 0, 0, 255 };
 		UIColor color3 = UIColor{ 255, 255, 255, 255 };

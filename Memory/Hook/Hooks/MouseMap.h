@@ -30,27 +30,6 @@
 #include <map>
 #include <cassert>
 #include <cmath>
-// Minhook
-#include "../Memory/minhook.h"
-// Utils
-#include "../Memory/Global.h"
-#include "../Utils/Utils.h"
-
-// Maths
-#include "../SDK/Maths/TextHolder.h"
-#include "../SDK/Maths/UIColor.h"
-#include "../SDK/Maths/Vectors.h"
-
-// Hooks
-#include "../Memory/Hook/FuncHook.h"
-
-// memory
-
-#include "../Memory/GameData.h"
-
-// Client 
-#include "Managers/ModuleManager.h"
-#include "Managers/Module.h"
 
 #include "../Includes/imgui/imgui.h"
 #include "../Includes/imgui/imgui_impl_win32.h"
