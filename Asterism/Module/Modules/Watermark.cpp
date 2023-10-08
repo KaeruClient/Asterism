@@ -25,7 +25,7 @@ void Watermark::onImRender() {/*
 	*/
 
 	ImFont* font = ImGui::GetIO().FontDefault;
-	std::string name = "Chronos";
+	std::string name = "Asterism";
 	vec2_t area = ImGuiUtil::get_text_area(font, 50, name);
 	vec2_t position = vec2_t(10, ImGuiUtil::get_window_size().y - area.y - 15);
 	ImGuiUtil::draw_rect(position.x - 2, position.y - 2, position.x + area.x + 2, position.y + area.y + 2, UIColor(0, 0, 0, 150));

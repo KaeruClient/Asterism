@@ -19,6 +19,7 @@ public:
 #include "Hooks/getDestroyProgress.h"
 #include "Hooks/JavaBypass.h"
 #include "Hooks/MouseMap.h"
+#include "Hooks/StartDestroyBlock.h"
 // This function initializes all registered function hooks
 void InitializeHooks() {
     // This is an array of pointers to function hook objects
@@ -32,7 +33,7 @@ void InitializeHooks() {
         //&DrawBackGroundHook::Instance(),
   //      &DestroyProgressHook::Instance(),
         &JavaBypassHook::Instance(),
-//        &ActorRuntimeIDHook::Instance()
+        &StartDestroyBlockHook::Instance()
     };
 
     // Iterate through all the hook objects

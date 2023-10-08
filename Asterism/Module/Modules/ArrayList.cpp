@@ -34,10 +34,10 @@ struct ModuleContainer {
 		const char* modeNameChr = mod->getModeName();
 		this->enabled = mod->isEnabled();
 		this->backingModule = mod;
-		
+		this->pos = mod->getPos();
 		moduleName = moduleNameChr;
 		if (modeNameChr != "") modeName = " " + std::string(modeNameChr);
-		if (!this->enabled)
+		if (!this->enabled && (this->pos->x == 0 && this->pos->y == 0))
 			this->shouldRender = false;
 		this->moduleWidth = ImGuiUtil::get_text_area(font, 30, moduleName).x;
 		this->modeWidth = ImGuiUtil::get_text_area(font, 30, modeName).x;
@@ -62,7 +62,7 @@ void ArrayList::onImRender() {
 		}
 	}
 	bool bottom = true;
-	float yPos = - 5;
+	float yPos = - 0;
 	ImFont* font = ImGui::GetIO().FontDefault;
 	vec2_t windowSize = vec2_t(ImGuiUtil::get_window_size().x + (ImGuiUtil::isFullScreen() ? 0 : 10),  ImGuiUtil::get_window_size().y - (ImGuiUtil::isFullScreen() ? -10 : 5) + yPos);
 	float yOffset = 0;
@@ -83,25 +83,38 @@ void ArrayList::onImRender() {
 
 		auto modeStr = container.modeName;
 		auto xOffsetOri = windowSize.x - textWidth;
-		float x = 0.0;
+		auto xOffset = windowSize.x - container.pos->x;
+		if (container.enabled) {
+			container.pos->y = smoothLerp(1, container.pos->y, 0.3);
+			if (container.pos->y >= 0.95)
+				container.pos->x = smoothLerp(windowSize.x - xOffsetOri, container.pos->x, 0.3);
+		}
+		else { 
+			container.pos->x = smoothLerp(-1, container.pos->x, 0.3);
+			if (xOffset >= windowSize.x) {
+				container.pos->x = 0.f;
+				container.pos->y = smoothLerp(0, container.pos->y, 0.3);
+				if (container.pos->y <= 0.1) container.pos->y = 0;
+			}
+		}
 		float h = ImGuiUtil::get_text_area(font, 30, textStr).y;
 		if (!bottom) {
 			auto arrayColor = ColorUtil::rainbowColor(2, 1, 1, -index * 100, 255);
-			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, windowSize.x + padding, yOffset + h, UIColor(0, 0, 0, 100));                       //background
-			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, xOffsetOri - 4, yOffset + h, arrayColor);                               //leftrect
-			if (index) ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, windowSize.x - len - padding, yOffset + 1, arrayColor);      //underline
-			ImGuiUtil::draw_text(font, 30, textStr, xOffsetOri, yOffset, arrayColor);                                         //modulename
-			ImGuiUtil::draw_text(font, 30, modeStr, xOffsetOri + moduleWidth, yOffset, UIColor(160, 160, 160));              //mode
-			yOffset += h;
+			ImGuiUtil::draw_rect(xOffset - padding, yOffset, windowSize.x + padding, yOffset + h, UIColor(0, 0, 0, 100));                       //background
+			ImGuiUtil::draw_rect(xOffset - padding, yOffset, xOffset - 4, yOffset + h, arrayColor);                               //leftrect
+			if (index) ImGuiUtil::draw_rect(xOffset - padding, yOffset, windowSize.x - (len + padding), yOffset + 1, arrayColor);      //underline
+			ImGuiUtil::draw_text(font, 30, textStr, xOffset, yOffset, arrayColor);                                         //modulename
+			ImGuiUtil::draw_text(font, 30, modeStr, xOffset + moduleWidth, yOffset, UIColor(160, 160, 160));              //mode
+			yOffset += h * container.pos->y;
 			col = arrayColor;
 		} else {
 			auto arrayColor = ColorUtil::rainbowColor(2, 1, 1, index * 100, 255);
-			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, windowSize.x + padding, yOffset + h, UIColor(0, 0, 0, 100));                       //background
-			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, xOffsetOri - 4, yOffset + h, arrayColor);                               //leftrect
-			if (index) ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset + h, windowSize.x - len - padding, yOffset - 1 + h, arrayColor);      //underline
-			ImGuiUtil::draw_text(font, 30, textStr, xOffsetOri, yOffset, arrayColor);                                         //modulename
-			ImGuiUtil::draw_text(font, 30, modeStr, xOffsetOri + moduleWidth, yOffset, UIColor(160, 160, 160));              //mode
-			yOffset -= h;
+			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset + h, windowSize.x + padding, yOffset + (h - h * container.pos->y), UIColor(0, 0, 0, 100));                       //background
+			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset + h, xOffsetOri - 4, yOffset + (h - h * container.pos->y), arrayColor);                               //leftrect
+			if (index) ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset + h, windowSize.x - (len + padding), yOffset - 1 + h, arrayColor);      //underline
+			ImGuiUtil::draw_text(font, 30, textStr, xOffset, yOffset, arrayColor);                                         //modulename
+			ImGuiUtil::draw_text(font, 30, modeStr, xOffset + moduleWidth, yOffset, UIColor(160, 160, 160));              //mode
+			yOffset -= h * container.pos->y;
 			col = arrayColor;
 		}
 		++index;

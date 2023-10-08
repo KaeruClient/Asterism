@@ -148,6 +148,7 @@
     <ClCompile Include="Asterism\Loader.cpp" />
     <ClCompile Include="Asterism\Module\Modules\ArrayList.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Module.cpp" />
+    <ClCompile Include="Asterism\Module\Modules\PacketMine.cpp" />
     <ClCompile Include="Asterism\Module\Modules\TestModule.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Watermark.cpp" />
     <ClCompile Include="Managers\ModuleManager.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Asterism\Loader.h" />
     <ClInclude Include="Asterism\Module\Modules\ArrayList.h" />
     <ClInclude Include="Asterism\Module\Modules\Module.h" />
+    <ClInclude Include="Asterism\Module\Modules\PacketMine.h" />
     <ClInclude Include="Asterism\Module\Modules\TestModule.h" />
     <ClInclude Include="Asterism\Module\Modules\Watermark.h" />
     <ClInclude Include="Managers\ModuleManager.h" />
@@ -201,9 +203,11 @@
     <ClInclude Include="Includes\minhook\hde\table64.h" />
     <ClInclude Include="Includes\minhook\trampoline.h" />
     <ClInclude Include="Memory\GameData.h" />
+    <ClInclude Include="Memory\Hook\Hooks\ContinueDestroy.h" />
     <ClInclude Include="Memory\Hook\Hooks\getDestroyProgress.h" />
     <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h" />
     <ClInclude Include="Memory\Hook\Hooks\MouseMap.h" />
+    <ClInclude Include="Memory\Hook\Hooks\StartDestroyBlock.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="SDK\Maths\Vectors.h" />
     <ClInclude Include="Utils\ColorUtils.h" />
@@ -220,6 +224,7 @@
     <ClInclude Include="SDK\Maths\UIColor.h" />
     <ClInclude Include="SDK\Structs\GameMode.h" />
     <ClInclude Include="SDK\Structs\MinecraftUIRenderContext.h" />
+    <ClInclude Include="SDK\Maths\GlobalMath.h" />
     <ClInclude Include="Utils\ImGuiUtils.h" />
     <ClInclude Include="Utils\TimerUtil.h" />
     <ClInclude Include="Utils\Utils.h" />

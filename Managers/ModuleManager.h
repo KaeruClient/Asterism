@@ -12,6 +12,7 @@
 
 #include "../Asterism/Module/Modules/Watermark.h"
 #include "../Asterism/Module/Modules/ArrayList.h"
+#include "../Asterism/Module/Modules/PacketMine.h"
 #include "../Asterism/Module/Modules/TestModule.h"
 #include "../Memory/GameData.h"
 //hi ikaaa ikaclient on TRASH
@@ -51,7 +52,6 @@ public:
 		auto lock = lockModuleList(); 
 		for (auto pMod : moduleList) {
 			if (auto pRet = dynamic_cast<typename std::remove_pointer<TRet>::type*>(pMod.get())) {
-
 				return pRet;
 			}
 		}

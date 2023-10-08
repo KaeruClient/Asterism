@@ -7,9 +7,9 @@ TestModule::~TestModule() {
 };
 
 const char* TestModule::getModuleName() {
-	return "TestModule";
+	return "AutoCrystal";
 }
 
 const char* TestModule::getModeName() {
-	return "Test";
+	return "Java";
 }

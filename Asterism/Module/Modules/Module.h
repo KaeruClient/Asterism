@@ -15,17 +15,28 @@ private:
 	const char* tooltip;
 	Category category;
 	int key = 0x0;
+	vec2_t pos;
 public:
 	Module(int key, Category category, const char* tooltip);
 	virtual ~Module() {};
 
+	inline vec2_t* getPos() {
+		return &pos;
+	};
 	virtual bool isEnabled() {
 		return this->enabled;
-	}
+	};
 	virtual int getBind() {
 		return this->key;
-	}
+	};
+	virtual void onEnable() {
+	};
+	virtual void onDisable() {
+	};
 	virtual void setEnabled(bool ean) {
+		if (this->enabled == ean) return;
+		if (ean) onEnable();
+		else onDisable();
 		this->enabled = ean;
 	};
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-
+#include "../../../SDK/Maths/GlobalMath.h"
 class ArrayList : public Module {
 public:
 	ArrayList();
