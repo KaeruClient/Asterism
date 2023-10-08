@@ -16,10 +16,10 @@ float GameModeDetour(GameMode* gm, void* a1, void* a2, void* a3) {
     auto pm = moduleMgr->getModule<PacketMine>();
     if (pm != nullptr)
     if (pm->packetmine && g_Data.getGameMode() != nullptr) {
-        if (pm->odelay >= 25) {
+        if (pm->odelay >= 100) {
         gm->destroyBlock(pm->pos, pm->face);
         }
-        else if (pm->odelay < 25) pm->odelay++;
+        else if (pm->odelay < 100) pm->odelay++;
     }
     //log("woah");
     return oFunc;

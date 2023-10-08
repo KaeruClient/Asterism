@@ -203,7 +203,6 @@
     <ClInclude Include="Includes\minhook\hde\table64.h" />
     <ClInclude Include="Includes\minhook\trampoline.h" />
     <ClInclude Include="Memory\GameData.h" />
-    <ClInclude Include="Memory\Hook\Hooks\ContinueDestroy.h" />
     <ClInclude Include="Memory\Hook\Hooks\getDestroyProgress.h" />
     <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h" />
     <ClInclude Include="Memory\Hook\Hooks\MouseMap.h" />

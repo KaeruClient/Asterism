@@ -257,8 +257,5 @@
     <ClInclude Include="Memory\Hook\Hooks\StartDestroyBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory\Hook\Hooks\ContinueDestroy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
