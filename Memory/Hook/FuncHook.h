@@ -35,12 +35,15 @@ void InitializeHooks() {
         &JavaBypassHook::Instance(),
         &StartDestroyBlockHook::Instance()
     };
-
+    int count = 0;
     // Iterate through all the hook objects
     for (std::size_t i = 0; i < std::size(hooks); ++i) {
         // Initialize the hook
         if (!hooks[i]->Initialize()) {
             // Handle initialization failure (Which for now we'll ignore)
         }
+        ++count;
     }
+    auto notification = g_Data.addInfoBox("Setup", std::to_string(count) + " hooks were successfully hooked!");
+    notification->duration = 3.f;
 }

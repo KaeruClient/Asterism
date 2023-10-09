@@ -2,8 +2,8 @@
 #include "../Managers/ModuleManager.h"
 // この関数はクライアントの初期設定をするものです
 void InitializeClient(HMODULE module) {
-    InitializeHooks();
     moduleMgr->initModules();
+    InitializeHooks();
 }
 
 BOOL APIENTRY DllMain(HMODULE module, DWORD reason, LPVOID reserved)

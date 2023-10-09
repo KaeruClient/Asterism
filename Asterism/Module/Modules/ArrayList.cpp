@@ -61,7 +61,6 @@ void ArrayList::onImRender() {
 			modContainerList.emplace(ModuleContainer(it));
 		}
 	}
-	bool bottom = true;
 	float yPos = - 0;
 	ImFont* font = ImGui::GetIO().FontDefault;
 	vec2_t windowSize = vec2_t(ImGuiUtil::get_window_size().x + (ImGuiUtil::isFullScreen() ? 0 : 10),  ImGuiUtil::get_window_size().y - !ImGuiUtil::isFullScreen() + yPos);

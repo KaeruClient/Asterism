@@ -6,7 +6,6 @@
 #include "../Memory/GameData.h"
 #include "../Includes/imgui/imgui.h"
 #include "../Includes/imgui/imgui_internal.h"
-
 #include "../Assets/ProductSans.h"
 class ImGuiUtil {
 public:
@@ -93,8 +92,9 @@ public:
 		get_draw_list()->AddCircle(ImVec2(x, y), scale, to_imu32(color), thickness = thickness);
 	}
 
-	static void draw_text(ImFont* font, float size, std::string const& text, float x, float y, UIColor const& color) {
-		get_draw_list()->AddText(font, size, ImVec2(x, y), to_imu32(color), text.c_str());
+	static void draw_text(ImFont* font, float size, std::string const& text, float x, float y, UIColor const& color, vec4_t clip = vec4_t(0,0,0,0)) {
+		//ImVec4 pos = ImVec4(clip.x, clip.y, clip.z, clip.w);
+		get_draw_list()->AddText(font, size, ImVec2(x, y), to_imu32(color), text.c_str(), 0, 0);
 	}
 
 	static vec2_t get_text_area(ImFont* font, float size, std::string const& text) {

@@ -64,7 +64,7 @@ void renderDetour(void* a1, MinecraftUIRenderContext* renderCtx) {
     // Increment layerCounter
     layerCounter++;
 
-    // If layerCounter is equal to 3
+     // If layerCounter is equal to 3
     if (layerCounter == 3) {
         // Set layerCounter to 0
         layerCounter = 0;

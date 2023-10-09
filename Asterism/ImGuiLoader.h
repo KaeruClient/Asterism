@@ -87,8 +87,8 @@
 #include "../Includes//Animations/snowflake.hpp"
 #include "../Includes/animations/dotMatrix.h"
 #include "../Includes/Animations/fade.hpp"
-
 #include "../Managers/ModuleManager.h"
+
 static ImVec2 getScreenResolution() {
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
@@ -106,6 +106,40 @@ auto GetDllMod(void) -> HMODULE {
 	return len ? (HMODULE)info.AllocationBase : NULL;
 }
 
+void drawNotifications() {
+	//Notification
+	ImGuiIO& io = ImGui::GetIO();
+	auto arraylist = moduleMgr->getModule<ArrayList>();
+	vec2_t windowSize = ImGuiUtil::get_window_size();
+	auto& notifications = g_Data.getInfoBoxList();
+	auto font = io.FontDefault;
+	float yPos = 15;
+	float x = 15;
+	if (arraylist == nullptr) return;
+	for (auto& notification : notifications) {
+		if (!notification->check) {
+			notification->maxDuration = notification->duration;
+			notification->check = true;
+		}
+		notification->fadeVal += (notification->fadeTarget - notification->fadeVal) * 0.08f;
+		if (notification->fadeTarget == 0 && notification->fadeVal < 0.1f)
+			notification->isOpen = false;
+		if (notification->fadeTarget == 1 && notification->duration <= 0 && notification->duration > -1)
+			notification->fadeTarget = 0;
+		else if (notification->duration > 0)
+			notification->duration -= 1.f / 60;
+		float percent = notification->duration / notification->maxDuration;
+		std::string text = notification->message;
+		float textHight = ImGuiUtil::get_text_area(font, 25, text).y;
+		float textWight = ImGuiUtil::get_text_area(font, 25, text).x;
+		float bar = x + (textWight + 4) * percent;
+		notification->animate.y = smoothLerp(yPos, notification->animate.y, 0.2);
+		ImGuiUtil::draw_rect(x * notification->fadeVal, (notification->animate.y - 2) * notification->fadeVal, (x + textWight + 4) * notification->fadeVal, (notification->animate.y + textHight + 2) * notification->fadeVal, UIColor(0, 0, 0, 150 * notification->fadeVal));
+		ImGuiUtil::draw_rect(x * notification->fadeVal, (notification->animate.y + textHight + 1) * notification->fadeVal, bar * notification->fadeVal, (notification->animate.y + textHight + 2) * notification->fadeVal, UIColor(255, 255, 255, 255 * notification->fadeVal));
+		ImGuiUtil::draw_text(font, 25 * notification->fadeVal, text, (x + 2) * notification->fadeVal, notification->animate.y * notification->fadeVal, UIColor(255, 255, 255, 255 * notification->fadeVal));
+		yPos += textHight + 15;
+	}
+}
 ImFont* font;
 //Index shit
 int countnum = -1;
@@ -132,7 +166,117 @@ ID3D12GraphicsCommandList* d3d12CommandList = nullptr;
 ID3D12CommandAllocator* allocator = nullptr;
 D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle;
 ID3D12CommandQueue* d3d12CommandQueue = nullptr;
-bool initContext = false;
+bool initContext = false;/*
+void drawInfoBox()
+{
+	//auto interfaceMod = moduleMgr->getModule<Interface>();
+	auto arraylist = moduleMgr->getModule<ArrayList>();
+	vec2_t windowSize = ImGuiUtil::get_window_size();
+	auto& notifications = boxmgr.getInfoBoxList();
+	int index = 0;
+	index++; int curIndex = -index * 25;
+	//auto interfaceColor = ColorUtil::interfaceColor(curIndex);
+	float yPos = windowSize.y - 15;
+	constexpr float margin = 6;
+	for (auto& notification : notifications) {
+		auto rainbow = ColorUtil::rainbowColor(32, 1.f, 1.f, -notification->colorIndex * 30, 150);
+		if (notification->check) {
+			notification->fadeVal += (notification->fadeTarget - notification->fadeVal) * 0.08f;
+			if (notification->fadeTarget == 0 && notification->fadeVal < 0.001f)
+				notification->isOpen = false;
+			if (notification->fadeTarget == 1 && notification->duration <= 0 && notification->duration > -1)
+				notification->fadeTarget = 0;
+			else if (notification->duration > 0)
+				notification->duration -= 1.f / 60;
+
+			int lines = 1;
+
+			std::string substring = notification->message;
+
+			while (lines < 5) {
+				auto brea = substring.find("\n");
+				if (brea == std::string::npos || brea + 1 >= substring.size())
+					break;
+				substring = substring.substr(brea + 1);
+				lines++;
+			}
+			if (notification->message.size() == 0)
+				lines = 0;
+
+			constexpr float notificationMessage = 1;
+			constexpr float unused = 0.7f;
+			constexpr float borderPadding = 10;
+			std::string message = notification->message;
+			std::string title = notification->title;
+			std::string textStr = message;
+			vec2_t getNotiTextSize = ImGuiUtil::get_text_area(font, 30.f, message);
+			float nameLength = getNotiTextSize.x;
+			float fullTextLength = nameLength;
+			static const float textHeight = (notificationMessage + unused * 1) * (getNotiTextSize.y * 1.2);
+
+			notification->animate.y += (yPos - notification->animate.y) * 0.1f;
+			if (notification->fadeTarget == 1)
+				notification->animate.x += ((windowSize.x - margin - fullTextLength - 2 - borderPadding * 2) - notification->animate.x) * 0.1f;
+			else
+				notification->animate.x += (windowSize.x - notification->animate.x) * 0.1f;
+
+			vec4_t rect = vec4_t(
+				notification->animate.x,
+				notification->animate.y - margin - textHeight - 4,
+				(notification->animate.x + margin + fullTextLength + 2 + borderPadding * 2) + margin - borderPadding - 2,
+				notification->animate.y - margin);
+
+			float duration = (rect.z - rect.x) * (notification->duration / notification->maxDuration);
+			if (duration < 1) duration = 1;
+			vec2_t textPos = vec2_t(rect.x + 9, rect.y + 1);
+			vec2_t titlePos = vec2_t(rect.x + 9, rect.y + 1);
+
+			//DrawUtils::drawText(vec2_t(textPos.x, textPos.y), &textStr, MC_Color(255, 255, 255), 0.8, 1, true);
+			vec4_t rect_glow = rect;
+			float rect_round = 10.f;
+			float rect_alpha = 7.5f;
+			for (int i = 0; i < 25; i++)
+			{
+				rect_glow.x -= 1.f;
+				rect_glow.y -= 1.f;
+				rect_glow.z += 1.f;
+				rect_glow.w += 1.f;
+				rect_round += 1.f;
+				rect_alpha -= 0.3f;
+				ImGuiUtil::draw_rounded(rect_glow.x, rect_glow.y, rect_glow.z, rect_glow.w, rect_round, UIColor(0, 0, 0, rect_alpha));
+			}
+
+
+				rect_glow = rect;
+				rect_round = 10.f;
+				rect_alpha = 7.5f;
+				rect_glow.z -= duration;
+				UIColor rainbowGlowColor = ColorUtil::rainbowColor(32, 1.f, 1.f, -notification->colorIndex * 30, 150);
+				for (int i = 0; i < 20; i++)
+				{
+					rect_glow.x -= 1.f;
+					rect_glow.y -= 1.f;
+					rect_glow.w += 1.f;
+					rect_round += 1.f;
+					rect_alpha -= 0.3f;
+					ImGuiUtil::draw_rounded(rect_glow.x, rect_glow.y, rect_glow.z, rect_glow.w, rect_round, rainbowGlowColor);
+				}
+				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z, rect.w, 10, UIColor(0, 0, 0, 150));
+				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z - duration, rect.w, 10, rainbow);
+				ImGuiUtil::draw_text(font, 30.f, textStr, textPos.x, textPos.y + 15.f, UIColor (255, 255, 255));
+			
+		}
+		else {
+			notification->maxDuration = notification->duration;
+			notification->check = true;
+			notification->animate.y = yPos;
+			notification->animate.x = windowSize.x;
+		}
+		if (notification->animate.x < windowSize.x + margin - 12 || notification->fadeTarget == 1) {
+			yPos -= margin + 75;
+		}
+	}
+}*/
 HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT flags) {
 	auto deviceType = ID3D_Device_Type::INVALID_DEVICE_TYPE;
 	auto window = (HWND)FindWindowA(nullptr, (LPCSTR)"Minecraft");
@@ -179,7 +323,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
 				30.f);
-			
+
 			initContext = true;
 		}
 		ImGui_ImplDX11_NewFrame();
@@ -212,7 +356,9 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 #pragma endregion
 
 		moduleMgr->onImRender();
-		
+
+		drawNotifications();
+
 		{
 			ImGuiStyle* style = &ImGui::GetStyle();
 			style->WindowPadding = ImVec2(15, 15);
@@ -341,7 +487,6 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
 				30.f);
-
 			initContext = true;
 		};
 		if (d3d12CommandQueue == nullptr)
@@ -376,7 +521,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		}
 #pragma endregion
 		moduleMgr->onImRender();
-		
+		drawNotifications();
 		//}
 	//}
 
@@ -473,11 +618,15 @@ void __stdcall hkDrawIndexedInstancedD12(ID3D12GraphicsCommandList* dCommandList
 class ImguiHooks {
 public:
 	static void InitImgui() {
-		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success)
-			logstr("Created hook for SwapChain::Present (DX12)!");
+		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success){
+			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX12)!");
+			notification->duration = 3.f;
+		}
 
-		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success)
-			logstr("Created hook for SwapChain::Present (DX11)!");
+		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
+			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX11)!");
+			notification->duration = 3.f;
+		}
 
 		kiero::bind(54, (void**)&oExecuteCommandListsD3D12, hookExecuteCommandListsD3D12);
 		kiero::bind(140, (void**)&oPresentD3D12, hookPresentD3D12);
