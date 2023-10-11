@@ -158,7 +158,7 @@ void ImGui::TextEx(const char* text, const char* text_end, ImGuiTextFlags flags)
 	if (text_end == NULL)
 		text_end = text + strlen(text);  // FIXME-OPT
 
-	const ImVec2 text_pos(window->DC.CursorPos.x, window->DC.CursorPos.y + window->DC.CurrLineTextBaseOffset);
+	const ImVec2 text_pos(window->DC.CursorPos.x + 7.f, window->DC.CursorPos.y + 5.f + window->DC.CurrLineTextBaseOffset);
 	const float wrap_pos_x = window->DC.TextWrapPos;
 	const bool wrap_enabled = (wrap_pos_x >= 0.0f);
 	if (text_end - text > 2000 && !wrap_enabled) {
@@ -1247,11 +1247,11 @@ void ImGui::Bullet() {
 // - ShrinkWidths() [Internal]
 //-------------------------------------------------------------------------
 
-void ImGui::Spacing() {
+void ImGui::Spacing(float y) {
 	ImGuiWindow* window = GetCurrentWindow();
 	if (window->SkipItems)
 		return;
-	ItemSize(ImVec2(0, 0));
+	ItemSize(ImVec2(0, y));
 }
 
 void ImGui::Dummy(const ImVec2& size) {

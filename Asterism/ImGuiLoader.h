@@ -117,6 +117,7 @@ void drawNotifications() {
 	float x = 15;
 	if (arraylist == nullptr) return;
 	for (auto& notification : notifications) {
+		if (notification == NULL) return;
 		if (!notification->check) {
 			notification->maxDuration = notification->duration;
 			notification->check = true;
@@ -264,7 +265,7 @@ void drawInfoBox()
 				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z, rect.w, 10, UIColor(0, 0, 0, 150));
 				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z - duration, rect.w, 10, rainbow);
 				ImGuiUtil::draw_text(font, 30.f, textStr, textPos.x, textPos.y + 15.f, UIColor (255, 255, 255));
-			
+
 		}
 		else {
 			notification->maxDuration = notification->duration;
@@ -415,7 +416,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 			ImGuiWindowFlags TargetFlags;
-			TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;	
+			TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
 		}
 
 		ImGui::Render();
@@ -533,7 +534,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGuiUtil::draw_gradient_rect(0, size69.y / 2, size69.x, size69.y, col4, col3, col1, col2);
 			//updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
 			//drawDotMatrix(dots, 50, 0.05, false);
-		
+
 			moduleMgr->getModule<ClickGui>()->onImRender();
 		}
 		else {
@@ -636,14 +637,14 @@ void __stdcall hkDrawIndexedInstancedD12(ID3D12GraphicsCommandList* dCommandList
 class ImguiHooks {
 public:
 	static void InitImgui() {
-		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success){
+		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success) {
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX12)!");
-			notification->duration = 10.f;
+			notification->duration = 7.f;
 		}
 
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX11)!");
-			notification->duration = 10.f;
+			notification->duration = 7.f;
 		}
 
 		kiero::bind(54, (void**)&oExecuteCommandListsD3D12, hookExecuteCommandListsD3D12);

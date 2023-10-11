@@ -18,7 +18,7 @@ void Module::setEnabled(bool ean) {
 	auto state = ean ? " Enabled" : " Disabled";
 	std::string noftitle = "Notification:";
 	auto notification = g_Data.addInfoBox(noftitle, std::string(std::string(state) + " " + this->getModuleName()));
-	notification->duration = 3.f;
+	notification->duration = 2.5f;
 	if (ean) onEnable();
 	else onDisable();
 	this->enabled = ean;
