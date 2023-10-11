@@ -115,9 +115,11 @@ void drawNotifications() {
 	auto font = io.FontDefault;
 	float yPos = 15;
 	float x = 15;
+	int counter = 0;
 	if (arraylist == nullptr) return;
 	for (auto& notification : notifications) {
-		if (notification == NULL) return;
+		counter++;
+		if (notification == nullptr || counter >= 23) return;
 		if (!notification->check) {
 			notification->maxDuration = notification->duration;
 			notification->check = true;
