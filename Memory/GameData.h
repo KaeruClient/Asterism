@@ -35,6 +35,7 @@
 
 #include <algorithm> 
 #include "../SDK/Structs/GameMode.h"
+#include <list>
 struct InfoBoxData {
 	bool isOpen = true;
 	float fadeTarget = 1;
@@ -65,26 +66,12 @@ private:
 	std::vector<std::shared_ptr<InfoBoxData>> infoBoxQueue;
 public:
 
-	inline std::shared_ptr<InfoBoxData> getFreshInfoBox() {
-		while (!this->infoBoxQueue.empty()) {
-			auto box = this->infoBoxQueue.front();
-			if (!box->isOpen) {
-				this->infoBoxQueue.erase(this->infoBoxQueue.begin());
-				continue;
-			}
-			return box;
-		}
-		return std::shared_ptr<InfoBoxData>();
-	}
+	 std::vector<Actor*> entitylist;
 
 	inline std::vector<std::shared_ptr<InfoBoxData>>& getInfoBoxList() {
-		while (!this->infoBoxQueue.empty()) {
-			auto box = this->infoBoxQueue.front();
-			if (!box->isOpen) {
-				this->infoBoxQueue.erase(this->infoBoxQueue.begin());
-				continue;
-			}
-			break;
+		for (int i = 0; i < this->infoBoxQueue.size(); ++i) {
+			if (this->infoBoxQueue[i]->isOpen) continue;
+			this->infoBoxQueue.erase(this->infoBoxQueue.begin() + i);
 		}
 		return this->infoBoxQueue;
 	}
@@ -94,7 +81,6 @@ public:
 		this->infoBoxQueue.push_back(box);
 		return box;
 	}
-	static std::map<uint64_t, Actor*> entitylist;
 	void setGameMode(GameMode* gm) {
 		_gm = gm;
 	}

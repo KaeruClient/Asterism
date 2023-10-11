@@ -86,10 +86,10 @@ void ArrayList::onImRender() {
 		if (container.enabled) {
 			container.pos->y = smoothLerp(1, container.pos->y, 0.3);
 			if (container.pos->y >= 0.95)
-				container.pos->x = smoothLerp(windowSize.x - xOffsetOri, container.pos->x, 0.3);
+				container.pos->x = smoothLerp(windowSize.x - xOffsetOri, container.pos->x, 0.4);
 		}
 		else { 
-			container.pos->x = smoothLerp(-1, container.pos->x, 0.3);
+			container.pos->x = smoothLerp(-1, container.pos->x, 0.4);
 			if (xOffset >= windowSize.x) {
 				container.pos->x = 0.f;
 				container.pos->y = smoothLerp(0, container.pos->y, 0.3);

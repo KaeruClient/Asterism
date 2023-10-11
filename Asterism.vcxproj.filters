@@ -99,6 +99,9 @@
     <ClCompile Include="Asterism\Module\Modules\ClickGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asterism\Module\Modules\KillAura.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory\minhook.h">
@@ -264,6 +267,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asterism\Module\Modules\ClickGui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asterism\Module\Modules\KillAura.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Hook\Hooks\onTick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

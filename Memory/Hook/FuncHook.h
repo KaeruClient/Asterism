@@ -10,6 +10,8 @@ public:
         MH_Uninitialize();
     };
 };
+#include "../GameData.h"
+#include "../../Managers/ModuleManager.h"
 #include "Hooks/Keymap.h"
 #include "Hooks/RenderContext.h"
 #include "Hooks/SwingDura.h"
@@ -20,6 +22,7 @@ public:
 #include "Hooks/JavaBypass.h"
 #include "Hooks/MouseMap.h"
 #include "Hooks/StartDestroyBlock.h"
+#include "Hooks/onTick.h"
 // This function initializes all registered function hooks
 void InitializeHooks() {
     // This is an array of pointers to function hook objects
@@ -33,7 +36,8 @@ void InitializeHooks() {
         //&DrawBackGroundHook::Instance(),
   //      &DestroyProgressHook::Instance(),
         &JavaBypassHook::Instance(),
-        &StartDestroyBlockHook::Instance()
+        &StartDestroyBlockHook::Instance(),
+        &TickHook::Instance()
     };
     int count = 0;
     // Iterate through all the hook objects
@@ -44,6 +48,6 @@ void InitializeHooks() {
         }
         ++count;
     }
-    auto notification = g_Data.addInfoBox("Setup", std::to_string(count) + " hooks were successfully hooked!");
-    notification->duration = 3.f;
+    auto notification = g_Data.addInfoBox("Setup", std::to_string(count) + " hooks successfully hooked!");
+    notification->duration = 10.f;
 }

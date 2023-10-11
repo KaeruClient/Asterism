@@ -1,18 +1,18 @@
 #pragma once
 
 void* __o__progress;
-float progressDetour(void* inv, void* block) {
-    return Utils::CallFunc<float, void*, void*>(
+float progressDetour(Actor* ent) {
+    return true;
+    return Utils::CallFunc<bool, Actor*>(
         __o__progress,
-        inv,
-        block
+        ent
     );
 }
 class DestroyProgressHook : public FuncHook {
 public:
     bool Initialize() override
     {
-        void* fluxAddr = Utils::findSig("48 89 5C 24 ? 57 48 83 EC 40 48 8B FA 0F 29 74 24 ? 48 8B 91");//java bypass C6 81 88 19 00 00 00
+        void* fluxAddr = Utils::findSig("E8 ? ? ? ? 0F B6 E8 84 C0 0F 84 ? ? ? ? 49 8B 0E");//java bypass C6 81 88 19 00 00 00
         return Utils::HookFunction(fluxAddr, (void*)&progressDetour, &__o__progress);
     }
     static DestroyProgressHook& Instance() {

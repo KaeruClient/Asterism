@@ -354,11 +354,15 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
-
-		moduleMgr->onImRender();
-
-		drawNotifications();
-
+		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
+			ImGuiUtil::draw_rect(0, 0, size69.x, size69.y, UIColor(0, 0, 0, 170));
+			updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
+			drawDotMatrix(dots, 50, 0.05, false);
+		}
+		else {
+			moduleMgr->onImRender();
+			drawNotifications();
+		}
 		{
 			ImGuiStyle* style = &ImGui::GetStyle();
 			style->WindowPadding = ImVec2(15, 15);
@@ -520,8 +524,20 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
-		moduleMgr->onImRender();
-		drawNotifications();
+		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
+			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);
+			auto col2 = ColorUtil::rainbowColor(2, 1, 1, 1000, 50);
+			ImGuiUtil::draw_rect(0, 0, size69.x, size69.y, UIColor(0, 0, 0, 100));
+			ImGuiUtil::draw_gradient_rect(0, size69.y / 2, size69.x, size69.y, UIColor(0, 255, 255, 0), UIColor(0, 255, 255, 0), col1, col2);
+			//updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
+			//drawDotMatrix(dots, 50, 0.05, false);
+		
+			moduleMgr->getModule<ClickGui>()->onImRender();
+		}
+		else {
+			moduleMgr->onImRender();
+			drawNotifications();
+		}
 		//}
 	//}
 
@@ -620,12 +636,12 @@ public:
 	static void InitImgui() {
 		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success){
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX12)!");
-			notification->duration = 3.f;
+			notification->duration = 10.f;
 		}
 
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX11)!");
-			notification->duration = 3.f;
+			notification->duration = 10.f;
 		}
 
 		kiero::bind(54, (void**)&oExecuteCommandListsD3D12, hookExecuteCommandListsD3D12);

@@ -148,6 +148,7 @@
     <ClCompile Include="Asterism\Loader.cpp" />
     <ClCompile Include="Asterism\Module\Modules\ArrayList.cpp" />
     <ClCompile Include="Asterism\Module\Modules\ClickGui.cpp" />
+    <ClCompile Include="Asterism\Module\Modules\KillAura.cpp" />
     <ClCompile Include="Asterism\Module\Modules\Module.cpp" />
     <ClCompile Include="Asterism\Module\Modules\PacketMine.cpp" />
     <ClCompile Include="Asterism\Module\Modules\TestModule.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Asterism\Loader.h" />
     <ClInclude Include="Asterism\Module\Modules\ArrayList.h" />
     <ClInclude Include="Asterism\Module\Modules\ClickGui.h" />
+    <ClInclude Include="Asterism\Module\Modules\KillAura.h" />
     <ClInclude Include="Asterism\Module\Modules\Module.h" />
     <ClInclude Include="Asterism\Module\Modules\PacketMine.h" />
     <ClInclude Include="Asterism\Module\Modules\TestModule.h" />
@@ -209,6 +211,7 @@
     <ClInclude Include="Memory\Hook\Hooks\getDestroyProgress.h" />
     <ClInclude Include="Memory\Hook\Hooks\JavaBypass.h" />
     <ClInclude Include="Memory\Hook\Hooks\MouseMap.h" />
+    <ClInclude Include="Memory\Hook\Hooks\onTick.h" />
     <ClInclude Include="Memory\Hook\Hooks\StartDestroyBlock.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="SDK\Maths\Vectors.h" />

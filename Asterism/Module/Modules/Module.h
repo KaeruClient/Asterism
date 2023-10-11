@@ -38,6 +38,9 @@ public:
 	};
 	virtual void setEnabled(bool ean);
 
+	virtual void setBind(int ean) {
+		key = ean;
+	};
 	virtual const char* getModuleName() = 0;
 	virtual const char* getModeName();
 	virtual void onTick(GameMode* gm) {};

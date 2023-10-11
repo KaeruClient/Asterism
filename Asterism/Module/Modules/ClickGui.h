@@ -7,6 +7,7 @@ class ClickGui : public Module {
 public:
 	ClickGui();
 	~ClickGui();
+
 	 const char* catToName(Category cat) {
 		 const char* categoryName{};
 
@@ -35,4 +36,8 @@ public:
 	virtual const char* getModuleName() override;
 	virtual void onImRender() override;
 	void getModuleListByCategory(Category category, std::vector<std::shared_ptr<Module>>* modList);
+	int pressedkey = 0;
+	bool onClick = false;
+	bool waitkey = false;
+	std::shared_ptr<Module> waitmodule;
 };

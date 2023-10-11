@@ -3,11 +3,14 @@
 void* __o__sd;
 
 __int64 sdDetour(Actor* _this) {//_thisがentitylistなんだよなぁww
+
+    g_Data.entitylist.clear();
     auto oFunc = Utils::CallFunc<__int64, Actor*>(//死刑死刑死刑死刑！！！死刑！！！！！！！！！！！！！！！！
         __o__sd,
         _this
     );
     //g_Data.getGameMode()->attack(*g_Data.getEntityList()[0]);
+    g_Data.entitylist.push_back(_this);
     return 20;
     return oFunc;
 }

@@ -15,6 +15,7 @@
 #include "../Asterism/Module/Modules/PacketMine.h"
 #include "../Asterism/Module/Modules/TestModule.h"
 #include "../Asterism/Module/Modules/ClickGui.h"
+#include "../Asterism/Module/Modules/KillAura.h"
 #include "../Memory/GameData.h"
 //hi ikaaa ikaclient on TRASH
 class ModuleManager {
