@@ -581,10 +581,13 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
 			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);
 			auto col2 = ColorUtil::rainbowColor(2, 1, 1, 1000, 50);
+			auto col3 = ColorUtil::rainbowColor(2, 1, 1, 0, 00);
+			auto col4 = ColorUtil::rainbowColor(2, 1, 1, 1000, 00);
 			ImGuiUtil::draw_rect(0, 0, size69.x, size69.y, UIColor(0, 0, 0, 100));
-			ImGuiUtil::draw_gradient_rect(0, size69.y / 2, size69.x, size69.y, UIColor(0, 255, 255, 0), UIColor(0, 255, 255, 0), col1, col2);
+			ImGuiUtil::draw_gradient_rect(0, size69.y / 2, size69.x, size69.y, col4, col3, col1, col2);
 			//updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
 			//drawDotMatrix(dots, 50, 0.05, false);
+>>>>>>> 694a124776fa214e70c66b818f1d59c7d9e33b7e
 		
 		//}
 	//}
