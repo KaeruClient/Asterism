@@ -91,7 +91,6 @@ void ClickGui::onImRender() {
 			{
 				for (auto& it : moduleList) {
 					std::string label = it->getModuleName();
-					//len = fmax(len, ImGuiUtil::get_text_area(font, 30, label).x);
 				}
 			}
 			ImGui::SetWindowSize(ImVec2(200, 430.f));
