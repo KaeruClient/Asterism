@@ -22,6 +22,8 @@ void ModuleManager::initModules() {
 		moduleList.emplace_back(new TestModule());
 		moduleList.emplace_back(new ArrayList());
 		moduleList.emplace_back(new PacketMine());
+		moduleList.emplace_back(new ClickGui());
+		moduleList.emplace_back(new KillAura());
 
 		// Sort modules alphabetically
 		std::sort(moduleList.begin(), moduleList.end(), [](auto lhs, auto rhs) {
@@ -35,6 +37,12 @@ void ModuleManager::initModules() {
 	getModule<Watermark>()->setEnabled(true);
 	getModule<ArrayList>()->setEnabled(true);
 	getModule<TestModule>()->setEnabled(false);
+	int count = 0;
+	for (auto& list : moduleList) {
+		++count;
+	}
+	auto notification = g_Data.addInfoBox("Setup", std::to_string(count) + " modules successfully initialized!");
+	notification->duration = 10.f;
 }
 
 void ModuleManager::onTick(GameMode* gameMode) {

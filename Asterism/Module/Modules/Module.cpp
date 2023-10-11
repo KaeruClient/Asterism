@@ -13,3 +13,13 @@ const char* Module::getModeName() {
 }
 void Module::onKey(__int32 key) {
 }
+void Module::setEnabled(bool ean) {
+	if (this->enabled == ean) return;
+	auto state = ean ? " Enabled" : " Disabled";
+	std::string noftitle = "Notification:";
+	auto notification = g_Data.addInfoBox(noftitle, std::string(std::string(state) + " " + this->getModuleName()));
+	notification->duration = 3.f;
+	if (ean) onEnable();
+	else onDisable();
+	this->enabled = ean;
+};

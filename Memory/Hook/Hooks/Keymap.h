@@ -17,8 +17,19 @@ void keymapDetour(__int32 key, bool held) {
     Global::keymap[key] = held;
     if (Global::keymap['L'] && Global::keymap[17])
         EjectClient(getDll());
-    if (held)
+    if (held) {
         moduleMgr->onKey(key);
+        auto clickgui = moduleMgr->getModule<ClickGui>();
+        if (clickgui != nullptr) {
+            if (clickgui->waitkey) {
+                if (clickgui->waitmodule != nullptr) {
+                    clickgui->waitmodule->setBind(key);
+                    clickgui->waitkey = false; 
+                    clickgui->waitmodule = nullptr;
+                }
+            }
+        }
+    }
     logstr(Utils::combine("Key ", key, " ", held, "\n").c_str());
     Utils::CallFunc<void*, __int32, bool>(
         __o__SendKey,

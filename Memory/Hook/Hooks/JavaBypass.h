@@ -2,10 +2,12 @@
 
 void* __o__javabypass;
 
-void JavaBypass(void* p) {
+void JavaBypass(Actor* p) {
+    g_Data.entitylist.clear();
+    g_Data.entitylist.push_back(p);
     auto mod = moduleMgr->getModule<PacketMine>();
     if (!mod->packetmine && !mod->isEnabled()) {
-        Utils::CallFunc<void*, void*>(
+        Utils::CallFunc<void*, Actor*>(
             __o__javabypass,
             p
         );

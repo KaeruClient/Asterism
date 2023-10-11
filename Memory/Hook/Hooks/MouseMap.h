@@ -25,6 +25,8 @@ void MouseDetour(__int64 a1, char mouseButton, char isDown, __int16 mouseX, __in
             break;
         }
     }
+    auto mod = moduleMgr->getModule<ClickGui>();
+    if (mod != nullptr && mod->isEnabled()) return;
     Utils::CallFunc<void, __int64, char, char, __int16, __int16, __int16, __int16, char>(
         __o__mouse,
         a1,
