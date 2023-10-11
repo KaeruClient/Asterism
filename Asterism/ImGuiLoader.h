@@ -117,6 +117,7 @@ void drawNotifications() {
 	float x = 15;
 	if (arraylist == nullptr) return;
 	for (auto& notification : notifications) {
+		if (notification == NULL) return;
 		if (!notification->check) {
 			notification->maxDuration = notification->duration;
 			notification->check = true;
@@ -264,7 +265,7 @@ void drawInfoBox()
 				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z, rect.w, 10, UIColor(0, 0, 0, 150));
 				ImGuiUtil::draw_rounded(rect.x, rect.y, rect.z - duration, rect.w, 10, rainbow);
 				ImGuiUtil::draw_text(font, 30.f, textStr, textPos.x, textPos.y + 15.f, UIColor (255, 255, 255));
-			
+
 		}
 		else {
 			notification->maxDuration = notification->duration;
@@ -365,8 +366,10 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		}
 		{
 			ImGuiStyle* style = &ImGui::GetStyle();
-			style->WindowPadding = ImVec2(0, 0);
-			style->WindowRounding = 0.f;
+			style->WindowPadding = ImVec2(15, 15);
+			style->WindowRounding = 10.f;
+			style->FramePadding = ImVec2(5, 5);
+			style->FrameRounding = 6.f;
 			style->ItemSpacing = ImVec2(12, 8);
 			style->ItemInnerSpacing = ImVec2(8, 6);
 			style->IndentSpacing = 25.0f;
@@ -379,9 +382,13 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
 			style->Colors[ImGuiCol_Separator] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 			style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-			style->Colors[ImGuiCol_WindowBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.85f);
-			style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 0.85f);
-			style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+			style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+			style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
+			style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+			style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+			style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 			style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 			style->Colors[ImGuiCol_CheckMark] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 			style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
@@ -397,9 +404,9 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 			style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 			style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_Header] = ImVec4(0.8039f, 0.0667f, 0.0667f, 0.85f);
-			style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.8039f, 0.0667f, 0.0667f, 0.85f);
-			style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.8039f, 0.0667f, 0.0667f, 0.85f);
+			style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
 			style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 			style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
 			style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
@@ -410,67 +417,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 			ImGuiWindowFlags TargetFlags;
 			TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
-
-			if (ImGui::Begin(("TestGui"), 0, TargetFlags)) {
-				ImGui::SetWindowSize(ImVec2(360.f, 430.f));
-#pragma region FadeAnimations
-				/*md::FadeInOut fade;
-				ImVec2 window_pos = ImGui::GetWindowPos();
-				ImVec2 window_size = ImGui::GetContentRegionMax();  // Other possible use : ImGui::GetContentRegionAvail();
-				ImVec2 mouse_pos = ImVec2(ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
-				static float opacity = 1.0f;
-				static bool b_inside_window = false;
-				static bool b_child_window_visible = false;
-
-				if (((mouse_pos.x < window_pos.x) || (mouse_pos.x > (window_pos.x + window_size.x)) ||
-					(mouse_pos.y < window_pos.y) || (mouse_pos.y > (window_pos.y + window_size.y))) &&
-					(b_child_window_visible == false)) {
-					b_inside_window = false;
-				}
-				else
-					b_inside_window = true;
-
-				opacity = fade.fadeInOut(1.f, 1.f, 0.1f, 1.f, b_inside_window);
-
-				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
-				if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows | ImGuiHoveredFlags_AllowWhenBlockedByPopup | ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
-					b_child_window_visible = true; else b_child_window_visible = false;*/
-#pragma endregion
-				if (ImGui::CollapsingHeader("Visuals")) {
-					ImGui::Spacing();
-					if (ImGui::Button("Test")) {
-					}
-					ImGui::Toggle("Toggle Snow", &ImGui::doSnow);
-					ImGui::Toggle("Toggle DotMatrix", &ImGui::doDotMatrix);
-					ImGui::ButtonScrollable("Button Scrollable", ImVec2(100.f, 0.f));
-					//ImGui::ButtonScrollable("Button Scrollable that fits in button size", ImVec2(350.f, 0.f));
-					ImGui::ButtonScrollableEx("Button Scrollable (Right-click only!)", ImVec2(100.f, 0.f), ImGuiButtonFlags_MouseButtonRight);
-					ImGui::Spacing();
-				}
-				if (ImGui::CollapsingHeader(("Aura"))) {
-					ImGui::Spacing();
-					if (ImGui::Button("Test")) {
-					}
-					ImGui::Spacing();
-				}
-				if (ImGui::CollapsingHeader(("Client"))) {
-					ImGui::Spacing();
-					if (ImGui::Button("Test")) {
-					}
-					ImGui::Spacing();
-				}
-				if (ImGui::CollapsingHeader(("Exploits"))) {
-					ImGui::Spacing();
-					if (ImGui::Button("Unlock Achevements")) {
-						//if (Minecraft.clientInstance != nullptr && Minecraft.clientInstance->getLocalPlayer() != nullptr)
-							//Minecraft.clientInstance->getLocalPlayer()->unlockAchievments();
-					}
-					ImGui::Spacing();
-				}
-			}
-			ImGui::End();
 		}
-		//}
 
 		ImGui::Render();
 		ppContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
@@ -543,7 +490,7 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 
 			ImGuiIO& io = ImGui::GetIO();
 			io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-			font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
+			io.FontDefault = io.Fonts->AddFontFromMemoryCompressedBase85TTF(ProductSans_compressed_data_base85,
 				30.f);
 			initContext = true;
 		};
@@ -587,8 +534,13 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGuiUtil::draw_gradient_rect(0, size69.y / 2, size69.x, size69.y, col4, col3, col1, col2);
 			//updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
 			//drawDotMatrix(dots, 50, 0.05, false);
->>>>>>> 694a124776fa214e70c66b818f1d59c7d9e33b7e
-		
+
+			moduleMgr->getModule<ClickGui>()->onImRender();
+		}
+		else {
+			moduleMgr->onImRender();
+			drawNotifications();
+		}
 		//}
 	//}
 
@@ -685,14 +637,14 @@ void __stdcall hkDrawIndexedInstancedD12(ID3D12GraphicsCommandList* dCommandList
 class ImguiHooks {
 public:
 	static void InitImgui() {
-		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success){
+		if (kiero::init(kiero::RenderType::D3D12) == kiero::Status::Success) {
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX12)!");
-			notification->duration = 10.f;
+			notification->duration = 7.f;
 		}
 
 		if (kiero::init(kiero::RenderType::D3D11) == kiero::Status::Success) {
 			auto notification = g_Data.addInfoBox("Setup", "Created hook for SwapChain::Present (DX11)!");
-			notification->duration = 10.f;
+			notification->duration = 7.f;
 		}
 
 		kiero::bind(54, (void**)&oExecuteCommandListsD3D12, hookExecuteCommandListsD3D12);

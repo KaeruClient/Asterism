@@ -3,7 +3,7 @@
 #include "../../../Includes/animations/snowflake.hpp"
 #include "../../../Includes/animations/dotMatrix.h"
 #include "../../../Managers/ModuleManager.h"
-ClickGui::ClickGui() : Module(0x2D, Category::RENDER, "clickgui") {
+ClickGui::ClickGui() : Module(VK_INSERT, Category::RENDER, "clickgui") {
 };
 
 ClickGui::~ClickGui() {
