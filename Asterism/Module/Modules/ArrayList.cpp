@@ -6,6 +6,7 @@
 
 #include "../../../Utils/ColorUtils.h"
 ArrayList::ArrayList() : Module(0x0, Category::RENDER, "im arraylist") {
+	registerBoolSetting("Bottom", &bottom, false);
 };
 
 ArrayList::~ArrayList() {

@@ -23,7 +23,7 @@ void ClickGui::getModuleListByCategory(Category category, std::vector<std::share
 }
 void ClickGui::onImRender() {
 	ImGuiStyle* style = &ImGui::GetStyle();
-	
+
 	style->WindowPadding = ImVec2(15, 15);
 	style->WindowRounding = 0.f;
 	style->FramePadding = ImVec2(5, 5);
@@ -42,8 +42,8 @@ void ClickGui::onImRender() {
 	style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 0.70f);
 	style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-	//style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
-	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+	style->Colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+	style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.0f, 0.00f);
 	style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
 	style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
@@ -54,11 +54,11 @@ void ClickGui::onImRender() {
 	style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
 	style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+	style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+	style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, .30f);
+	style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
 	style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, .30f);
 	style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, .30f);
 	style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, .30f);
@@ -72,16 +72,16 @@ void ClickGui::onImRender() {
 	style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 	style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
 	style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f); 
+	style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 	ImGuiIO& io = ImGui::GetIO();
 	vec2_t windowSize = ImGuiUtil::get_window_size();
 	auto& notifications = g_Data.getInfoBoxList();
 	auto font = io.FontDefault;
-	font->Scale = 0.65f;
+	font->Scale = 0.9f;
 	ImGuiWindowFlags TargetFlags;
 	TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 	std::vector<Category> cats = { Category::COMBAT, Category::MISC, Category::PLAYER, Category::RENDER, Category::WORLD };
-	
+
 	for (auto& category : cats) {
 		//len = fmax(len, ImGuiUtil::get_text_area(font, 30, catToName(category)).x);
 		if (ImGui::Begin((catToName(category)), 0, TargetFlags)) {
@@ -91,12 +91,11 @@ void ClickGui::onImRender() {
 			{
 				for (auto& it : moduleList) {
 					std::string label = it->getModuleName();
-					//len = fmax(len, ImGuiUtil::get_text_area(font, 30, label).x);
 				}
 			}
-			ImGui::SetWindowSize(ImVec2(200, 430.f));
+			ImGui::SetWindowSize(ImVec2(260, 470.f));
 			for (auto& mods : moduleList) {
-				
+
 				if (ImGui::CollapsingHeader((mods->getModuleName()))) {
 					std::string key = (std::string)"Key : " + Utils::getKeyName(mods->getBind());
 					if (mods->getBind() == 0x0) key = (std::string)"Key : None";
@@ -108,6 +107,40 @@ void ClickGui::onImRender() {
 					if (ImGui::Button(mods->isEnabled() ? "Disable" : "Enable")) {
 						mods->setEnabled(!mods->isEnabled());
 					}
+
+					std::vector<SettingEntry*>* settings = mods->getSettings();
+
+					for (auto& setting : *settings) {
+						if (strcmp(setting->name, "enabled") == 0 || strcmp(setting->name, "keybind") == 0)
+							continue;
+
+						switch (setting->valueType) {
+						case ValueType::BOOL_T: {
+							if(ImGui::Checkbox(setting->name, &setting->defaultValue->_bool)) {
+								setting->value->_bool = !setting->value->_bool;
+							}
+							ImGui::Spacing(10.f);
+							break;
+						}
+						case ValueType::ENUM_T: {
+							break;
+						}
+						case ValueType::FLOAT_T: {
+							ImGui::SliderFloat(setting->name, &setting->defaultValue->_float, setting->minValue->_float, setting->maxValue->_float);
+							ImGui::Spacing(10.f);
+						} break;
+						case ValueType::INT_T: {
+							ImGui::SliderInt(setting->name, &setting->defaultValue->_int, setting->minValue->_int, setting->maxValue->_int);
+							ImGui::Spacing(10.f);
+							break;
+						}
+						default: {
+							char alc[100];
+							sprintf_s(alc, 100, "Not implemented (%s)", setting->name);
+							std::string elTexto = alc;
+						} break;
+						}
+					}
 				}
 				else {
 					if (mods == waitmodule) {
@@ -116,35 +149,7 @@ void ClickGui::onImRender() {
 					}
 				}
 			}
-			/*
-			if (ImGui::CollapsingHeader("Visuals")) {
-				ImGui::Spacing();
-				if (ImGui::Button("Test")) {
-				}
-				ImGui::Toggle("Toggle Snow", &ImGui::doSnow);
-				ImGui::Toggle("Toggle DotMatrix", &ImGui::doDotMatrix);
-				ImGui::ButtonScrollable("Button Scrollable", ImVec2(100.f, 0.f));
-				ImGui::ButtonScrollableEx("Button Scrollable (Right-click only!)", ImVec2(100.f, 0.f), ImGuiButtonFlags_MouseButtonRight);
-				ImGui::Spacing();
-			}
-			if (ImGui::CollapsingHeader(("Aura"))) {
-				ImGui::Spacing();
-				if (ImGui::Button("Test")) {
-				}
-				ImGui::Spacing();
-			}
-			if (ImGui::CollapsingHeader(("Client"))) {
-				ImGui::Spacing();
-				if (ImGui::Button("Test")) {
-				}
-				ImGui::Spacing();
-			}
-			if (ImGui::CollapsingHeader(("Exploits"))) {
-				ImGui::Spacing();
-				if (ImGui::Button("Unlock Achevements")) {
-				}
-				ImGui::Spacing();
-			}*/
+
 		}
 
 		ImGui::End();
