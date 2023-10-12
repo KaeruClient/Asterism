@@ -256,7 +256,7 @@ Index of this file:
 static const int TABLE_DRAW_CHANNEL_BG0 = 0;
 static const int TABLE_DRAW_CHANNEL_BG2_FROZEN = 1;
 static const int TABLE_DRAW_CHANNEL_NOCLIP = 2;                     // When using ImGuiTableFlags_NoClip (this becomes the last visible channel)
-static const float TABLE_BORDER_SIZE                     = 1.0f;    // FIXME-TABLE: Currently hard-coded because of clipping assumptions with outer borders rendering.
+static const float TABLE_BORDER_SIZE = 1.0f;    // FIXME-TABLE: Currently hard-coded because of clipping assumptions with outer borders rendering.
 static const float TABLE_RESIZE_SEPARATOR_HALF_THICKNESS = 4.0f;    // Extend outside inner borders.
 static const float TABLE_RESIZE_SEPARATOR_FEEDBACK_TIMER = 0.06f;   // Delay/timer before making the hover feedback (color+cursor) visible because tables/columns tends to be more cramped.
 
@@ -697,9 +697,9 @@ static void TableSetupColumnFlags(ImGuiTable* table, ImGuiTableColumn* column, I
     if (table->Flags & ImGuiTableFlags_Sortable)
     {
         int count = 0, mask = 0, list = 0;
-        if ((flags & ImGuiTableColumnFlags_PreferSortAscending)  != 0 && (flags & ImGuiTableColumnFlags_NoSortAscending)  == 0) { mask |= 1 << ImGuiSortDirection_Ascending;  list |= ImGuiSortDirection_Ascending  << (count << 1); count++; }
+        if ((flags & ImGuiTableColumnFlags_PreferSortAscending) != 0 && (flags & ImGuiTableColumnFlags_NoSortAscending) == 0) { mask |= 1 << ImGuiSortDirection_Ascending;  list |= ImGuiSortDirection_Ascending << (count << 1); count++; }
         if ((flags & ImGuiTableColumnFlags_PreferSortDescending) != 0 && (flags & ImGuiTableColumnFlags_NoSortDescending) == 0) { mask |= 1 << ImGuiSortDirection_Descending; list |= ImGuiSortDirection_Descending << (count << 1); count++; }
-        if ((flags & ImGuiTableColumnFlags_PreferSortAscending)  == 0 && (flags & ImGuiTableColumnFlags_NoSortAscending)  == 0) { mask |= 1 << ImGuiSortDirection_Ascending;  list |= ImGuiSortDirection_Ascending  << (count << 1); count++; }
+        if ((flags & ImGuiTableColumnFlags_PreferSortAscending) == 0 && (flags & ImGuiTableColumnFlags_NoSortAscending) == 0) { mask |= 1 << ImGuiSortDirection_Ascending;  list |= ImGuiSortDirection_Ascending << (count << 1); count++; }
         if ((flags & ImGuiTableColumnFlags_PreferSortDescending) == 0 && (flags & ImGuiTableColumnFlags_NoSortDescending) == 0) { mask |= 1 << ImGuiSortDirection_Descending; list |= ImGuiSortDirection_Descending << (count << 1); count++; }
         if ((table->Flags & ImGuiTableFlags_SortTristate) || count == 0) { mask |= 1 << ImGuiSortDirection_None; count++; }
         column->SortDirectionsAvailList = (ImU8)list;
@@ -936,19 +936,11 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
             width_remaining_for_stretched_columns -= 1.0f;
         }
 
-    // Determine if table is hovered which will be used to flag columns as hovered.
-    // - In principle we'd like to use the equivalent of IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem),
-    //   but because our item is partially submitted at this point we use ItemHoverable() and a workaround (temporarily
-    //   clear ActiveId, which is equivalent to the change provided by _AllowWhenBLockedByActiveItem).
-    // - This allows columns to be marked as hovered when e.g. clicking a button inside the column, or using drag and drop.
     ImGuiTableInstanceData* table_instance = TableGetInstanceData(table, table->InstanceCurrent);
     table->HoveredColumnBody = -1;
     table->HoveredColumnBorder = -1;
     const ImRect mouse_hit_rect(table->OuterRect.Min.x, table->OuterRect.Min.y, table->OuterRect.Max.x, ImMax(table->OuterRect.Max.y, table->OuterRect.Min.y + table_instance->LastOuterHeight));
-    const ImGuiID backup_active_id = g.ActiveId;
-    g.ActiveId = 0;
     const bool is_hovering_table = ItemHoverable(mouse_hit_rect, 0);
-    g.ActiveId = backup_active_id;
 
     // [Part 6] Setup final position, offset, skip/clip states and clipping rectangles, detect hovered column
     // Process columns in their visible orders as we are comparing the visible order and adjusting host_clip_rect while looping.
@@ -3406,12 +3398,12 @@ static void TableSettingsHandler_ReadLine(ImGuiContext*, ImGuiSettingsHandler*, 
         char c = 0;
         ImGuiTableColumnSettings* column = settings->GetColumnSettings() + column_n;
         column->Index = (ImGuiTableColumnIdx)column_n;
-        if (sscanf(line, "UserID=0x%08X%n", (ImU32*)&n, &r)==1) { line = ImStrSkipBlank(line + r); column->UserID = (ImGuiID)n; }
-        if (sscanf(line, "Width=%d%n", &n, &r) == 1)            { line = ImStrSkipBlank(line + r); column->WidthOrWeight = (float)n; column->IsStretch = 0; settings->SaveFlags |= ImGuiTableFlags_Resizable; }
-        if (sscanf(line, "Weight=%f%n", &f, &r) == 1)           { line = ImStrSkipBlank(line + r); column->WidthOrWeight = f; column->IsStretch = 1; settings->SaveFlags |= ImGuiTableFlags_Resizable; }
-        if (sscanf(line, "Visible=%d%n", &n, &r) == 1)          { line = ImStrSkipBlank(line + r); column->IsEnabled = (ImU8)n; settings->SaveFlags |= ImGuiTableFlags_Hideable; }
-        if (sscanf(line, "Order=%d%n", &n, &r) == 1)            { line = ImStrSkipBlank(line + r); column->DisplayOrder = (ImGuiTableColumnIdx)n; settings->SaveFlags |= ImGuiTableFlags_Reorderable; }
-        if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2)       { line = ImStrSkipBlank(line + r); column->SortOrder = (ImGuiTableColumnIdx)n; column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending; settings->SaveFlags |= ImGuiTableFlags_Sortable; }
+        if (sscanf(line, "UserID=0x%08X%n", (ImU32*)&n, &r) == 1) { line = ImStrSkipBlank(line + r); column->UserID = (ImGuiID)n; }
+        if (sscanf(line, "Width=%d%n", &n, &r) == 1) { line = ImStrSkipBlank(line + r); column->WidthOrWeight = (float)n; column->IsStretch = 0; settings->SaveFlags |= ImGuiTableFlags_Resizable; }
+        if (sscanf(line, "Weight=%f%n", &f, &r) == 1) { line = ImStrSkipBlank(line + r); column->WidthOrWeight = f; column->IsStretch = 1; settings->SaveFlags |= ImGuiTableFlags_Resizable; }
+        if (sscanf(line, "Visible=%d%n", &n, &r) == 1) { line = ImStrSkipBlank(line + r); column->IsEnabled = (ImU8)n; settings->SaveFlags |= ImGuiTableFlags_Hideable; }
+        if (sscanf(line, "Order=%d%n", &n, &r) == 1) { line = ImStrSkipBlank(line + r); column->DisplayOrder = (ImGuiTableColumnIdx)n; settings->SaveFlags |= ImGuiTableFlags_Reorderable; }
+        if (sscanf(line, "Sort=%d%c%n", &n, &c, &r) == 2) { line = ImStrSkipBlank(line + r); column->SortOrder = (ImGuiTableColumnIdx)n; column->SortDirection = (c == '^') ? ImGuiSortDirection_Descending : ImGuiSortDirection_Ascending; settings->SaveFlags |= ImGuiTableFlags_Sortable; }
     }
 }
 
@@ -3425,10 +3417,10 @@ static void TableSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettingsHandle
 
         // TableSaveSettings() may clear some of those flags when we establish that the data can be stripped
         // (e.g. Order was unchanged)
-        const bool save_size    = (settings->SaveFlags & ImGuiTableFlags_Resizable) != 0;
+        const bool save_size = (settings->SaveFlags & ImGuiTableFlags_Resizable) != 0;
         const bool save_visible = (settings->SaveFlags & ImGuiTableFlags_Hideable) != 0;
-        const bool save_order   = (settings->SaveFlags & ImGuiTableFlags_Reorderable) != 0;
-        const bool save_sort    = (settings->SaveFlags & ImGuiTableFlags_Sortable) != 0;
+        const bool save_order = (settings->SaveFlags & ImGuiTableFlags_Reorderable) != 0;
+        const bool save_sort = (settings->SaveFlags & ImGuiTableFlags_Sortable) != 0;
         if (!save_size && !save_visible && !save_order && !save_sort)
             continue;
 
@@ -3541,8 +3533,8 @@ void ImGui::TableGcCompactSettings()
 static const char* DebugNodeTableGetSizingPolicyDesc(ImGuiTableFlags sizing_policy)
 {
     sizing_policy &= ImGuiTableFlags_SizingMask_;
-    if (sizing_policy == ImGuiTableFlags_SizingFixedFit)    { return "FixedFit"; }
-    if (sizing_policy == ImGuiTableFlags_SizingFixedSame)   { return "FixedSame"; }
+    if (sizing_policy == ImGuiTableFlags_SizingFixedFit) { return "FixedFit"; }
+    if (sizing_policy == ImGuiTableFlags_SizingFixedSame) { return "FixedSame"; }
     if (sizing_policy == ImGuiTableFlags_SizingStretchProp) { return "StretchProp"; }
     if (sizing_policy == ImGuiTableFlags_SizingStretchSame) { return "StretchSame"; }
     return "N/A";

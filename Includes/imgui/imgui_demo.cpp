@@ -8,15 +8,11 @@
 // Read imgui.cpp for more details, documentation and comments.
 // Get the latest version at https://github.com/ocornut/imgui
 
-// -------------------------------------------------
-// PLEASE DO NOT REMOVE THIS FILE FROM YOUR PROJECT!
-// -------------------------------------------------
 // Message to the person tempted to delete this file when integrating Dear ImGui into their codebase:
-// Think again! It is the most useful reference code that you and other coders will want to refer to and call.
-// Have the ImGui::ShowDemoWindow() function wired in an always-available debug menu of your game/app!
-// Also include Metrics! ItemPicker! DebugLog! and other debug features.
-// Removing this file from your project is hindering access to documentation for everyone in your team,
-// likely leading you to poorer usage of the library.
+// Do NOT remove this file from your project! Think again! It is the most useful reference code that you and other
+// coders will want to refer to and call. Have the ImGui::ShowDemoWindow() function wired in an always-available
+// debug menu of your game/app! Removing this file from your project is hindering access to documentation for everyone
+// in your team, likely leading you to poorer usage of the library.
 // Everything in this file will be stripped out by the linker if you don't call ImGui::ShowDemoWindow().
 // If you want to link core Dear ImGui in your shipped builds but want a thorough guarantee that the demo will not be
 // linked, you can setup your imconfig.h with #define IMGUI_DISABLE_DEMO_WINDOWS and those functions will be empty.
@@ -50,10 +46,8 @@
 
 Index of this file:
 
-// [SECTION] Forward Declarations
-// [SECTION] Helpers
+// [SECTION] Forward Declarations, Helpers
 // [SECTION] Demo Window / ShowDemoWindow()
-// - ShowDemoWindow()
 // - sub section: ShowDemoWindowWidgets()
 // - sub section: ShowDemoWindowLayout()
 // - sub section: ShowDemoWindowPopups()
@@ -61,7 +55,6 @@ Index of this file:
 // - sub section: ShowDemoWindowInputs()
 // [SECTION] About Window / ShowAboutWindow()
 // [SECTION] Style Editor / ShowStyleEditor()
-// [SECTION] User Guide / ShowUserGuide()
 // [SECTION] Example App: Main Menu Bar / ShowExampleAppMainMenuBar()
 // [SECTION] Example App: Debug Console / ShowExampleAppConsole()
 // [SECTION] Example App: Debug Log / ShowExampleAppLog()
@@ -193,19 +186,6 @@ static void ShowExampleAppWindowTitles(bool* p_open);
 static void ShowExampleAppCustomRendering(bool* p_open);
 static void ShowExampleMenuFile();
 
-// We split the contents of the big ShowDemoWindow() function into smaller functions
-// (because the link time of very large functions grow non-linearly)
-static void ShowDemoWindowWidgets();
-static void ShowDemoWindowLayout();
-static void ShowDemoWindowPopups();
-static void ShowDemoWindowTables();
-static void ShowDemoWindowColumns();
-static void ShowDemoWindowInputs();
-
-//-----------------------------------------------------------------------------
-// [SECTION] Helpers
-//-----------------------------------------------------------------------------
-
 // Helper to display a little (?) mark which shows a tooltip when hovered.
 // In your own code you may want to display an actual icon if you are using a merged icon fonts (see docs/FONTS.md)
 static void HelpMarker(const char* desc)
@@ -223,16 +203,46 @@ static void HelpMarker(const char* desc)
 
 // Helper to wire demo markers located in code to an interactive browser
 typedef void (*ImGuiDemoMarkerCallback)(const char* file, int line, const char* section, void* user_data);
-extern ImGuiDemoMarkerCallback      GImGuiDemoMarkerCallback;
-extern void*                        GImGuiDemoMarkerCallbackUserData;
-ImGuiDemoMarkerCallback             GImGuiDemoMarkerCallback = NULL;
-void*                               GImGuiDemoMarkerCallbackUserData = NULL;
+extern ImGuiDemoMarkerCallback  GImGuiDemoMarkerCallback;
+extern void* GImGuiDemoMarkerCallbackUserData;
+ImGuiDemoMarkerCallback         GImGuiDemoMarkerCallback = NULL;
+void* GImGuiDemoMarkerCallbackUserData = NULL;
 #define IMGUI_DEMO_MARKER(section)  do { if (GImGuiDemoMarkerCallback != NULL) GImGuiDemoMarkerCallback(__FILE__, __LINE__, section, GImGuiDemoMarkerCallbackUserData); } while (0)
+
+// Helper to display basic user controls.
+void ImGui::ShowUserGuide()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::BulletText("Double-click on title bar to collapse window.");
+    ImGui::BulletText(
+        "Click and drag on lower corner to resize window\n"
+        "(double-click to auto fit window to its contents).");
+    ImGui::BulletText("CTRL+Click on a slider or drag box to input value as text.");
+    ImGui::BulletText("TAB/SHIFT+TAB to cycle through keyboard editable fields.");
+    ImGui::BulletText("CTRL+Tab to select a window.");
+    if (io.FontAllowUserScaling)
+        ImGui::BulletText("CTRL+Mouse Wheel to zoom window contents.");
+    ImGui::BulletText("While inputing text:\n");
+    ImGui::Indent();
+    ImGui::BulletText("CTRL+Left/Right to word jump.");
+    ImGui::BulletText("CTRL+A or double-click to select all.");
+    ImGui::BulletText("CTRL+X/C/V to use clipboard cut/copy/paste.");
+    ImGui::BulletText("CTRL+Z,CTRL+Y to undo/redo.");
+    ImGui::BulletText("ESCAPE to revert.");
+    ImGui::Unindent();
+    ImGui::BulletText("With keyboard navigation enabled:");
+    ImGui::Indent();
+    ImGui::BulletText("Arrow keys to navigate.");
+    ImGui::BulletText("Space to activate a widget.");
+    ImGui::BulletText("Return to input text into a widget.");
+    ImGui::BulletText("Escape to deactivate a widget, close popup, exit child window.");
+    ImGui::BulletText("Alt to jump to the menu layer of a window.");
+    ImGui::Unindent();
+}
 
 //-----------------------------------------------------------------------------
 // [SECTION] Demo Window / ShowDemoWindow()
 //-----------------------------------------------------------------------------
-// - ShowDemoWindow()
 // - ShowDemoWindowWidgets()
 // - ShowDemoWindowLayout()
 // - ShowDemoWindowPopups()
@@ -241,18 +251,28 @@ void*                               GImGuiDemoMarkerCallbackUserData = NULL;
 // - ShowDemoWindowInputs()
 //-----------------------------------------------------------------------------
 
+// We split the contents of the big ShowDemoWindow() function into smaller functions
+// (because the link time of very large functions grow non-linearly)
+static void ShowDemoWindowWidgets();
+static void ShowDemoWindowLayout();
+static void ShowDemoWindowPopups();
+static void ShowDemoWindowTables();
+static void ShowDemoWindowColumns();
+static void ShowDemoWindowInputs();
+
 // Demonstrate most Dear ImGui features (this is big function!)
 // You may execute this function to experiment with the UI and understand what it does.
 // You may then search for keywords in the code when you are interested by a specific feature.
 void ImGui::ShowDemoWindow(bool* p_open)
 {
     // Exceptionally add an extra assert here for people confused about initial Dear ImGui setup
-    // Most functions would normally just crash if the context is missing.
+    // Most ImGui functions would normally just crash if the context is missing.
     IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing dear imgui context. Refer to examples app!");
 
     // Examples Apps (accessible from the "Examples" menu)
     static bool show_app_main_menu_bar = false;
     static bool show_app_documents = false;
+
     static bool show_app_console = false;
     static bool show_app_log = false;
     static bool show_app_layout = false;
@@ -267,6 +287,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
 
     if (show_app_main_menu_bar)       ShowExampleAppMainMenuBar();
     if (show_app_documents)           ShowExampleAppDocuments(&show_app_documents);
+
     if (show_app_console)             ShowExampleAppConsole(&show_app_console);
     if (show_app_log)                 ShowExampleAppLog(&show_app_log);
     if (show_app_layout)              ShowExampleAppLayout(&show_app_layout);
@@ -279,7 +300,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     if (show_app_window_titles)       ShowExampleAppWindowTitles(&show_app_window_titles);
     if (show_app_custom_rendering)    ShowExampleAppCustomRendering(&show_app_custom_rendering);
 
-    // Dear ImGui Tools/Apps (accessible from the "Tools" menu)
+    // Dear ImGui Apps (accessible from the "Tools" menu)
     static bool show_app_metrics = false;
     static bool show_app_debug_log = false;
     static bool show_app_stack_tool = false;
@@ -342,8 +363,10 @@ void ImGui::ShowDemoWindow(bool* p_open)
     }
 
     // Most "big" widgets share a common width settings by default. See 'Demo->Layout->Widgets Width' for details.
+
     // e.g. Use 2/3 of the space for widgets and 1/3 for labels (right align)
     //ImGui::PushItemWidth(-ImGui::GetWindowWidth() * 0.35f);
+
     // e.g. Leave a fixed amount of width for labels (by passing a negative value), the rest goes to widgets.
     ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
 
@@ -403,7 +426,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
         ImGui::BulletText("Sections below are demonstrating many aspects of the library.");
         ImGui::BulletText("The \"Examples\" menu above leads to more demo contents.");
         ImGui::BulletText("The \"Tools\" menu above gives access to: About Box, Style Editor,\n"
-                          "and Metrics/Debugger (general purpose Dear ImGui debugging tool).");
+            "and Metrics/Debugger (general purpose Dear ImGui debugging tool).");
         ImGui::Separator();
 
         ImGui::Text("PROGRAMMER GUIDE:");
@@ -426,13 +449,13 @@ void ImGui::ShowDemoWindow(bool* p_open)
 
         if (ImGui::TreeNode("Configuration##2"))
         {
-            ImGui::CheckboxFlags("io.ConfigFlags: NavEnableKeyboard",    &io.ConfigFlags, ImGuiConfigFlags_NavEnableKeyboard);
+            ImGui::CheckboxFlags("io.ConfigFlags: NavEnableKeyboard", &io.ConfigFlags, ImGuiConfigFlags_NavEnableKeyboard);
             ImGui::SameLine(); HelpMarker("Enable keyboard controls.");
-            ImGui::CheckboxFlags("io.ConfigFlags: NavEnableGamepad",     &io.ConfigFlags, ImGuiConfigFlags_NavEnableGamepad);
+            ImGui::CheckboxFlags("io.ConfigFlags: NavEnableGamepad", &io.ConfigFlags, ImGuiConfigFlags_NavEnableGamepad);
             ImGui::SameLine(); HelpMarker("Enable gamepad controls. Require backend to set io.BackendFlags |= ImGuiBackendFlags_HasGamepad.\n\nRead instructions in imgui.cpp for details.");
             ImGui::CheckboxFlags("io.ConfigFlags: NavEnableSetMousePos", &io.ConfigFlags, ImGuiConfigFlags_NavEnableSetMousePos);
             ImGui::SameLine(); HelpMarker("Instruct navigation to move the mouse cursor. See comment for ImGuiConfigFlags_NavEnableSetMousePos.");
-            ImGui::CheckboxFlags("io.ConfigFlags: NoMouse",              &io.ConfigFlags, ImGuiConfigFlags_NoMouse);
+            ImGui::CheckboxFlags("io.ConfigFlags: NoMouse", &io.ConfigFlags, ImGuiConfigFlags_NoMouse);
             if (io.ConfigFlags & ImGuiConfigFlags_NoMouse)
             {
                 // The "NoMouse" option can get us stuck with a disabled mouse! Let's provide an alternative way to fix it:
@@ -474,9 +497,9 @@ void ImGui::ShowDemoWindow(bool* p_open)
             // Make a local copy to avoid modifying actual backend flags.
             // FIXME: We don't use BeginDisabled() to keep label bright, maybe we need a BeginReadonly() equivalent..
             ImGuiBackendFlags backend_flags = io.BackendFlags;
-            ImGui::CheckboxFlags("io.BackendFlags: HasGamepad",           &backend_flags, ImGuiBackendFlags_HasGamepad);
-            ImGui::CheckboxFlags("io.BackendFlags: HasMouseCursors",      &backend_flags, ImGuiBackendFlags_HasMouseCursors);
-            ImGui::CheckboxFlags("io.BackendFlags: HasSetMousePos",       &backend_flags, ImGuiBackendFlags_HasSetMousePos);
+            ImGui::CheckboxFlags("io.BackendFlags: HasGamepad", &backend_flags, ImGuiBackendFlags_HasGamepad);
+            ImGui::CheckboxFlags("io.BackendFlags: HasMouseCursors", &backend_flags, ImGuiBackendFlags_HasMouseCursors);
+            ImGui::CheckboxFlags("io.BackendFlags: HasSetMousePos", &backend_flags, ImGuiBackendFlags_HasSetMousePos);
             ImGui::CheckboxFlags("io.BackendFlags: RendererHasVtxOffset", &backend_flags, ImGuiBackendFlags_RendererHasVtxOffset);
             ImGui::TreePop();
             ImGui::Separator();
@@ -809,10 +832,10 @@ static void ShowDemoWindowWidgets()
             static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
             static bool align_label_with_current_x_position = false;
             static bool test_drag_and_drop = false;
-            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_OpenOnArrow",       &base_flags, ImGuiTreeNodeFlags_OpenOnArrow);
+            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_OpenOnArrow", &base_flags, ImGuiTreeNodeFlags_OpenOnArrow);
             ImGui::CheckboxFlags("ImGuiTreeNodeFlags_OpenOnDoubleClick", &base_flags, ImGuiTreeNodeFlags_OpenOnDoubleClick);
-            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_SpanAvailWidth",    &base_flags, ImGuiTreeNodeFlags_SpanAvailWidth); ImGui::SameLine(); HelpMarker("Extend hit area to all available width instead of allowing more items to be laid out after the node.");
-            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_SpanFullWidth",     &base_flags, ImGuiTreeNodeFlags_SpanFullWidth);
+            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_SpanAvailWidth", &base_flags, ImGuiTreeNodeFlags_SpanAvailWidth); ImGui::SameLine(); HelpMarker("Extend hit area to all available width instead of allowing more items to be laid out after the node.");
+            ImGui::CheckboxFlags("ImGuiTreeNodeFlags_SpanFullWidth", &base_flags, ImGuiTreeNodeFlags_SpanFullWidth);
             ImGui::Checkbox("Align label with current X position", &align_label_with_current_x_position);
             ImGui::Checkbox("Test tree node as drag source", &test_drag_and_drop);
             ImGui::Text("Hello!");
@@ -1234,9 +1257,9 @@ static void ShowDemoWindowWidgets()
             // Using the Selectable() override that takes "bool* p_selected" parameter,
             // this function toggle your bool value automatically.
             static bool selected[3] = { false, false, false };
-            ImGui::Selectable("main.c",    &selected[0]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
+            ImGui::Selectable("main.c", &selected[0]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
             ImGui::Selectable("Hello.cpp", &selected[1]); ImGui::SameLine(300); ImGui::Text("12,345 bytes");
-            ImGui::Selectable("Hello.h",   &selected[2]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
+            ImGui::Selectable("Hello.h", &selected[2]); ImGui::SameLine(300); ImGui::Text(" 2,345 bytes");
             ImGui::TreePop();
         }
         IMGUI_DEMO_MARKER("Widgets/Selectables/In columns");
@@ -1378,11 +1401,11 @@ static void ShowDemoWindowWidgets()
                 }
             };
 
-            static char buf1[64] = ""; ImGui::InputText("default",     buf1, 64);
-            static char buf2[64] = ""; ImGui::InputText("decimal",     buf2, 64, ImGuiInputTextFlags_CharsDecimal);
+            static char buf1[64] = ""; ImGui::InputText("default", buf1, 64);
+            static char buf2[64] = ""; ImGui::InputText("decimal", buf2, 64, ImGuiInputTextFlags_CharsDecimal);
             static char buf3[64] = ""; ImGui::InputText("hexadecimal", buf3, 64, ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase);
-            static char buf4[64] = ""; ImGui::InputText("uppercase",   buf4, 64, ImGuiInputTextFlags_CharsUppercase);
-            static char buf5[64] = ""; ImGui::InputText("no blank",    buf5, 64, ImGuiInputTextFlags_CharsNoBlank);
+            static char buf4[64] = ""; ImGui::InputText("uppercase", buf4, 64, ImGuiInputTextFlags_CharsUppercase);
+            static char buf5[64] = ""; ImGui::InputText("no blank", buf5, 64, ImGuiInputTextFlags_CharsNoBlank);
             static char buf6[64] = ""; ImGui::InputText("\"imgui\" letters", buf6, 64, ImGuiInputTextFlags_CallbackCharFilter, TextFilters::FilterImGuiLetters);
             ImGui::TreePop();
         }
@@ -1984,25 +2007,25 @@ static void ShowDemoWindowWidgets()
 
         // Setup limits (as helper variables so we can take their address, as explained above)
         // Note: SliderScalar() functions have a maximum usable range of half the natural type maximum, hence the /2.
-        #ifndef LLONG_MIN
+#ifndef LLONG_MIN
         ImS64 LLONG_MIN = -9223372036854775807LL - 1;
         ImS64 LLONG_MAX = 9223372036854775807LL;
         ImU64 ULLONG_MAX = (2ULL * 9223372036854775807LL + 1);
-        #endif
-        const char    s8_zero  = 0,   s8_one  = 1,   s8_fifty  = 50, s8_min  = -128,        s8_max = 127;
-        const ImU8    u8_zero  = 0,   u8_one  = 1,   u8_fifty  = 50, u8_min  = 0,           u8_max = 255;
-        const short   s16_zero = 0,   s16_one = 1,   s16_fifty = 50, s16_min = -32768,      s16_max = 32767;
-        const ImU16   u16_zero = 0,   u16_one = 1,   u16_fifty = 50, u16_min = 0,           u16_max = 65535;
-        const ImS32   s32_zero = 0,   s32_one = 1,   s32_fifty = 50, s32_min = INT_MIN/2,   s32_max = INT_MAX/2,    s32_hi_a = INT_MAX/2 - 100,    s32_hi_b = INT_MAX/2;
-        const ImU32   u32_zero = 0,   u32_one = 1,   u32_fifty = 50, u32_min = 0,           u32_max = UINT_MAX/2,   u32_hi_a = UINT_MAX/2 - 100,   u32_hi_b = UINT_MAX/2;
-        const ImS64   s64_zero = 0,   s64_one = 1,   s64_fifty = 50, s64_min = LLONG_MIN/2, s64_max = LLONG_MAX/2,  s64_hi_a = LLONG_MAX/2 - 100,  s64_hi_b = LLONG_MAX/2;
-        const ImU64   u64_zero = 0,   u64_one = 1,   u64_fifty = 50, u64_min = 0,           u64_max = ULLONG_MAX/2, u64_hi_a = ULLONG_MAX/2 - 100, u64_hi_b = ULLONG_MAX/2;
+#endif
+        const char    s8_zero = 0, s8_one = 1, s8_fifty = 50, s8_min = -128, s8_max = 127;
+        const ImU8    u8_zero = 0, u8_one = 1, u8_fifty = 50, u8_min = 0, u8_max = 255;
+        const short   s16_zero = 0, s16_one = 1, s16_fifty = 50, s16_min = -32768, s16_max = 32767;
+        const ImU16   u16_zero = 0, u16_one = 1, u16_fifty = 50, u16_min = 0, u16_max = 65535;
+        const ImS32   s32_zero = 0, s32_one = 1, s32_fifty = 50, s32_min = INT_MIN / 2, s32_max = INT_MAX / 2, s32_hi_a = INT_MAX / 2 - 100, s32_hi_b = INT_MAX / 2;
+        const ImU32   u32_zero = 0, u32_one = 1, u32_fifty = 50, u32_min = 0, u32_max = UINT_MAX / 2, u32_hi_a = UINT_MAX / 2 - 100, u32_hi_b = UINT_MAX / 2;
+        const ImS64   s64_zero = 0, s64_one = 1, s64_fifty = 50, s64_min = LLONG_MIN / 2, s64_max = LLONG_MAX / 2, s64_hi_a = LLONG_MAX / 2 - 100, s64_hi_b = LLONG_MAX / 2;
+        const ImU64   u64_zero = 0, u64_one = 1, u64_fifty = 50, u64_min = 0, u64_max = ULLONG_MAX / 2, u64_hi_a = ULLONG_MAX / 2 - 100, u64_hi_b = ULLONG_MAX / 2;
         const float   f32_zero = 0.f, f32_one = 1.f, f32_lo_a = -10000000000.0f, f32_hi_a = +10000000000.0f;
-        const double  f64_zero = 0.,  f64_one = 1.,  f64_lo_a = -1000000000000000.0, f64_hi_a = +1000000000000000.0;
+        const double  f64_zero = 0., f64_one = 1., f64_lo_a = -1000000000000000.0, f64_hi_a = +1000000000000000.0;
 
         // State
-        static char   s8_v  = 127;
-        static ImU8   u8_v  = 255;
+        static char   s8_v = 127;
+        static ImU8   u8_v = 255;
         static short  s16_v = 32767;
         static ImU16  u16_v = 65535;
         static ImS32  s32_v = -1;
@@ -2020,70 +2043,70 @@ static void ShowDemoWindowWidgets()
         ImGui::SameLine(); HelpMarker(
             "As with every widget in dear imgui, we never modify values unless there is a user interaction.\n"
             "You can override the clamping limits by using CTRL+Click to input a value.");
-        ImGui::DragScalar("drag s8",        ImGuiDataType_S8,     &s8_v,  drag_speed, drag_clamp ? &s8_zero  : NULL, drag_clamp ? &s8_fifty  : NULL);
-        ImGui::DragScalar("drag u8",        ImGuiDataType_U8,     &u8_v,  drag_speed, drag_clamp ? &u8_zero  : NULL, drag_clamp ? &u8_fifty  : NULL, "%u ms");
-        ImGui::DragScalar("drag s16",       ImGuiDataType_S16,    &s16_v, drag_speed, drag_clamp ? &s16_zero : NULL, drag_clamp ? &s16_fifty : NULL);
-        ImGui::DragScalar("drag u16",       ImGuiDataType_U16,    &u16_v, drag_speed, drag_clamp ? &u16_zero : NULL, drag_clamp ? &u16_fifty : NULL, "%u ms");
-        ImGui::DragScalar("drag s32",       ImGuiDataType_S32,    &s32_v, drag_speed, drag_clamp ? &s32_zero : NULL, drag_clamp ? &s32_fifty : NULL);
-        ImGui::DragScalar("drag s32 hex",   ImGuiDataType_S32,    &s32_v, drag_speed, drag_clamp ? &s32_zero : NULL, drag_clamp ? &s32_fifty : NULL, "0x%08X");
-        ImGui::DragScalar("drag u32",       ImGuiDataType_U32,    &u32_v, drag_speed, drag_clamp ? &u32_zero : NULL, drag_clamp ? &u32_fifty : NULL, "%u ms");
-        ImGui::DragScalar("drag s64",       ImGuiDataType_S64,    &s64_v, drag_speed, drag_clamp ? &s64_zero : NULL, drag_clamp ? &s64_fifty : NULL);
-        ImGui::DragScalar("drag u64",       ImGuiDataType_U64,    &u64_v, drag_speed, drag_clamp ? &u64_zero : NULL, drag_clamp ? &u64_fifty : NULL);
-        ImGui::DragScalar("drag float",     ImGuiDataType_Float,  &f32_v, 0.005f,  &f32_zero, &f32_one, "%f");
-        ImGui::DragScalar("drag float log", ImGuiDataType_Float,  &f32_v, 0.005f,  &f32_zero, &f32_one, "%f", ImGuiSliderFlags_Logarithmic);
-        ImGui::DragScalar("drag double",    ImGuiDataType_Double, &f64_v, 0.0005f, &f64_zero, NULL,     "%.10f grams");
-        ImGui::DragScalar("drag double log",ImGuiDataType_Double, &f64_v, 0.0005f, &f64_zero, &f64_one, "0 < %.10f < 1", ImGuiSliderFlags_Logarithmic);
+        ImGui::DragScalar("drag s8", ImGuiDataType_S8, &s8_v, drag_speed, drag_clamp ? &s8_zero : NULL, drag_clamp ? &s8_fifty : NULL);
+        ImGui::DragScalar("drag u8", ImGuiDataType_U8, &u8_v, drag_speed, drag_clamp ? &u8_zero : NULL, drag_clamp ? &u8_fifty : NULL, "%u ms");
+        ImGui::DragScalar("drag s16", ImGuiDataType_S16, &s16_v, drag_speed, drag_clamp ? &s16_zero : NULL, drag_clamp ? &s16_fifty : NULL);
+        ImGui::DragScalar("drag u16", ImGuiDataType_U16, &u16_v, drag_speed, drag_clamp ? &u16_zero : NULL, drag_clamp ? &u16_fifty : NULL, "%u ms");
+        ImGui::DragScalar("drag s32", ImGuiDataType_S32, &s32_v, drag_speed, drag_clamp ? &s32_zero : NULL, drag_clamp ? &s32_fifty : NULL);
+        ImGui::DragScalar("drag s32 hex", ImGuiDataType_S32, &s32_v, drag_speed, drag_clamp ? &s32_zero : NULL, drag_clamp ? &s32_fifty : NULL, "0x%08X");
+        ImGui::DragScalar("drag u32", ImGuiDataType_U32, &u32_v, drag_speed, drag_clamp ? &u32_zero : NULL, drag_clamp ? &u32_fifty : NULL, "%u ms");
+        ImGui::DragScalar("drag s64", ImGuiDataType_S64, &s64_v, drag_speed, drag_clamp ? &s64_zero : NULL, drag_clamp ? &s64_fifty : NULL);
+        ImGui::DragScalar("drag u64", ImGuiDataType_U64, &u64_v, drag_speed, drag_clamp ? &u64_zero : NULL, drag_clamp ? &u64_fifty : NULL);
+        ImGui::DragScalar("drag float", ImGuiDataType_Float, &f32_v, 0.005f, &f32_zero, &f32_one, "%f");
+        ImGui::DragScalar("drag float log", ImGuiDataType_Float, &f32_v, 0.005f, &f32_zero, &f32_one, "%f", ImGuiSliderFlags_Logarithmic);
+        ImGui::DragScalar("drag double", ImGuiDataType_Double, &f64_v, 0.0005f, &f64_zero, NULL, "%.10f grams");
+        ImGui::DragScalar("drag double log", ImGuiDataType_Double, &f64_v, 0.0005f, &f64_zero, &f64_one, "0 < %.10f < 1", ImGuiSliderFlags_Logarithmic);
 
         IMGUI_DEMO_MARKER("Widgets/Data Types/Sliders");
         ImGui::Text("Sliders");
-        ImGui::SliderScalar("slider s8 full",       ImGuiDataType_S8,     &s8_v,  &s8_min,   &s8_max,   "%d");
-        ImGui::SliderScalar("slider u8 full",       ImGuiDataType_U8,     &u8_v,  &u8_min,   &u8_max,   "%u");
-        ImGui::SliderScalar("slider s16 full",      ImGuiDataType_S16,    &s16_v, &s16_min,  &s16_max,  "%d");
-        ImGui::SliderScalar("slider u16 full",      ImGuiDataType_U16,    &u16_v, &u16_min,  &u16_max,  "%u");
-        ImGui::SliderScalar("slider s32 low",       ImGuiDataType_S32,    &s32_v, &s32_zero, &s32_fifty,"%d");
-        ImGui::SliderScalar("slider s32 high",      ImGuiDataType_S32,    &s32_v, &s32_hi_a, &s32_hi_b, "%d");
-        ImGui::SliderScalar("slider s32 full",      ImGuiDataType_S32,    &s32_v, &s32_min,  &s32_max,  "%d");
-        ImGui::SliderScalar("slider s32 hex",       ImGuiDataType_S32,    &s32_v, &s32_zero, &s32_fifty, "0x%04X");
-        ImGui::SliderScalar("slider u32 low",       ImGuiDataType_U32,    &u32_v, &u32_zero, &u32_fifty,"%u");
-        ImGui::SliderScalar("slider u32 high",      ImGuiDataType_U32,    &u32_v, &u32_hi_a, &u32_hi_b, "%u");
-        ImGui::SliderScalar("slider u32 full",      ImGuiDataType_U32,    &u32_v, &u32_min,  &u32_max,  "%u");
-        ImGui::SliderScalar("slider s64 low",       ImGuiDataType_S64,    &s64_v, &s64_zero, &s64_fifty,"%" IM_PRId64);
-        ImGui::SliderScalar("slider s64 high",      ImGuiDataType_S64,    &s64_v, &s64_hi_a, &s64_hi_b, "%" IM_PRId64);
-        ImGui::SliderScalar("slider s64 full",      ImGuiDataType_S64,    &s64_v, &s64_min,  &s64_max,  "%" IM_PRId64);
-        ImGui::SliderScalar("slider u64 low",       ImGuiDataType_U64,    &u64_v, &u64_zero, &u64_fifty,"%" IM_PRIu64 " ms");
-        ImGui::SliderScalar("slider u64 high",      ImGuiDataType_U64,    &u64_v, &u64_hi_a, &u64_hi_b, "%" IM_PRIu64 " ms");
-        ImGui::SliderScalar("slider u64 full",      ImGuiDataType_U64,    &u64_v, &u64_min,  &u64_max,  "%" IM_PRIu64 " ms");
-        ImGui::SliderScalar("slider float low",     ImGuiDataType_Float,  &f32_v, &f32_zero, &f32_one);
-        ImGui::SliderScalar("slider float low log", ImGuiDataType_Float,  &f32_v, &f32_zero, &f32_one,  "%.10f", ImGuiSliderFlags_Logarithmic);
-        ImGui::SliderScalar("slider float high",    ImGuiDataType_Float,  &f32_v, &f32_lo_a, &f32_hi_a, "%e");
-        ImGui::SliderScalar("slider double low",    ImGuiDataType_Double, &f64_v, &f64_zero, &f64_one,  "%.10f grams");
-        ImGui::SliderScalar("slider double low log",ImGuiDataType_Double, &f64_v, &f64_zero, &f64_one,  "%.10f", ImGuiSliderFlags_Logarithmic);
-        ImGui::SliderScalar("slider double high",   ImGuiDataType_Double, &f64_v, &f64_lo_a, &f64_hi_a, "%e grams");
+        ImGui::SliderScalar("slider s8 full", ImGuiDataType_S8, &s8_v, &s8_min, &s8_max, "%d");
+        ImGui::SliderScalar("slider u8 full", ImGuiDataType_U8, &u8_v, &u8_min, &u8_max, "%u");
+        ImGui::SliderScalar("slider s16 full", ImGuiDataType_S16, &s16_v, &s16_min, &s16_max, "%d");
+        ImGui::SliderScalar("slider u16 full", ImGuiDataType_U16, &u16_v, &u16_min, &u16_max, "%u");
+        ImGui::SliderScalar("slider s32 low", ImGuiDataType_S32, &s32_v, &s32_zero, &s32_fifty, "%d");
+        ImGui::SliderScalar("slider s32 high", ImGuiDataType_S32, &s32_v, &s32_hi_a, &s32_hi_b, "%d");
+        ImGui::SliderScalar("slider s32 full", ImGuiDataType_S32, &s32_v, &s32_min, &s32_max, "%d");
+        ImGui::SliderScalar("slider s32 hex", ImGuiDataType_S32, &s32_v, &s32_zero, &s32_fifty, "0x%04X");
+        ImGui::SliderScalar("slider u32 low", ImGuiDataType_U32, &u32_v, &u32_zero, &u32_fifty, "%u");
+        ImGui::SliderScalar("slider u32 high", ImGuiDataType_U32, &u32_v, &u32_hi_a, &u32_hi_b, "%u");
+        ImGui::SliderScalar("slider u32 full", ImGuiDataType_U32, &u32_v, &u32_min, &u32_max, "%u");
+        ImGui::SliderScalar("slider s64 low", ImGuiDataType_S64, &s64_v, &s64_zero, &s64_fifty, "%" IM_PRId64);
+        ImGui::SliderScalar("slider s64 high", ImGuiDataType_S64, &s64_v, &s64_hi_a, &s64_hi_b, "%" IM_PRId64);
+        ImGui::SliderScalar("slider s64 full", ImGuiDataType_S64, &s64_v, &s64_min, &s64_max, "%" IM_PRId64);
+        ImGui::SliderScalar("slider u64 low", ImGuiDataType_U64, &u64_v, &u64_zero, &u64_fifty, "%" IM_PRIu64 " ms");
+        ImGui::SliderScalar("slider u64 high", ImGuiDataType_U64, &u64_v, &u64_hi_a, &u64_hi_b, "%" IM_PRIu64 " ms");
+        ImGui::SliderScalar("slider u64 full", ImGuiDataType_U64, &u64_v, &u64_min, &u64_max, "%" IM_PRIu64 " ms");
+        ImGui::SliderScalar("slider float low", ImGuiDataType_Float, &f32_v, &f32_zero, &f32_one);
+        ImGui::SliderScalar("slider float low log", ImGuiDataType_Float, &f32_v, &f32_zero, &f32_one, "%.10f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderScalar("slider float high", ImGuiDataType_Float, &f32_v, &f32_lo_a, &f32_hi_a, "%e");
+        ImGui::SliderScalar("slider double low", ImGuiDataType_Double, &f64_v, &f64_zero, &f64_one, "%.10f grams");
+        ImGui::SliderScalar("slider double low log", ImGuiDataType_Double, &f64_v, &f64_zero, &f64_one, "%.10f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderScalar("slider double high", ImGuiDataType_Double, &f64_v, &f64_lo_a, &f64_hi_a, "%e grams");
 
         ImGui::Text("Sliders (reverse)");
-        ImGui::SliderScalar("slider s8 reverse",    ImGuiDataType_S8,   &s8_v,  &s8_max,    &s8_min,   "%d");
-        ImGui::SliderScalar("slider u8 reverse",    ImGuiDataType_U8,   &u8_v,  &u8_max,    &u8_min,   "%u");
-        ImGui::SliderScalar("slider s32 reverse",   ImGuiDataType_S32,  &s32_v, &s32_fifty, &s32_zero, "%d");
-        ImGui::SliderScalar("slider u32 reverse",   ImGuiDataType_U32,  &u32_v, &u32_fifty, &u32_zero, "%u");
-        ImGui::SliderScalar("slider s64 reverse",   ImGuiDataType_S64,  &s64_v, &s64_fifty, &s64_zero, "%" IM_PRId64);
-        ImGui::SliderScalar("slider u64 reverse",   ImGuiDataType_U64,  &u64_v, &u64_fifty, &u64_zero, "%" IM_PRIu64 " ms");
+        ImGui::SliderScalar("slider s8 reverse", ImGuiDataType_S8, &s8_v, &s8_max, &s8_min, "%d");
+        ImGui::SliderScalar("slider u8 reverse", ImGuiDataType_U8, &u8_v, &u8_max, &u8_min, "%u");
+        ImGui::SliderScalar("slider s32 reverse", ImGuiDataType_S32, &s32_v, &s32_fifty, &s32_zero, "%d");
+        ImGui::SliderScalar("slider u32 reverse", ImGuiDataType_U32, &u32_v, &u32_fifty, &u32_zero, "%u");
+        ImGui::SliderScalar("slider s64 reverse", ImGuiDataType_S64, &s64_v, &s64_fifty, &s64_zero, "%" IM_PRId64);
+        ImGui::SliderScalar("slider u64 reverse", ImGuiDataType_U64, &u64_v, &u64_fifty, &u64_zero, "%" IM_PRIu64 " ms");
 
         IMGUI_DEMO_MARKER("Widgets/Data Types/Inputs");
         static bool inputs_step = true;
         ImGui::Text("Inputs");
         ImGui::Checkbox("Show step buttons", &inputs_step);
-        ImGui::InputScalar("input s8",      ImGuiDataType_S8,     &s8_v,  inputs_step ? &s8_one  : NULL, NULL, "%d");
-        ImGui::InputScalar("input u8",      ImGuiDataType_U8,     &u8_v,  inputs_step ? &u8_one  : NULL, NULL, "%u");
-        ImGui::InputScalar("input s16",     ImGuiDataType_S16,    &s16_v, inputs_step ? &s16_one : NULL, NULL, "%d");
-        ImGui::InputScalar("input u16",     ImGuiDataType_U16,    &u16_v, inputs_step ? &u16_one : NULL, NULL, "%u");
-        ImGui::InputScalar("input s32",     ImGuiDataType_S32,    &s32_v, inputs_step ? &s32_one : NULL, NULL, "%d");
-        ImGui::InputScalar("input s32 hex", ImGuiDataType_S32,    &s32_v, inputs_step ? &s32_one : NULL, NULL, "%04X");
-        ImGui::InputScalar("input u32",     ImGuiDataType_U32,    &u32_v, inputs_step ? &u32_one : NULL, NULL, "%u");
-        ImGui::InputScalar("input u32 hex", ImGuiDataType_U32,    &u32_v, inputs_step ? &u32_one : NULL, NULL, "%08X");
-        ImGui::InputScalar("input s64",     ImGuiDataType_S64,    &s64_v, inputs_step ? &s64_one : NULL);
-        ImGui::InputScalar("input u64",     ImGuiDataType_U64,    &u64_v, inputs_step ? &u64_one : NULL);
-        ImGui::InputScalar("input float",   ImGuiDataType_Float,  &f32_v, inputs_step ? &f32_one : NULL);
-        ImGui::InputScalar("input double",  ImGuiDataType_Double, &f64_v, inputs_step ? &f64_one : NULL);
+        ImGui::InputScalar("input s8", ImGuiDataType_S8, &s8_v, inputs_step ? &s8_one : NULL, NULL, "%d");
+        ImGui::InputScalar("input u8", ImGuiDataType_U8, &u8_v, inputs_step ? &u8_one : NULL, NULL, "%u");
+        ImGui::InputScalar("input s16", ImGuiDataType_S16, &s16_v, inputs_step ? &s16_one : NULL, NULL, "%d");
+        ImGui::InputScalar("input u16", ImGuiDataType_U16, &u16_v, inputs_step ? &u16_one : NULL, NULL, "%u");
+        ImGui::InputScalar("input s32", ImGuiDataType_S32, &s32_v, inputs_step ? &s32_one : NULL, NULL, "%d");
+        ImGui::InputScalar("input s32 hex", ImGuiDataType_S32, &s32_v, inputs_step ? &s32_one : NULL, NULL, "%04X");
+        ImGui::InputScalar("input u32", ImGuiDataType_U32, &u32_v, inputs_step ? &u32_one : NULL, NULL, "%u");
+        ImGui::InputScalar("input u32 hex", ImGuiDataType_U32, &u32_v, inputs_step ? &u32_one : NULL, NULL, "%08X");
+        ImGui::InputScalar("input s64", ImGuiDataType_S64, &s64_v, inputs_step ? &s64_one : NULL);
+        ImGui::InputScalar("input u64", ImGuiDataType_U64, &u64_v, inputs_step ? &u64_one : NULL);
+        ImGui::InputScalar("input float", ImGuiDataType_Float, &f32_v, inputs_step ? &f32_one : NULL);
+        ImGui::InputScalar("input double", ImGuiDataType_Double, &f64_v, inputs_step ? &f64_one : NULL);
 
         ImGui::TreePop();
     }
@@ -2315,7 +2338,7 @@ static void ShowDemoWindowWidgets()
         ImGui::Combo("Item Type", &item_type, item_names, IM_ARRAYSIZE(item_names), IM_ARRAYSIZE(item_names));
         ImGui::SameLine();
         HelpMarker("Testing how various types of items are interacting with the IsItemXXX functions. Note that the bool return value of most ImGui function is generally equivalent to calling ImGui::IsItemHovered().");
-        ImGui::Checkbox("Item Disabled",  &item_disabled);
+        ImGui::Checkbox("Item Disabled", &item_disabled);
 
         // Submit selected items so we can query their status in the code following it.
         bool ret = false;
@@ -2334,12 +2357,12 @@ static void ShowDemoWindowWidgets()
         if (item_type == 7) { ret = ImGui::InputFloat("ITEM: InputFloat", col4f, 1.0f); }               // Testing +/- buttons on scalar input
         if (item_type == 8) { ret = ImGui::InputFloat3("ITEM: InputFloat3", col4f); }                   // Testing multi-component items (IsItemXXX flags are reported merged)
         if (item_type == 9) { ret = ImGui::ColorEdit4("ITEM: ColorEdit4", col4f); }                     // Testing multi-component items (IsItemXXX flags are reported merged)
-        if (item_type == 10){ ret = ImGui::Selectable("ITEM: Selectable"); }                            // Testing selectable item
-        if (item_type == 11){ ret = ImGui::MenuItem("ITEM: MenuItem"); }                                // Testing menu item (they use ImGuiButtonFlags_PressedOnRelease button policy)
-        if (item_type == 12){ ret = ImGui::TreeNode("ITEM: TreeNode"); if (ret) ImGui::TreePop(); }     // Testing tree node
-        if (item_type == 13){ ret = ImGui::TreeNodeEx("ITEM: TreeNode w/ ImGuiTreeNodeFlags_OpenOnDoubleClick", ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_NoTreePushOnOpen); } // Testing tree node with ImGuiButtonFlags_PressedOnDoubleClick button policy.
-        if (item_type == 14){ const char* items[] = { "Apple", "Banana", "Cherry", "Kiwi" }; static int current = 1; ret = ImGui::Combo("ITEM: Combo", &current, items, IM_ARRAYSIZE(items)); }
-        if (item_type == 15){ const char* items[] = { "Apple", "Banana", "Cherry", "Kiwi" }; static int current = 1; ret = ImGui::ListBox("ITEM: ListBox", &current, items, IM_ARRAYSIZE(items), IM_ARRAYSIZE(items)); }
+        if (item_type == 10) { ret = ImGui::Selectable("ITEM: Selectable"); }                            // Testing selectable item
+        if (item_type == 11) { ret = ImGui::MenuItem("ITEM: MenuItem"); }                                // Testing menu item (they use ImGuiButtonFlags_PressedOnRelease button policy)
+        if (item_type == 12) { ret = ImGui::TreeNode("ITEM: TreeNode"); if (ret) ImGui::TreePop(); }     // Testing tree node
+        if (item_type == 13) { ret = ImGui::TreeNodeEx("ITEM: TreeNode w/ ImGuiTreeNodeFlags_OpenOnDoubleClick", ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_NoTreePushOnOpen); } // Testing tree node with ImGuiButtonFlags_PressedOnDoubleClick button policy.
+        if (item_type == 14) { const char* items[] = { "Apple", "Banana", "Cherry", "Kiwi" }; static int current = 1; ret = ImGui::Combo("ITEM: Combo", &current, items, IM_ARRAYSIZE(items)); }
+        if (item_type == 15) { const char* items[] = { "Apple", "Banana", "Cherry", "Kiwi" }; static int current = 1; ret = ImGui::ListBox("ITEM: ListBox", &current, items, IM_ARRAYSIZE(items), IM_ARRAYSIZE(items)); }
 
         bool hovered_delay_none = ImGui::IsItemHovered();
         bool hovered_delay_short = ImGui::IsItemHovered(ImGuiHoveredFlags_DelayShort);
@@ -2694,11 +2717,11 @@ static void ShowDemoWindowLayout()
         // Text
         IMGUI_DEMO_MARKER("Layout/Basic Horizontal Layout/SameLine");
         ImGui::Text("Two items: Hello"); ImGui::SameLine();
-        ImGui::TextColored(ImVec4(1,1,0,1), "Sailor");
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Sailor");
 
         // Adjust spacing
         ImGui::Text("More spacing: Hello"); ImGui::SameLine(0, 20);
-        ImGui::TextColored(ImVec4(1,1,0,1), "Sailor");
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Sailor");
 
         // Button
         ImGui::AlignTextToFramePadding();
@@ -3600,65 +3623,65 @@ static void ShowDemoWindowPopups()
 // (pre-C++11 doesn't allow us to instantiate ImVector<MyItem> template if this structure is defined inside the demo function)
 namespace
 {
-// We are passing our own identifier to TableSetupColumn() to facilitate identifying columns in the sorting code.
-// This identifier will be passed down into ImGuiTableSortSpec::ColumnUserID.
-// But it is possible to omit the user id parameter of TableSetupColumn() and just use the column index instead! (ImGuiTableSortSpec::ColumnIndex)
-// If you don't use sorting, you will generally never care about giving column an ID!
-enum MyItemColumnID
-{
-    MyItemColumnID_ID,
-    MyItemColumnID_Name,
-    MyItemColumnID_Action,
-    MyItemColumnID_Quantity,
-    MyItemColumnID_Description
-};
-
-struct MyItem
-{
-    int         ID;
-    const char* Name;
-    int         Quantity;
-
-    // We have a problem which is affecting _only this demo_ and should not affect your code:
-    // As we don't rely on std:: or other third-party library to compile dear imgui, we only have reliable access to qsort(),
-    // however qsort doesn't allow passing user data to comparing function.
-    // As a workaround, we are storing the sort specs in a static/global for the comparing function to access.
-    // In your own use case you would probably pass the sort specs to your sorting/comparing functions directly and not use a global.
-    // We could technically call ImGui::TableGetSortSpecs() in CompareWithSortSpecs(), but considering that this function is called
-    // very often by the sorting algorithm it would be a little wasteful.
-    static const ImGuiTableSortSpecs* s_current_sort_specs;
-
-    // Compare function to be used by qsort()
-    static int IMGUI_CDECL CompareWithSortSpecs(const void* lhs, const void* rhs)
+    // We are passing our own identifier to TableSetupColumn() to facilitate identifying columns in the sorting code.
+    // This identifier will be passed down into ImGuiTableSortSpec::ColumnUserID.
+    // But it is possible to omit the user id parameter of TableSetupColumn() and just use the column index instead! (ImGuiTableSortSpec::ColumnIndex)
+    // If you don't use sorting, you will generally never care about giving column an ID!
+    enum MyItemColumnID
     {
-        const MyItem* a = (const MyItem*)lhs;
-        const MyItem* b = (const MyItem*)rhs;
-        for (int n = 0; n < s_current_sort_specs->SpecsCount; n++)
-        {
-            // Here we identify columns using the ColumnUserID value that we ourselves passed to TableSetupColumn()
-            // We could also choose to identify columns based on their index (sort_spec->ColumnIndex), which is simpler!
-            const ImGuiTableColumnSortSpecs* sort_spec = &s_current_sort_specs->Specs[n];
-            int delta = 0;
-            switch (sort_spec->ColumnUserID)
-            {
-            case MyItemColumnID_ID:             delta = (a->ID - b->ID);                break;
-            case MyItemColumnID_Name:           delta = (strcmp(a->Name, b->Name));     break;
-            case MyItemColumnID_Quantity:       delta = (a->Quantity - b->Quantity);    break;
-            case MyItemColumnID_Description:    delta = (strcmp(a->Name, b->Name));     break;
-            default: IM_ASSERT(0); break;
-            }
-            if (delta > 0)
-                return (sort_spec->SortDirection == ImGuiSortDirection_Ascending) ? +1 : -1;
-            if (delta < 0)
-                return (sort_spec->SortDirection == ImGuiSortDirection_Ascending) ? -1 : +1;
-        }
+        MyItemColumnID_ID,
+        MyItemColumnID_Name,
+        MyItemColumnID_Action,
+        MyItemColumnID_Quantity,
+        MyItemColumnID_Description
+    };
 
-        // qsort() is instable so always return a way to differenciate items.
-        // Your own compare function may want to avoid fallback on implicit sort specs e.g. a Name compare if it wasn't already part of the sort specs.
-        return (a->ID - b->ID);
-    }
-};
-const ImGuiTableSortSpecs* MyItem::s_current_sort_specs = NULL;
+    struct MyItem
+    {
+        int         ID;
+        const char* Name;
+        int         Quantity;
+
+        // We have a problem which is affecting _only this demo_ and should not affect your code:
+        // As we don't rely on std:: or other third-party library to compile dear imgui, we only have reliable access to qsort(),
+        // however qsort doesn't allow passing user data to comparing function.
+        // As a workaround, we are storing the sort specs in a static/global for the comparing function to access.
+        // In your own use case you would probably pass the sort specs to your sorting/comparing functions directly and not use a global.
+        // We could technically call ImGui::TableGetSortSpecs() in CompareWithSortSpecs(), but considering that this function is called
+        // very often by the sorting algorithm it would be a little wasteful.
+        static const ImGuiTableSortSpecs* s_current_sort_specs;
+
+        // Compare function to be used by qsort()
+        static int IMGUI_CDECL CompareWithSortSpecs(const void* lhs, const void* rhs)
+        {
+            const MyItem* a = (const MyItem*)lhs;
+            const MyItem* b = (const MyItem*)rhs;
+            for (int n = 0; n < s_current_sort_specs->SpecsCount; n++)
+            {
+                // Here we identify columns using the ColumnUserID value that we ourselves passed to TableSetupColumn()
+                // We could also choose to identify columns based on their index (sort_spec->ColumnIndex), which is simpler!
+                const ImGuiTableColumnSortSpecs* sort_spec = &s_current_sort_specs->Specs[n];
+                int delta = 0;
+                switch (sort_spec->ColumnUserID)
+                {
+                case MyItemColumnID_ID:             delta = (a->ID - b->ID);                break;
+                case MyItemColumnID_Name:           delta = (strcmp(a->Name, b->Name));     break;
+                case MyItemColumnID_Quantity:       delta = (a->Quantity - b->Quantity);    break;
+                case MyItemColumnID_Description:    delta = (strcmp(a->Name, b->Name));     break;
+                default: IM_ASSERT(0); break;
+                }
+                if (delta > 0)
+                    return (sort_spec->SortDirection == ImGuiSortDirection_Ascending) ? +1 : -1;
+                if (delta < 0)
+                    return (sort_spec->SortDirection == ImGuiSortDirection_Ascending) ? -1 : +1;
+            }
+
+            // qsort() is instable so always return a way to differenciate items.
+            // Your own compare function may want to avoid fallback on implicit sort specs e.g. a Name compare if it wasn't already part of the sort specs.
+            return (a->ID - b->ID);
+        }
+    };
+    const ImGuiTableSortSpecs* MyItem::s_current_sort_specs = NULL;
 }
 
 // Make the UI compact because there are so many fields
@@ -4781,8 +4804,8 @@ static void ShowDemoWindowTables()
             // Simple storage to output a dummy file-system.
             struct MyTreeNode
             {
-                const char*     Name;
-                const char*     Type;
+                const char* Name;
+                const char* Type;
                 int             Size;
                 int             ChildIdx;
                 int             ChildCount;
@@ -5113,9 +5136,9 @@ static void ShowDemoWindowTables()
             // - ImGuiTableColumnFlags_DefaultSort
             // - ImGuiTableColumnFlags_NoSort / ImGuiTableColumnFlags_NoSortAscending / ImGuiTableColumnFlags_NoSortDescending
             // - ImGuiTableColumnFlags_PreferSortAscending / ImGuiTableColumnFlags_PreferSortDescending
-            ImGui::TableSetupColumn("ID",       ImGuiTableColumnFlags_DefaultSort          | ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_ID);
-            ImGui::TableSetupColumn("Name",                                                  ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_Name);
-            ImGui::TableSetupColumn("Action",   ImGuiTableColumnFlags_NoSort               | ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_Action);
+            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_DefaultSort | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_ID);
+            ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Name);
+            ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_NoSort | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Action);
             ImGui::TableSetupColumn("Quantity", ImGuiTableColumnFlags_PreferSortDescending | ImGuiTableColumnFlags_WidthStretch, 0.0f, MyItemColumnID_Quantity);
             ImGui::TableSetupScrollFreeze(0, 1); // Make row always visible
             ImGui::TableHeadersRow();
@@ -5327,12 +5350,12 @@ static void ShowDemoWindowTables()
             // Declare columns
             // We use the "user_id" parameter of TableSetupColumn() to specify a user id that will be stored in the sort specifications.
             // This is so our sort function can identify a column given our own identifier. We could also identify them based on their index!
-            ImGui::TableSetupColumn("ID",           ImGuiTableColumnFlags_DefaultSort | ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoHide, 0.0f, MyItemColumnID_ID);
-            ImGui::TableSetupColumn("Name",         ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Name);
-            ImGui::TableSetupColumn("Action",       ImGuiTableColumnFlags_NoSort | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Action);
-            ImGui::TableSetupColumn("Quantity",     ImGuiTableColumnFlags_PreferSortDescending, 0.0f, MyItemColumnID_Quantity);
-            ImGui::TableSetupColumn("Description",  (flags & ImGuiTableFlags_NoHostExtendX) ? 0 : ImGuiTableColumnFlags_WidthStretch, 0.0f, MyItemColumnID_Description);
-            ImGui::TableSetupColumn("Hidden",       ImGuiTableColumnFlags_DefaultHide | ImGuiTableColumnFlags_NoSort);
+            ImGui::TableSetupColumn("ID", ImGuiTableColumnFlags_DefaultSort | ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoHide, 0.0f, MyItemColumnID_ID);
+            ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Name);
+            ImGui::TableSetupColumn("Action", ImGuiTableColumnFlags_NoSort | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Action);
+            ImGui::TableSetupColumn("Quantity", ImGuiTableColumnFlags_PreferSortDescending, 0.0f, MyItemColumnID_Quantity);
+            ImGui::TableSetupColumn("Description", (flags & ImGuiTableFlags_NoHostExtendX) ? 0 : ImGuiTableColumnFlags_WidthStretch, 0.0f, MyItemColumnID_Description);
+            ImGui::TableSetupColumn("Hidden", ImGuiTableColumnFlags_DefaultHide | ImGuiTableColumnFlags_NoSort);
             ImGui::TableSetupScrollFreeze(freeze_cols, freeze_rows);
 
             // Sort our data if sort specs have been changed!
@@ -5368,89 +5391,89 @@ static void ShowDemoWindowTables()
                 for (int row_n = clipper.DisplayStart; row_n < clipper.DisplayEnd; row_n++)
 #else
             // Without clipper
-            {
-                for (int row_n = 0; row_n < items.Size; row_n++)
-#endif
                 {
-                    MyItem* item = &items[row_n];
-                    //if (!filter.PassFilter(item->Name))
-                    //    continue;
-
-                    const bool item_is_selected = selection.contains(item->ID);
-                    ImGui::PushID(item->ID);
-                    ImGui::TableNextRow(ImGuiTableRowFlags_None, row_min_height);
-
-                    // For the demo purpose we can select among different type of items submitted in the first column
-                    ImGui::TableSetColumnIndex(0);
-                    char label[32];
-                    sprintf(label, "%04d", item->ID);
-                    if (contents_type == CT_Text)
-                        ImGui::TextUnformatted(label);
-                    else if (contents_type == CT_Button)
-                        ImGui::Button(label);
-                    else if (contents_type == CT_SmallButton)
-                        ImGui::SmallButton(label);
-                    else if (contents_type == CT_FillButton)
-                        ImGui::Button(label, ImVec2(-FLT_MIN, 0.0f));
-                    else if (contents_type == CT_Selectable || contents_type == CT_SelectableSpanRow)
+                    for (int row_n = 0; row_n < items.Size; row_n++)
+#endif
                     {
-                        ImGuiSelectableFlags selectable_flags = (contents_type == CT_SelectableSpanRow) ? ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap : ImGuiSelectableFlags_None;
-                        if (ImGui::Selectable(label, item_is_selected, selectable_flags, ImVec2(0, row_min_height)))
+                        MyItem* item = &items[row_n];
+                        //if (!filter.PassFilter(item->Name))
+                        //    continue;
+
+                        const bool item_is_selected = selection.contains(item->ID);
+                        ImGui::PushID(item->ID);
+                        ImGui::TableNextRow(ImGuiTableRowFlags_None, row_min_height);
+
+                        // For the demo purpose we can select among different type of items submitted in the first column
+                        ImGui::TableSetColumnIndex(0);
+                        char label[32];
+                        sprintf(label, "%04d", item->ID);
+                        if (contents_type == CT_Text)
+                            ImGui::TextUnformatted(label);
+                        else if (contents_type == CT_Button)
+                            ImGui::Button(label);
+                        else if (contents_type == CT_SmallButton)
+                            ImGui::SmallButton(label);
+                        else if (contents_type == CT_FillButton)
+                            ImGui::Button(label, ImVec2(-FLT_MIN, 0.0f));
+                        else if (contents_type == CT_Selectable || contents_type == CT_SelectableSpanRow)
                         {
-                            if (ImGui::GetIO().KeyCtrl)
+                            ImGuiSelectableFlags selectable_flags = (contents_type == CT_SelectableSpanRow) ? ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap : ImGuiSelectableFlags_None;
+                            if (ImGui::Selectable(label, item_is_selected, selectable_flags, ImVec2(0, row_min_height)))
                             {
-                                if (item_is_selected)
-                                    selection.find_erase_unsorted(item->ID);
+                                if (ImGui::GetIO().KeyCtrl)
+                                {
+                                    if (item_is_selected)
+                                        selection.find_erase_unsorted(item->ID);
+                                    else
+                                        selection.push_back(item->ID);
+                                }
                                 else
+                                {
+                                    selection.clear();
                                     selection.push_back(item->ID);
-                            }
-                            else
-                            {
-                                selection.clear();
-                                selection.push_back(item->ID);
+                                }
                             }
                         }
+
+                        if (ImGui::TableSetColumnIndex(1))
+                            ImGui::TextUnformatted(item->Name);
+
+                        // Here we demonstrate marking our data set as needing to be sorted again if we modified a quantity,
+                        // and we are currently sorting on the column showing the Quantity.
+                        // To avoid triggering a sort while holding the button, we only trigger it when the button has been released.
+                        // You will probably need a more advanced system in your code if you want to automatically sort when a specific entry changes.
+                        if (ImGui::TableSetColumnIndex(2))
+                        {
+                            if (ImGui::SmallButton("Chop")) { item->Quantity += 1; }
+                            if (sorts_specs_using_quantity && ImGui::IsItemDeactivated()) { items_need_sort = true; }
+                            ImGui::SameLine();
+                            if (ImGui::SmallButton("Eat")) { item->Quantity -= 1; }
+                            if (sorts_specs_using_quantity && ImGui::IsItemDeactivated()) { items_need_sort = true; }
+                        }
+
+                        if (ImGui::TableSetColumnIndex(3))
+                            ImGui::Text("%d", item->Quantity);
+
+                        ImGui::TableSetColumnIndex(4);
+                        if (show_wrapped_text)
+                            ImGui::TextWrapped("Lorem ipsum dolor sit amet");
+                        else
+                            ImGui::Text("Lorem ipsum dolor sit amet");
+
+                        if (ImGui::TableSetColumnIndex(5))
+                            ImGui::Text("1234");
+
+                        ImGui::PopID();
                     }
-
-                    if (ImGui::TableSetColumnIndex(1))
-                        ImGui::TextUnformatted(item->Name);
-
-                    // Here we demonstrate marking our data set as needing to be sorted again if we modified a quantity,
-                    // and we are currently sorting on the column showing the Quantity.
-                    // To avoid triggering a sort while holding the button, we only trigger it when the button has been released.
-                    // You will probably need a more advanced system in your code if you want to automatically sort when a specific entry changes.
-                    if (ImGui::TableSetColumnIndex(2))
-                    {
-                        if (ImGui::SmallButton("Chop")) { item->Quantity += 1; }
-                        if (sorts_specs_using_quantity && ImGui::IsItemDeactivated()) { items_need_sort = true; }
-                        ImGui::SameLine();
-                        if (ImGui::SmallButton("Eat")) { item->Quantity -= 1; }
-                        if (sorts_specs_using_quantity && ImGui::IsItemDeactivated()) { items_need_sort = true; }
-                    }
-
-                    if (ImGui::TableSetColumnIndex(3))
-                        ImGui::Text("%d", item->Quantity);
-
-                    ImGui::TableSetColumnIndex(4);
-                    if (show_wrapped_text)
-                        ImGui::TextWrapped("Lorem ipsum dolor sit amet");
-                    else
-                        ImGui::Text("Lorem ipsum dolor sit amet");
-
-                    if (ImGui::TableSetColumnIndex(5))
-                        ImGui::Text("1234");
-
-                    ImGui::PopID();
                 }
-            }
-            ImGui::PopButtonRepeat();
+                ImGui::PopButtonRepeat();
 
-            // Store some info to display debug details below
-            table_scroll_cur = ImVec2(ImGui::GetScrollX(), ImGui::GetScrollY());
-            table_scroll_max = ImVec2(ImGui::GetScrollMaxX(), ImGui::GetScrollMaxY());
-            table_draw_list = ImGui::GetWindowDrawList();
-            ImGui::EndTable();
-        }
+                // Store some info to display debug details below
+                table_scroll_cur = ImVec2(ImGui::GetScrollX(), ImGui::GetScrollY());
+                table_scroll_max = ImVec2(ImGui::GetScrollMaxX(), ImGui::GetScrollMaxY());
+                table_draw_list = ImGui::GetWindowDrawList();
+                ImGui::EndTable();
+            }
         static bool show_debug_details = false;
         ImGui::Checkbox("Debug details", &show_debug_details);
         if (show_debug_details && table_draw_list)
@@ -5465,7 +5488,7 @@ static void ShowDemoWindowTables()
                     table_draw_list_draw_cmd_count - 1, table_scroll_cur.x, table_scroll_max.x, table_scroll_cur.y, table_scroll_max.y);
         }
         ImGui::TreePop();
-    }
+        }
 
     ImGui::PopID();
 
@@ -5473,7 +5496,7 @@ static void ShowDemoWindowTables()
 
     if (disable_indent)
         ImGui::PopStyleVar();
-}
+    }
 
 // Demonstrate old/legacy Columns API!
 // [2020: Columns are under-featured and not maintained. Prefer using the more flexible and powerful BeginTable() API!]
@@ -5715,9 +5738,9 @@ static void ShowDemoWindowInputs()
             ImGui::Text("Mouse delta: (%g, %g)", io.MouseDelta.x, io.MouseDelta.y);
 
             int count = IM_ARRAYSIZE(io.MouseDown);
-            ImGui::Text("Mouse down:");         for (int i = 0; i < count; i++) if (ImGui::IsMouseDown(i))      { ImGui::SameLine(); ImGui::Text("b%d (%.02f secs)", i, io.MouseDownDuration[i]); }
-            ImGui::Text("Mouse clicked:");      for (int i = 0; i < count; i++) if (ImGui::IsMouseClicked(i))   { ImGui::SameLine(); ImGui::Text("b%d (%d)", i, ImGui::GetMouseClickedCount(i)); }
-            ImGui::Text("Mouse released:");     for (int i = 0; i < count; i++) if (ImGui::IsMouseReleased(i))  { ImGui::SameLine(); ImGui::Text("b%d", i); }
+            ImGui::Text("Mouse down:");         for (int i = 0; i < count; i++) if (ImGui::IsMouseDown(i)) { ImGui::SameLine(); ImGui::Text("b%d (%.02f secs)", i, io.MouseDownDuration[i]); }
+            ImGui::Text("Mouse clicked:");      for (int i = 0; i < count; i++) if (ImGui::IsMouseClicked(i)) { ImGui::SameLine(); ImGui::Text("b%d (%d)", i, ImGui::GetMouseClickedCount(i)); }
+            ImGui::Text("Mouse released:");     for (int i = 0; i < count; i++) if (ImGui::IsMouseReleased(i)) { ImGui::SameLine(); ImGui::Text("b%d", i); }
             ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
             ImGui::Text("Pen Pressure: %.1f", io.PenPressure); // Note: currently unused
             ImGui::TreePop();
@@ -5760,15 +5783,15 @@ static void ShowDemoWindowInputs()
             // User code should never have to go through such hoops: old code may use native keycodes, new code may use ImGuiKey codes.
 #ifdef IMGUI_DISABLE_OBSOLETE_KEYIO
             struct funcs { static bool IsLegacyNativeDupe(ImGuiKey) { return false; } };
-            const ImGuiKey key_first = (ImGuiKey)ImGuiKey_NamedKey_BEGIN;
+            const ImGuiKey key_first = ImGuiKey_NamedKey_BEGIN;
 #else
             struct funcs { static bool IsLegacyNativeDupe(ImGuiKey key) { return key < 512 && ImGui::GetIO().KeyMap[key] != -1; } }; // Hide Native<>ImGuiKey duplicates when both exists in the array
-            const ImGuiKey key_first = (ImGuiKey)0;
+            const ImGuiKey key_first = 0;
             //ImGui::Text("Legacy raw:");       for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key++) { if (io.KeysDown[key]) { ImGui::SameLine(); ImGui::Text("\"%s\" %d", ImGui::GetKeyName(key), key); } }
 #endif
-            ImGui::Text("Keys down:");          for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key = (ImGuiKey)(key + 1)) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyDown(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d (%.02f secs)", ImGui::GetKeyName(key), key, ImGui::GetKeyData(key)->DownDuration); } }
-            ImGui::Text("Keys pressed:");       for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key = (ImGuiKey)(key + 1)) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyPressed(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d", ImGui::GetKeyName(key), key); } }
-            ImGui::Text("Keys released:");      for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key = (ImGuiKey)(key + 1)) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyReleased(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d", ImGui::GetKeyName(key), key); } }
+            ImGui::Text("Keys down:");          for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key++) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyDown(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d (%.02f secs)", ImGui::GetKeyName(key), key, ImGui::GetKeyData(key)->DownDuration); } }
+            ImGui::Text("Keys pressed:");       for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key++) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyPressed(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d", ImGui::GetKeyName(key), key); } }
+            ImGui::Text("Keys released:");      for (ImGuiKey key = key_first; key < ImGuiKey_COUNT; key++) { if (funcs::IsLegacyNativeDupe(key)) continue; if (ImGui::IsKeyReleased(key)) { ImGui::SameLine(); ImGui::Text("\"%s\" %d", ImGui::GetKeyName(key), key); } }
             ImGui::Text("Keys mods: %s%s%s%s", io.KeyCtrl ? "CTRL " : "", io.KeyShift ? "SHIFT " : "", io.KeyAlt ? "ALT " : "", io.KeySuper ? "SUPER " : "");
             ImGui::Text("Chars queue:");        for (int i = 0; i < io.InputQueueCharacters.Size; i++) { ImWchar c = io.InputQueueCharacters[i]; ImGui::SameLine();  ImGui::Text("\'%c\' (0x%04X)", (c > ' ' && c <= 255) ? (char)c : '?', c); } // FIXME: We should convert 'c' to UTF-8 here but the functions are not public.
 
@@ -6148,7 +6171,7 @@ bool ImGui::ShowStyleSelector(const char* label)
     return false;
 }
 
-void ImGui::ShowStyleEditor(ImGuiStyle* ref)
+void ImGui::ShowStyleEditor(ImGuiStyle * ref)
 {
     IMGUI_DEMO_MARKER("Tools/Style Editor");
     // You can pass in a reference ImGuiStyle structure to compare to, revert to and save to
@@ -6175,9 +6198,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
         style.GrabRounding = style.FrameRounding; // Make GrabRounding always the same value as FrameRounding
     { bool border = (style.WindowBorderSize > 0.0f); if (ImGui::Checkbox("WindowBorder", &border)) { style.WindowBorderSize = border ? 1.0f : 0.0f; } }
     ImGui::SameLine();
-    { bool border = (style.FrameBorderSize > 0.0f);  if (ImGui::Checkbox("FrameBorder",  &border)) { style.FrameBorderSize  = border ? 1.0f : 0.0f; } }
+    { bool border = (style.FrameBorderSize > 0.0f);  if (ImGui::Checkbox("FrameBorder", &border)) { style.FrameBorderSize = border ? 1.0f : 0.0f; } }
     ImGui::SameLine();
-    { bool border = (style.PopupBorderSize > 0.0f);  if (ImGui::Checkbox("PopupBorder",  &border)) { style.PopupBorderSize  = border ? 1.0f : 0.0f; } }
+    { bool border = (style.PopupBorderSize > 0.0f);  if (ImGui::Checkbox("PopupBorder", &border)) { style.PopupBorderSize = border ? 1.0f : 0.0f; } }
 
     // Save/Revert button
     if (ImGui::Button("Save Ref"))
@@ -6265,9 +6288,9 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
             filter.Draw("Filter colors", ImGui::GetFontSize() * 16);
 
             static ImGuiColorEditFlags alpha_flags = 0;
-            if (ImGui::RadioButton("Opaque", alpha_flags == ImGuiColorEditFlags_None))             { alpha_flags = ImGuiColorEditFlags_None; } ImGui::SameLine();
-            if (ImGui::RadioButton("Alpha",  alpha_flags == ImGuiColorEditFlags_AlphaPreview))     { alpha_flags = ImGuiColorEditFlags_AlphaPreview; } ImGui::SameLine();
-            if (ImGui::RadioButton("Both",   alpha_flags == ImGuiColorEditFlags_AlphaPreviewHalf)) { alpha_flags = ImGuiColorEditFlags_AlphaPreviewHalf; } ImGui::SameLine();
+            if (ImGui::RadioButton("Opaque", alpha_flags == ImGuiColorEditFlags_None)) { alpha_flags = ImGuiColorEditFlags_None; } ImGui::SameLine();
+            if (ImGui::RadioButton("Alpha", alpha_flags == ImGuiColorEditFlags_AlphaPreview)) { alpha_flags = ImGuiColorEditFlags_AlphaPreview; } ImGui::SameLine();
+            if (ImGui::RadioButton("Both", alpha_flags == ImGuiColorEditFlags_AlphaPreviewHalf)) { alpha_flags = ImGuiColorEditFlags_AlphaPreviewHalf; } ImGui::SameLine();
             HelpMarker(
                 "In the color list:\n"
                 "Left-click on color square to open color picker,\n"
@@ -6342,7 +6365,7 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
             if (style.CurveTessellationTol < 0.10f) style.CurveTessellationTol = 0.10f;
 
             // When editing the "Circle Segment Max Error" value, draw a preview of its effect on auto-tessellated circles.
-            ImGui::DragFloat("Circle Tessellation Max Error", &style.CircleTessellationMaxError , 0.005f, 0.10f, 5.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+            ImGui::DragFloat("Circle Tessellation Max Error", &style.CircleTessellationMaxError, 0.005f, 0.10f, 5.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
             if (ImGui::IsItemActive())
             {
                 ImGui::SetNextWindowPos(ImGui::GetCursorScreenPos());
@@ -6362,8 +6385,8 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                     ImGui::Text("R: %.f\nN: %d", rad, draw_list->_CalcCircleAutoSegmentCount(rad));
 
                     const float canvas_width = IM_MAX(min_widget_width, rad * 2.0f);
-                    const float offset_x     = floorf(canvas_width * 0.5f);
-                    const float offset_y     = floorf(RAD_MAX);
+                    const float offset_x = floorf(canvas_width * 0.5f);
+                    const float offset_y = floorf(RAD_MAX);
 
                     const ImVec2 p1 = ImGui::GetCursorScreenPos();
                     draw_list->AddCircle(ImVec2(p1.x + offset_x, p1.y + offset_y), rad, ImGui::GetColorU32(ImGuiCol_Text));
@@ -6394,40 +6417,6 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
     }
 
     ImGui::PopItemWidth();
-}
-
-//-----------------------------------------------------------------------------
-// [SECTION] User Guide / ShowUserGuide()
-//-----------------------------------------------------------------------------
-
-void ImGui::ShowUserGuide()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    ImGui::BulletText("Double-click on title bar to collapse window.");
-    ImGui::BulletText(
-        "Click and drag on lower corner to resize window\n"
-        "(double-click to auto fit window to its contents).");
-    ImGui::BulletText("CTRL+Click on a slider or drag box to input value as text.");
-    ImGui::BulletText("TAB/SHIFT+TAB to cycle through keyboard editable fields.");
-    ImGui::BulletText("CTRL+Tab to select a window.");
-    if (io.FontAllowUserScaling)
-        ImGui::BulletText("CTRL+Mouse Wheel to zoom window contents.");
-    ImGui::BulletText("While inputing text:\n");
-    ImGui::Indent();
-    ImGui::BulletText("CTRL+Left/Right to word jump.");
-    ImGui::BulletText("CTRL+A or double-click to select all.");
-    ImGui::BulletText("CTRL+X/C/V to use clipboard cut/copy/paste.");
-    ImGui::BulletText("CTRL+Z,CTRL+Y to undo/redo.");
-    ImGui::BulletText("ESCAPE to revert.");
-    ImGui::Unindent();
-    ImGui::BulletText("With keyboard navigation enabled:");
-    ImGui::Indent();
-    ImGui::BulletText("Arrow keys to navigate.");
-    ImGui::BulletText("Space to activate a widget.");
-    ImGui::BulletText("Return to input text into a widget.");
-    ImGui::BulletText("Escape to deactivate a widget, close popup, exit child window.");
-    ImGui::BulletText("Alt to jump to the menu layer of a window.");
-    ImGui::Unindent();
 }
 
 //-----------------------------------------------------------------------------
@@ -6587,10 +6576,10 @@ struct ExampleAppConsole
     }
 
     // Portable helpers
-    static int   Stricmp(const char* s1, const char* s2)         { int d; while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; } return d; }
+    static int   Stricmp(const char* s1, const char* s2) { int d; while ((d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; } return d; }
     static int   Strnicmp(const char* s1, const char* s2, int n) { int d = 0; while (n > 0 && (d = toupper(*s2) - toupper(*s1)) == 0 && *s1) { s1++; s2++; n--; } return d; }
-    static char* Strdup(const char* s)                           { IM_ASSERT(s); size_t len = strlen(s) + 1; void* buf = malloc(len); IM_ASSERT(buf); return (char*)memcpy(buf, (const void*)s, len); }
-    static void  Strtrim(char* s)                                { char* str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
+    static char* Strdup(const char* s) { IM_ASSERT(s); size_t len = strlen(s) + 1; void* buf = malloc(len); IM_ASSERT(buf); return (char*)memcpy(buf, (const void*)s, len); }
+    static void  Strtrim(char* s) { char* str_end = s + strlen(s); while (str_end > s && str_end[-1] == ' ') str_end--; *str_end = 0; }
 
     void    ClearLog()
     {
@@ -6606,7 +6595,7 @@ struct ExampleAppConsole
         va_list args;
         va_start(args, fmt);
         vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
-        buf[IM_ARRAYSIZE(buf)-1] = 0;
+        buf[IM_ARRAYSIZE(buf) - 1] = 0;
         va_end(args);
         Items.push_back(Strdup(buf));
     }
@@ -6637,11 +6626,11 @@ struct ExampleAppConsole
 
         // TODO: display items starting from the bottom
 
-        if (ImGui::SmallButton("Add Debug Text"))  { AddLog("%d some text", Items.Size); AddLog("some more text"); AddLog("display very important message here!"); }
+        if (ImGui::SmallButton("Add Debug Text")) { AddLog("%d some text", Items.Size); AddLog("some more text"); AddLog("display very important message here!"); }
         ImGui::SameLine();
         if (ImGui::SmallButton("Add Debug Error")) { AddLog("[error] something went wrong"); }
         ImGui::SameLine();
-        if (ImGui::SmallButton("Clear"))           { ClearLog(); }
+        if (ImGui::SmallButton("Clear")) { ClearLog(); }
         ImGui::SameLine();
         bool copy_to_clipboard = ImGui::SmallButton("Copy");
         //static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
@@ -6664,74 +6653,72 @@ struct ExampleAppConsole
 
         // Reserve enough left-over height for 1 separator + 1 input text
         const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
-        if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar))
+        ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), false, ImGuiWindowFlags_HorizontalScrollbar);
+        if (ImGui::BeginPopupContextWindow())
         {
-            if (ImGui::BeginPopupContextWindow())
-            {
-                if (ImGui::Selectable("Clear")) ClearLog();
-                ImGui::EndPopup();
-            }
-
-            // Display every line as a separate entry so we can change their color or add custom widgets.
-            // If you only want raw text you can use ImGui::TextUnformatted(log.begin(), log.end());
-            // NB- if you have thousands of entries this approach may be too inefficient and may require user-side clipping
-            // to only process visible items. The clipper will automatically measure the height of your first item and then
-            // "seek" to display only items in the visible area.
-            // To use the clipper we can replace your standard loop:
-            //      for (int i = 0; i < Items.Size; i++)
-            //   With:
-            //      ImGuiListClipper clipper;
-            //      clipper.Begin(Items.Size);
-            //      while (clipper.Step())
-            //         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-            // - That your items are evenly spaced (same height)
-            // - That you have cheap random access to your elements (you can access them given their index,
-            //   without processing all the ones before)
-            // You cannot this code as-is if a filter is active because it breaks the 'cheap random-access' property.
-            // We would need random-access on the post-filtered list.
-            // A typical application wanting coarse clipping and filtering may want to pre-compute an array of indices
-            // or offsets of items that passed the filtering test, recomputing this array when user changes the filter,
-            // and appending newly elements as they are inserted. This is left as a task to the user until we can manage
-            // to improve this example code!
-            // If your items are of variable height:
-            // - Split them into same height items would be simpler and facilitate random-seeking into your list.
-            // - Consider using manual call to IsRectVisible() and skipping extraneous decoration from your items.
-            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
-            if (copy_to_clipboard)
-                ImGui::LogToClipboard();
-            for (int i = 0; i < Items.Size; i++)
-            {
-                const char* item = Items[i];
-                if (!Filter.PassFilter(item))
-                    continue;
-
-                // Normally you would store more information in your item than just a string.
-                // (e.g. make Items[] an array of structure, store color/type etc.)
-                ImVec4 color;
-                bool has_color = false;
-                if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
-                else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
-                if (has_color)
-                    ImGui::PushStyleColor(ImGuiCol_Text, color);
-                ImGui::TextUnformatted(item);
-                if (has_color)
-                    ImGui::PopStyleColor();
-            }
-            if (copy_to_clipboard)
-                ImGui::LogFinish();
-
-            if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
-                ImGui::SetScrollHereY(1.0f);
-            ScrollToBottom = false;
-
-            ImGui::PopStyleVar();
+            if (ImGui::Selectable("Clear")) ClearLog();
+            ImGui::EndPopup();
         }
+
+        // Display every line as a separate entry so we can change their color or add custom widgets.
+        // If you only want raw text you can use ImGui::TextUnformatted(log.begin(), log.end());
+        // NB- if you have thousands of entries this approach may be too inefficient and may require user-side clipping
+        // to only process visible items. The clipper will automatically measure the height of your first item and then
+        // "seek" to display only items in the visible area.
+        // To use the clipper we can replace your standard loop:
+        //      for (int i = 0; i < Items.Size; i++)
+        //   With:
+        //      ImGuiListClipper clipper;
+        //      clipper.Begin(Items.Size);
+        //      while (clipper.Step())
+        //         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+        // - That your items are evenly spaced (same height)
+        // - That you have cheap random access to your elements (you can access them given their index,
+        //   without processing all the ones before)
+        // You cannot this code as-is if a filter is active because it breaks the 'cheap random-access' property.
+        // We would need random-access on the post-filtered list.
+        // A typical application wanting coarse clipping and filtering may want to pre-compute an array of indices
+        // or offsets of items that passed the filtering test, recomputing this array when user changes the filter,
+        // and appending newly elements as they are inserted. This is left as a task to the user until we can manage
+        // to improve this example code!
+        // If your items are of variable height:
+        // - Split them into same height items would be simpler and facilitate random-seeking into your list.
+        // - Consider using manual call to IsRectVisible() and skipping extraneous decoration from your items.
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+        if (copy_to_clipboard)
+            ImGui::LogToClipboard();
+        for (int i = 0; i < Items.Size; i++)
+        {
+            const char* item = Items[i];
+            if (!Filter.PassFilter(item))
+                continue;
+
+            // Normally you would store more information in your item than just a string.
+            // (e.g. make Items[] an array of structure, store color/type etc.)
+            ImVec4 color;
+            bool has_color = false;
+            if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+            else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+            if (has_color)
+                ImGui::PushStyleColor(ImGuiCol_Text, color);
+            ImGui::TextUnformatted(item);
+            if (has_color)
+                ImGui::PopStyleColor();
+        }
+        if (copy_to_clipboard)
+            ImGui::LogFinish();
+
+        if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+            ImGui::SetScrollHereY(1.0f);
+        ScrollToBottom = false;
+
+        ImGui::PopStyleVar();
         ImGui::EndChild();
         ImGui::Separator();
 
         // Command-line
         bool reclaim_focus = false;
-        ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
+        ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
         if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), input_text_flags, &TextEditCallbackStub, (void*)this))
         {
             char* s = InputBuf;
@@ -6805,97 +6792,97 @@ struct ExampleAppConsole
         switch (data->EventFlag)
         {
         case ImGuiInputTextFlags_CallbackCompletion:
-            {
-                // Example of TEXT COMPLETION
+        {
+            // Example of TEXT COMPLETION
 
-                // Locate beginning of current word
-                const char* word_end = data->Buf + data->CursorPos;
-                const char* word_start = word_end;
-                while (word_start > data->Buf)
+            // Locate beginning of current word
+            const char* word_end = data->Buf + data->CursorPos;
+            const char* word_start = word_end;
+            while (word_start > data->Buf)
+            {
+                const char c = word_start[-1];
+                if (c == ' ' || c == '\t' || c == ',' || c == ';')
+                    break;
+                word_start--;
+            }
+
+            // Build a list of candidates
+            ImVector<const char*> candidates;
+            for (int i = 0; i < Commands.Size; i++)
+                if (Strnicmp(Commands[i], word_start, (int)(word_end - word_start)) == 0)
+                    candidates.push_back(Commands[i]);
+
+            if (candidates.Size == 0)
+            {
+                // No match
+                AddLog("No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
+            }
+            else if (candidates.Size == 1)
+            {
+                // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing.
+                data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
+                data->InsertChars(data->CursorPos, candidates[0]);
+                data->InsertChars(data->CursorPos, " ");
+            }
+            else
+            {
+                // Multiple matches. Complete as much as we can..
+                // So inputing "C"+Tab will complete to "CL" then display "CLEAR" and "CLASSIFY" as matches.
+                int match_len = (int)(word_end - word_start);
+                for (;;)
                 {
-                    const char c = word_start[-1];
-                    if (c == ' ' || c == '\t' || c == ',' || c == ';')
+                    int c = 0;
+                    bool all_candidates_matches = true;
+                    for (int i = 0; i < candidates.Size && all_candidates_matches; i++)
+                        if (i == 0)
+                            c = toupper(candidates[i][match_len]);
+                        else if (c == 0 || c != toupper(candidates[i][match_len]))
+                            all_candidates_matches = false;
+                    if (!all_candidates_matches)
                         break;
-                    word_start--;
+                    match_len++;
                 }
 
-                // Build a list of candidates
-                ImVector<const char*> candidates;
-                for (int i = 0; i < Commands.Size; i++)
-                    if (Strnicmp(Commands[i], word_start, (int)(word_end - word_start)) == 0)
-                        candidates.push_back(Commands[i]);
-
-                if (candidates.Size == 0)
+                if (match_len > 0)
                 {
-                    // No match
-                    AddLog("No match for \"%.*s\"!\n", (int)(word_end - word_start), word_start);
-                }
-                else if (candidates.Size == 1)
-                {
-                    // Single match. Delete the beginning of the word and replace it entirely so we've got nice casing.
                     data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
-                    data->InsertChars(data->CursorPos, candidates[0]);
-                    data->InsertChars(data->CursorPos, " ");
-                }
-                else
-                {
-                    // Multiple matches. Complete as much as we can..
-                    // So inputing "C"+Tab will complete to "CL" then display "CLEAR" and "CLASSIFY" as matches.
-                    int match_len = (int)(word_end - word_start);
-                    for (;;)
-                    {
-                        int c = 0;
-                        bool all_candidates_matches = true;
-                        for (int i = 0; i < candidates.Size && all_candidates_matches; i++)
-                            if (i == 0)
-                                c = toupper(candidates[i][match_len]);
-                            else if (c == 0 || c != toupper(candidates[i][match_len]))
-                                all_candidates_matches = false;
-                        if (!all_candidates_matches)
-                            break;
-                        match_len++;
-                    }
-
-                    if (match_len > 0)
-                    {
-                        data->DeleteChars((int)(word_start - data->Buf), (int)(word_end - word_start));
-                        data->InsertChars(data->CursorPos, candidates[0], candidates[0] + match_len);
-                    }
-
-                    // List matches
-                    AddLog("Possible matches:\n");
-                    for (int i = 0; i < candidates.Size; i++)
-                        AddLog("- %s\n", candidates[i]);
+                    data->InsertChars(data->CursorPos, candidates[0], candidates[0] + match_len);
                 }
 
-                break;
+                // List matches
+                AddLog("Possible matches:\n");
+                for (int i = 0; i < candidates.Size; i++)
+                    AddLog("- %s\n", candidates[i]);
             }
+
+            break;
+        }
         case ImGuiInputTextFlags_CallbackHistory:
+        {
+            // Example of HISTORY
+            const int prev_history_pos = HistoryPos;
+            if (data->EventKey == ImGuiKey_UpArrow)
             {
-                // Example of HISTORY
-                const int prev_history_pos = HistoryPos;
-                if (data->EventKey == ImGuiKey_UpArrow)
-                {
-                    if (HistoryPos == -1)
-                        HistoryPos = History.Size - 1;
-                    else if (HistoryPos > 0)
-                        HistoryPos--;
-                }
-                else if (data->EventKey == ImGuiKey_DownArrow)
-                {
-                    if (HistoryPos != -1)
-                        if (++HistoryPos >= History.Size)
-                            HistoryPos = -1;
-                }
-
-                // A better implementation would preserve the data on the current input line along with cursor position.
-                if (prev_history_pos != HistoryPos)
-                {
-                    const char* history_str = (HistoryPos >= 0) ? History[HistoryPos] : "";
-                    data->DeleteChars(0, data->BufTextLen);
-                    data->InsertChars(0, history_str);
-                }
+                if (HistoryPos == -1)
+                    HistoryPos = History.Size - 1;
+                else if (HistoryPos > 0)
+                    HistoryPos--;
             }
+            else if (data->EventKey == ImGuiKey_DownArrow)
+            {
+                if (HistoryPos != -1)
+                    if (++HistoryPos >= History.Size)
+                        HistoryPos = -1;
+            }
+
+            // A better implementation would preserve the data on the current input line along with cursor position.
+            if (prev_history_pos != HistoryPos)
+            {
+                const char* history_str = (HistoryPos >= 0) ? History[HistoryPos] : "";
+                data->DeleteChars(0, data->BufTextLen);
+                data->InsertChars(0, history_str);
+            }
+        }
         }
         return 0;
     }
@@ -6973,64 +6960,63 @@ struct ExampleAppLog
         Filter.Draw("Filter", -100.0f);
 
         ImGui::Separator();
+        ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
-        if (ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar))
+        if (clear)
+            Clear();
+        if (copy)
+            ImGui::LogToClipboard();
+
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        const char* buf = Buf.begin();
+        const char* buf_end = Buf.end();
+        if (Filter.IsActive())
         {
-            if (clear)
-                Clear();
-            if (copy)
-                ImGui::LogToClipboard();
-
-            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-            const char* buf = Buf.begin();
-            const char* buf_end = Buf.end();
-            if (Filter.IsActive())
+            // In this example we don't use the clipper when Filter is enabled.
+            // This is because we don't have random access to the result of our filter.
+            // A real application processing logs with ten of thousands of entries may want to store the result of
+            // search/filter.. especially if the filtering function is not trivial (e.g. reg-exp).
+            for (int line_no = 0; line_no < LineOffsets.Size; line_no++)
             {
-                // In this example we don't use the clipper when Filter is enabled.
-                // This is because we don't have random access to the result of our filter.
-                // A real application processing logs with ten of thousands of entries may want to store the result of
-                // search/filter.. especially if the filtering function is not trivial (e.g. reg-exp).
-                for (int line_no = 0; line_no < LineOffsets.Size; line_no++)
+                const char* line_start = buf + LineOffsets[line_no];
+                const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
+                if (Filter.PassFilter(line_start, line_end))
+                    ImGui::TextUnformatted(line_start, line_end);
+            }
+        }
+        else
+        {
+            // The simplest and easy way to display the entire buffer:
+            //   ImGui::TextUnformatted(buf_begin, buf_end);
+            // And it'll just work. TextUnformatted() has specialization for large blob of text and will fast-forward
+            // to skip non-visible lines. Here we instead demonstrate using the clipper to only process lines that are
+            // within the visible area.
+            // If you have tens of thousands of items and their processing cost is non-negligible, coarse clipping them
+            // on your side is recommended. Using ImGuiListClipper requires
+            // - A) random access into your data
+            // - B) items all being the  same height,
+            // both of which we can handle since we have an array pointing to the beginning of each line of text.
+            // When using the filter (in the block of code above) we don't have random access into the data to display
+            // anymore, which is why we don't use the clipper. Storing or skimming through the search result would make
+            // it possible (and would be recommended if you want to search through tens of thousands of entries).
+            ImGuiListClipper clipper;
+            clipper.Begin(LineOffsets.Size);
+            while (clipper.Step())
+            {
+                for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
                 {
                     const char* line_start = buf + LineOffsets[line_no];
                     const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
-                    if (Filter.PassFilter(line_start, line_end))
-                        ImGui::TextUnformatted(line_start, line_end);
+                    ImGui::TextUnformatted(line_start, line_end);
                 }
             }
-            else
-            {
-                // The simplest and easy way to display the entire buffer:
-                //   ImGui::TextUnformatted(buf_begin, buf_end);
-                // And it'll just work. TextUnformatted() has specialization for large blob of text and will fast-forward
-                // to skip non-visible lines. Here we instead demonstrate using the clipper to only process lines that are
-                // within the visible area.
-                // If you have tens of thousands of items and their processing cost is non-negligible, coarse clipping them
-                // on your side is recommended. Using ImGuiListClipper requires
-                // - A) random access into your data
-                // - B) items all being the  same height,
-                // both of which we can handle since we have an array pointing to the beginning of each line of text.
-                // When using the filter (in the block of code above) we don't have random access into the data to display
-                // anymore, which is why we don't use the clipper. Storing or skimming through the search result would make
-                // it possible (and would be recommended if you want to search through tens of thousands of entries).
-                ImGuiListClipper clipper;
-                clipper.Begin(LineOffsets.Size);
-                while (clipper.Step())
-                {
-                    for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
-                    {
-                        const char* line_start = buf + LineOffsets[line_no];
-                        const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
-                        ImGui::TextUnformatted(line_start, line_end);
-                    }
-                }
-                clipper.End();
-            }
-            ImGui::PopStyleVar();
-
-            if (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
-                ImGui::SetScrollHereY(1.0f);
+            clipper.End();
         }
+        ImGui::PopStyleVar();
+
+        if (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+            ImGui::SetScrollHereY(1.0f);
+
         ImGui::EndChild();
         ImGui::End();
     }
@@ -7257,17 +7243,17 @@ static void ShowExampleAppLongText(bool* p_open)
         ImGui::TextUnformatted(log.begin(), log.end());
         break;
     case 1:
-        {
-            // Multiple calls to Text(), manually coarsely clipped - demonstrate how to use the ImGuiListClipper helper.
-            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-            ImGuiListClipper clipper;
-            clipper.Begin(lines);
-            while (clipper.Step())
-                for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-                    ImGui::Text("%i The quick brown fox jumps over the lazy dog", i);
-            ImGui::PopStyleVar();
-            break;
-        }
+    {
+        // Multiple calls to Text(), manually coarsely clipped - demonstrate how to use the ImGuiListClipper helper.
+        ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+        ImGuiListClipper clipper;
+        clipper.Begin(lines);
+        while (clipper.Step())
+            for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+                ImGui::Text("%i The quick brown fox jumps over the lazy dog", i);
+        ImGui::PopStyleVar();
+        break;
+    }
     case 2:
         // Multiple calls to Text(), not clipped (slow)
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
@@ -7317,9 +7303,9 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
     {
         // Helper functions to demonstrate programmatic constraints
         // FIXME: This doesn't take account of decoration size (e.g. title bar), library should make this easier.
-        static void AspectRatio(ImGuiSizeCallbackData* data)    { float aspect_ratio = *(float*)data->UserData; data->DesiredSize.x = IM_MAX(data->CurrentSize.x, data->CurrentSize.y); data->DesiredSize.y = (float)(int)(data->DesiredSize.x / aspect_ratio); }
-        static void Square(ImGuiSizeCallbackData* data)         { data->DesiredSize.x = data->DesiredSize.y = IM_MAX(data->CurrentSize.x, data->CurrentSize.y); }
-        static void Step(ImGuiSizeCallbackData* data)           { float step = *(float*)data->UserData; data->DesiredSize = ImVec2((int)(data->CurrentSize.x / step + 0.5f) * step, (int)(data->CurrentSize.y / step + 0.5f) * step); }
+        static void AspectRatio(ImGuiSizeCallbackData* data) { float aspect_ratio = *(float*)data->UserData; data->DesiredSize.x = IM_MAX(data->CurrentSize.x, data->CurrentSize.y); data->DesiredSize.y = (float)(int)(data->DesiredSize.x / aspect_ratio); }
+        static void Square(ImGuiSizeCallbackData* data) { data->DesiredSize.x = data->DesiredSize.y = IM_MAX(data->CurrentSize.x, data->CurrentSize.y); }
+        static void Step(ImGuiSizeCallbackData* data) { float step = *(float*)data->UserData; data->DesiredSize = ImVec2((int)(data->CurrentSize.x / step + 0.5f) * step, (int)(data->CurrentSize.y / step + 0.5f) * step); }
     };
 
     const char* test_desc[] =
@@ -7345,12 +7331,12 @@ static void ShowExampleAppConstrainedResize(bool* p_open)
     float fixed_step = 100.0f;
     if (type == 0) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(500, 500));         // Between 100x100 and 500x500
     if (type == 1) ImGui::SetNextWindowSizeConstraints(ImVec2(100, 100), ImVec2(FLT_MAX, FLT_MAX)); // Width > 100, Height > 100
-    if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0),    ImVec2(-1, FLT_MAX));      // Vertical only
-    if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1),    ImVec2(FLT_MAX, -1));      // Horizontal only
-    if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1),  ImVec2(500, -1));          // Width Between and 400 and 500
-    if (type == 5) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0),     ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::AspectRatio, (void*)&aspect_ratio);   // Aspect ratio
-    if (type == 6) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0),     ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Square);                              // Always Square
-    if (type == 7) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0),     ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Step, (void*)&fixed_step);            // Fixed Step
+    if (type == 2) ImGui::SetNextWindowSizeConstraints(ImVec2(-1, 0), ImVec2(-1, FLT_MAX));      // Vertical only
+    if (type == 3) ImGui::SetNextWindowSizeConstraints(ImVec2(0, -1), ImVec2(FLT_MAX, -1));      // Horizontal only
+    if (type == 4) ImGui::SetNextWindowSizeConstraints(ImVec2(400, -1), ImVec2(500, -1));          // Width Between and 400 and 500
+    if (type == 5) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::AspectRatio, (void*)&aspect_ratio);   // Aspect ratio
+    if (type == 6) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Square);                              // Always Square
+    if (type == 7) ImGui::SetNextWindowSizeConstraints(ImVec2(0, 0), ImVec2(FLT_MAX, FLT_MAX), CustomConstraints::Step, (void*)&fixed_step);            // Fixed Step
 
     // Submit window
     if (!window_padding)
@@ -7433,11 +7419,11 @@ static void ShowExampleAppSimpleOverlay(bool* p_open)
             ImGui::Text("Mouse Position: <invalid>");
         if (ImGui::BeginPopupContextWindow())
         {
-            if (ImGui::MenuItem("Custom",       NULL, location == -1)) location = -1;
-            if (ImGui::MenuItem("Center",       NULL, location == -2)) location = -2;
-            if (ImGui::MenuItem("Top-left",     NULL, location == 0)) location = 0;
-            if (ImGui::MenuItem("Top-right",    NULL, location == 1)) location = 1;
-            if (ImGui::MenuItem("Bottom-left",  NULL, location == 2)) location = 2;
+            if (ImGui::MenuItem("Custom", NULL, location == -1)) location = -1;
+            if (ImGui::MenuItem("Center", NULL, location == -2)) location = -2;
+            if (ImGui::MenuItem("Top-left", NULL, location == 0)) location = 0;
+            if (ImGui::MenuItem("Top-right", NULL, location == 1)) location = 1;
+            if (ImGui::MenuItem("Bottom-left", NULL, location == 2)) location = 2;
             if (ImGui::MenuItem("Bottom-right", NULL, location == 3)) location = 3;
             if (p_open && ImGui::MenuItem("Close")) *p_open = false;
             ImGui::EndPopup();
@@ -7600,12 +7586,12 @@ static void ShowExampleAppCustomRendering(bool* p_open)
             {
                 // First line uses a thickness of 1.0f, second line uses the configurable thickness
                 float th = (n == 0) ? 1.0f : thickness;
-                draw_list->AddNgon(ImVec2(x + sz*0.5f, y + sz*0.5f), sz*0.5f, col, ngon_sides, th);                 x += sz + spacing;  // N-gon
-                draw_list->AddCircle(ImVec2(x + sz*0.5f, y + sz*0.5f), sz*0.5f, col, circle_segments, th);          x += sz + spacing;  // Circle
+                draw_list->AddNgon(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz * 0.5f, col, ngon_sides, th);                 x += sz + spacing;  // N-gon
+                draw_list->AddCircle(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz * 0.5f, col, circle_segments, th);          x += sz + spacing;  // Circle
                 draw_list->AddRect(ImVec2(x, y), ImVec2(x + sz, y + sz), col, 0.0f, ImDrawFlags_None, th);          x += sz + spacing;  // Square
                 draw_list->AddRect(ImVec2(x, y), ImVec2(x + sz, y + sz), col, rounding, ImDrawFlags_None, th);      x += sz + spacing;  // Square with all rounded corners
                 draw_list->AddRect(ImVec2(x, y), ImVec2(x + sz, y + sz), col, rounding, corners_tl_br, th);         x += sz + spacing;  // Square with two rounded corners
-                draw_list->AddTriangle(ImVec2(x+sz*0.5f,y), ImVec2(x+sz, y+sz-0.5f), ImVec2(x, y+sz-0.5f), col, th);x += sz + spacing;  // Triangle
+                draw_list->AddTriangle(ImVec2(x + sz * 0.5f, y), ImVec2(x + sz, y + sz - 0.5f), ImVec2(x, y + sz - 0.5f), col, th); x += sz + spacing;  // Triangle
                 //draw_list->AddTriangle(ImVec2(x+sz*0.2f,y), ImVec2(x, y+sz-0.5f), ImVec2(x+sz*0.4f, y+sz-0.5f), col, th);x+= sz*0.4f + spacing; // Thin triangle
                 draw_list->AddLine(ImVec2(x, y), ImVec2(x + sz, y), col, th);                                       x += sz + spacing;  // Horizontal line (note: drawing a filled rectangle will be faster!)
                 draw_list->AddLine(ImVec2(x, y), ImVec2(x, y + sz), col, th);                                       x += spacing;       // Vertical line (note: drawing a filled rectangle will be faster!)
@@ -7622,12 +7608,12 @@ static void ShowExampleAppCustomRendering(bool* p_open)
                 x = p.x + 4;
                 y += sz + spacing;
             }
-            draw_list->AddNgonFilled(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz*0.5f, col, ngon_sides);               x += sz + spacing;  // N-gon
-            draw_list->AddCircleFilled(ImVec2(x + sz*0.5f, y + sz*0.5f), sz*0.5f, col, circle_segments);            x += sz + spacing;  // Circle
+            draw_list->AddNgonFilled(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz * 0.5f, col, ngon_sides);               x += sz + spacing;  // N-gon
+            draw_list->AddCircleFilled(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz * 0.5f, col, circle_segments);            x += sz + spacing;  // Circle
             draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), col);                                    x += sz + spacing;  // Square
             draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), col, 10.0f);                             x += sz + spacing;  // Square with all rounded corners
             draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + sz), col, 10.0f, corners_tl_br);              x += sz + spacing;  // Square with two rounded corners
-            draw_list->AddTriangleFilled(ImVec2(x+sz*0.5f,y), ImVec2(x+sz, y+sz-0.5f), ImVec2(x, y+sz-0.5f), col);  x += sz + spacing;  // Triangle
+            draw_list->AddTriangleFilled(ImVec2(x + sz * 0.5f, y), ImVec2(x + sz, y + sz - 0.5f), ImVec2(x, y + sz - 0.5f), col);  x += sz + spacing;  // Triangle
             //draw_list->AddTriangleFilled(ImVec2(x+sz*0.2f,y), ImVec2(x, y+sz-0.5f), ImVec2(x+sz*0.4f, y+sz-0.5f), col); x += sz*0.4f + spacing; // Thin triangle
             draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + sz, y + thickness), col);                             x += sz + spacing;  // Horizontal line (faster than AddLine, but only handle integer thickness)
             draw_list->AddRectFilled(ImVec2(x, y), ImVec2(x + thickness, y + sz), col);                             x += spacing * 2.0f;// Vertical line (faster than AddLine, but only handle integer thickness)
@@ -7782,10 +7768,10 @@ struct MyDocument
         WantClose = false;
         Color = color;
     }
-    void DoOpen()       { Open = true; }
+    void DoOpen() { Open = true; }
     void DoQueueClose() { WantClose = true; }
     void DoForceClose() { Open = false; Dirty = false; }
-    void DoSave()       { Dirty = false; }
+    void DoSave() { Dirty = false; }
 
     // Display placeholder contents for the Document
     static void DisplayContents(MyDocument* doc)
@@ -7826,12 +7812,12 @@ struct ExampleAppDocuments
 
     ExampleAppDocuments()
     {
-        Documents.push_back(MyDocument("Lettuce",             true,  ImVec4(0.4f, 0.8f, 0.4f, 1.0f)));
-        Documents.push_back(MyDocument("Eggplant",            true,  ImVec4(0.8f, 0.5f, 1.0f, 1.0f)));
-        Documents.push_back(MyDocument("Carrot",              true,  ImVec4(1.0f, 0.8f, 0.5f, 1.0f)));
-        Documents.push_back(MyDocument("Tomato",              false, ImVec4(1.0f, 0.3f, 0.4f, 1.0f)));
+        Documents.push_back(MyDocument("Lettuce", true, ImVec4(0.4f, 0.8f, 0.4f, 1.0f)));
+        Documents.push_back(MyDocument("Eggplant", true, ImVec4(0.8f, 0.5f, 1.0f, 1.0f)));
+        Documents.push_back(MyDocument("Carrot", true, ImVec4(1.0f, 0.8f, 0.5f, 1.0f)));
+        Documents.push_back(MyDocument("Tomato", false, ImVec4(1.0f, 0.3f, 0.4f, 1.0f)));
         Documents.push_back(MyDocument("A Rather Long Title", false));
-        Documents.push_back(MyDocument("Some Document",       false));
+        Documents.push_back(MyDocument("Some Document", false));
     }
 };
 
@@ -7843,7 +7829,7 @@ struct ExampleAppDocuments
 // give the impression of a flicker for one frame.
 // We call SetTabItemClosed() to manually notify the Tab Bar or Docking system of removed tabs to avoid this glitch.
 // Note that this completely optional, and only affect tab bars with the ImGuiTabBarFlags_Reorderable flag.
-static void NotifyOfDocumentsClosedElsewhere(ExampleAppDocuments& app)
+static void NotifyOfDocumentsClosedElsewhere(ExampleAppDocuments & app)
 {
     for (int doc_n = 0; doc_n < app.Documents.Size; doc_n++)
     {

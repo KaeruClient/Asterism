@@ -119,7 +119,8 @@ void drawNotifications() {
 	if (arraylist == nullptr) return;
 	for (auto& notification : notifications) {
 		counter++;
-		if (notification == nullptr || counter >= 23) return;
+		if (notification == NULL || notification == nullptr) return;
+		if (counter >= 23) return;
 		if (!notification->check) {
 			notification->maxDuration = notification->duration;
 			notification->check = true;
@@ -337,25 +338,6 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		RECT rect;
 		GetWindowRect(window, &rect);
 		ImVec2 size69 = ImVec2(rect.right - rect.left, rect.bottom - rect.top);
-		if (ImGui::doSnow || ImGui::doDotMatrix) {
-			ImGui::SetNextWindowPos(ImVec2(size69.x - size69.x, size69.y - size69.y), ImGuiCond_Once);
-			ImGui::SetNextWindowSize(ImVec2(size69.x, size69.y));
-			ImGui::SetNextWindowBgAlpha(0.f);//Set to 0.25 for a nice background
-
-			ImGui::Begin("HELLO!!!", 0, ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar);
-			{
-				GetWindowRect(window, &rc);
-				GetCursorPos(&mouse);
-				// render this before anything else so it is the background
-				if (ImGui::doSnow)
-					Snowflake::Update(snow, Snowflake::vec3(mouse.x, mouse.y), Snowflake::vec3(rc.left, rc.top));  // you can change a few things inside the update function
-				if (ImGui::doDotMatrix) {
-					updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
-					drawDotMatrix(dots, 50, 0.05, false);
-				}
-			}
-			ImGui::End();
-		}
 #pragma endregion
 		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
 			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);
@@ -459,26 +441,6 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 		RECT rect;
 		GetWindowRect(window, &rect);
 		ImVec2 size69 = ImVec2(rect.right - rect.left, rect.bottom - rect.top);
-		if (ImGui::doSnow || ImGui::doDotMatrix) {
-			ImGui::SetNextWindowPos(ImVec2(size69.x - size69.x, size69.y - size69.y), ImGuiCond_Once);
-			ImGui::SetNextWindowSize(ImVec2(size69.x, size69.y));
-			ImGui::SetNextWindowBgAlpha(0.f);//Set to 0.25 for a nice background
-
-			ImGui::Begin("HELLO!!!", 0, ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollbar);
-			{
-				GetWindowRect(window, &rc);
-				GetCursorPos(&mouse);
-				// render this before anything else so it is the background
-				if (ImGui::doSnow)
-					Snowflake::Update(snow, Snowflake::vec3(mouse.x, mouse.y), Snowflake::vec3(rc.left, rc.top));  // you can change a few things inside the update function
-
-				if (ImGui::doDotMatrix) {
-					updateDotMatrix({ getScreenResolution().x,getScreenResolution().y }, dots);
-					drawDotMatrix(dots, 50, 0.05, false);
-				}
-			}
-			ImGui::End();
-		}
 #pragma endregion
 		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
 			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);

@@ -70,6 +70,7 @@ public:
 
 	inline std::vector<std::shared_ptr<InfoBoxData>>& getInfoBoxList() {
 		for (int i = 0; i < this->infoBoxQueue.size(); ++i) {
+			if (this->infoBoxQueue[i] == NULL || this->infoBoxQueue[i] == nullptr) continue;
 			if (this->infoBoxQueue[i]->isOpen) continue;
 			this->infoBoxQueue.erase(this->infoBoxQueue.begin() + i);
 		}
