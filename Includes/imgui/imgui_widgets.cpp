@@ -1121,10 +1121,12 @@ bool ImGui::Checkbox(const char* label, bool* v)
     const ImVec2 label_size = CalcTextSize(label, NULL, true);
 
     const float w = GetWindowWidth() - 30;
-    const float square_sz = 17;
+    const float square_sz = 17; // サイズを戻す
+    const float checkbox_height = 20; // 高さを調整
+    const float checkbox_width = 20; // 幅を調整
     const ImVec2 pos = window->DC.CursorPos;
-    const ImRect frame_bb(pos + ImVec2(w - square_sz - 13, 0), window->DC.CursorPos + ImVec2(w, square_sz - 1));
-    const ImRect total_bb(pos, pos + ImVec2(square_sz + (label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f), label_size.y + style.FramePadding.y * 2.0f));
+    const ImRect frame_bb(pos + ImVec2(w - checkbox_width - 13, label_size.y * 0.5f - checkbox_height * 0.5f), window->DC.CursorPos + ImVec2(w, label_size.y * 0.5f + checkbox_height * 0.5f - 1));
+    const ImRect total_bb(pos, pos + ImVec2(checkbox_width + (label_size.x > 0.0f ? style.ItemInnerSpacing.x + label_size.x : 0.0f), label_size.y + style.FramePadding.y * 2.0f));
     ItemSize(total_bb, style.FramePadding.y);
     if (!ItemAdd(total_bb, id))
     {
@@ -1148,14 +1150,23 @@ bool ImGui::Checkbox(const char* label, bool* v)
         it_anim = anim.find(id);
     }
 
-    it_anim->second.animation = ImLerp(it_anim->second.animation, *v ? 1.0f : 0.0f, 0.12f * (1.0f - ImGui::GetIO().DeltaTime));
+    it_anim->second.animation = ImLerp(it_anim->second.animation, *v ? 1.0f : 0.0f, 0.12f * 1.5f * (1.0f - ImGui::GetIO().DeltaTime)); // 1.5倍のアニメーション速度
 
     RenderNavHighlight(total_bb, id);
 
     RenderFrame(frame_bb.Min, frame_bb.Max, ImColor(15, 15, 16), false, 9.0f);
     RenderFrame(frame_bb.Min, frame_bb.Max, ImColor(147 / 255.0f, 190 / 255.0f, 66 / 255.0f, it_anim->second.animation), false, 9.0f);
 
-    window->DrawList->AddCircleFilled(ImVec2(frame_bb.Min.x + 8 + 14 * it_anim->second.animation, frame_bb.Min.y + 8), 5.0f, ImColor(1.0f, 1.0f, 1.0f), 30);
+    // アニメーションで画面の端まで移動
+    const float max_animation_length = frame_bb.GetWidth() - 14;
+    float animation_pos = max_animation_length * it_anim->second.animation;
+    animation_pos = ImClamp(animation_pos, 0.0f, max_animation_length);
+
+    // 円の位置を内側に
+    ImVec2 circle_center = ImVec2(frame_bb.Min.x + 8 + animation_pos, frame_bb.Min.y + checkbox_height * 0.5f);
+    float circle_radius = checkbox_height * 0.35f;
+
+    window->DrawList->AddCircleFilled(circle_center, circle_radius, ImColor(1.0f, 1.0f, 1.0f), 30);
 
     if (label_size.x > 0.0f)
         RenderText(total_bb.Min, label);

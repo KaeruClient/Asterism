@@ -77,7 +77,7 @@ void ClickGui::onImRender() {
 	vec2_t windowSize = ImGuiUtil::get_window_size();
 	auto& notifications = g_Data.getInfoBoxList();
 	auto font = io.FontDefault;
-	font->Scale = 0.65f;
+	font->Scale = 0.9f;
 	ImGuiWindowFlags TargetFlags;
 	TargetFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
 	std::vector<Category> cats = { Category::COMBAT, Category::MISC, Category::PLAYER, Category::RENDER, Category::WORLD };
