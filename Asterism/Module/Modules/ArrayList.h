@@ -6,7 +6,7 @@ class ArrayList : public Module {
 public:
 	ArrayList();
 	~ArrayList();
-	bool bottom = true;
+	bool bottom = false;
 	virtual const char* getModuleName() override;
 	virtual void onImRender() override;
 };

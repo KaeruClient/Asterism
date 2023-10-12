@@ -99,9 +99,9 @@ void ArrayList::onImRender() {
 		float h = ImGuiUtil::get_text_area(font, 30, textStr).y;
 		if (!bottom) {
 			auto arrayColor = ColorUtil::rainbowColor(2, 1, 1, -index * 100, 255);
-			ImGuiUtil::draw_rect(xOffset - padding, yOffset, windowSize.x + padding, yOffset + h, UIColor(0, 0, 0, 100));                       //background
-			ImGuiUtil::draw_rect(xOffset - padding, yOffset, xOffset - 4, yOffset + h, arrayColor);                               //leftrect
-			if (index) ImGuiUtil::draw_rect(xOffset - padding, yOffset, windowSize.x - (len + padding), yOffset + 1, arrayColor);      //underline
+			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, windowSize.x + padding, yOffset + h * container.pos->y, UIColor(0, 0, 0, 100));                       //background
+			ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, xOffsetOri - 4, yOffset + h * container.pos->y, arrayColor);                               //leftrect
+			if (index) ImGuiUtil::draw_rect(xOffsetOri - padding, yOffset, windowSize.x - (len + padding), yOffset + 1, arrayColor);      //underline
 			ImGuiUtil::draw_text(font, 30, textStr, xOffset, yOffset, arrayColor);                                         //modulename
 			ImGuiUtil::draw_text(font, 30, modeStr, xOffset + moduleWidth, yOffset, UIColor(160, 160, 160));              //mode
 			yOffset += h * container.pos->y;

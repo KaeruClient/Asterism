@@ -357,6 +357,8 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
+		//const auto& pWindowDrawList = ImGui::GetWindowDrawList();
+		//DrawBackgroundBlur(pWindowDrawList, d3d11Device);
 		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
 			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);
 			auto col2 = ColorUtil::rainbowColor(2, 1, 1, 1000, 50);
@@ -534,6 +536,8 @@ HRESULT hookPresentD3D12(IDXGISwapChain3* ppSwapChain, UINT syncInterval, UINT f
 			ImGui::End();
 		}
 #pragma endregion
+		//const auto& pWindowDrawList = ImGui::GetWindowDrawList();
+		//DrawBackgroundBlur(pWindowDrawList, d3d11Device);
 		if (moduleMgr->isInitialized() && moduleMgr->getModule<ClickGui>()->isEnabled()) {
 			auto col1 = ColorUtil::rainbowColor(2, 1, 1, 0, 50);
 			auto col2 = ColorUtil::rainbowColor(2, 1, 1, 1000, 50);
