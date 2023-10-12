@@ -275,5 +275,8 @@
     <ClInclude Include="Memory\Hook\Hooks\onTick.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Structs\DirectMovementProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

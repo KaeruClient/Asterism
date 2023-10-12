@@ -99,12 +99,6 @@ static ImVec2 getScreenResolution() {
 #define SNOW_LIMIT 300 // max ammount of Snow/Bubbles allowed on screen at once
 std::vector<Snowflake::Snowflake> snow;
 std::vector<Particle> dots;
-auto GetDllMod(void) -> HMODULE {
-	MEMORY_BASIC_INFORMATION info;
-	size_t len = VirtualQueryEx(GetCurrentProcess(), (void*)GetDllMod, &info, sizeof(info));
-	assert(len == sizeof(info));
-	return len ? (HMODULE)info.AllocationBase : NULL;
-}
 
 void drawNotifications() {
 	//Notification

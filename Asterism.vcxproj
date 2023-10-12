@@ -215,6 +215,7 @@
     <ClInclude Include="Memory\Hook\Hooks\StartDestroyBlock.h" />
     <ClInclude Include="Memory\minhook.h" />
     <ClInclude Include="SDK\Maths\Vectors.h" />
+    <ClInclude Include="SDK\Structs\DirectMovementProxy.h" />
     <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\DrawUtils.h" />
     <ClInclude Include="Memory\Global.h" />
